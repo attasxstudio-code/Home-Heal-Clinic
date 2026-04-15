@@ -1,10 +1,10 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 
 const ADMIN_EMAIL    = 'admin@homeheal.com';
 const ADMIN_PASSWORD = 'Homeheal@001admin';
 const JWT_SECRET     = process.env.JWT_SECRET || 'hhc_jwt_s3cr3t_k3y_2026_x9z';
 
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -38,4 +38,4 @@ export default function handler(req, res) {
       name:  'HomeHeal Admin',
     },
   });
-}
+};

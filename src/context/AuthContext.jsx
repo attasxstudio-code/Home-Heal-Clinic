@@ -51,7 +51,14 @@ export const AuthProvider = ({ children }) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
+
+    let data;
+    try {
+      data = await res.json();
+    } catch {
+      throw new Error('Server unavailable. Please try again later.');
+    }
+
     if (!res.ok) throw new Error(data.error || 'Login failed.');
 
     localStorage.setItem(TOKEN_KEY, data.token);
