@@ -609,7 +609,7 @@ const BookingSection = () => (
               style={{ border:0, display:'block' }}
               allowFullScreen="" loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://maps.google.com/maps?q=Karan+Nagar,+Srinagar,+Jammu+and+Kashmir&hl=en&z=15&output=embed"
+              src="https://maps.google.com/maps?q=34.0806043,74.7988594&hl=en&z=17&output=embed&iwloc=near"
               title="Apollo Clinic - Karan Nagar, Srinagar"
             />
           </div>
