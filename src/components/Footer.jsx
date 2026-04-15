@@ -142,7 +142,24 @@ const Footer = () => {
               <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center',
                 marginBottom:'0.65rem', gap:'1rem' }}>
                 <span style={{ color:'rgba(255,255,255,0.65)', fontSize:'0.85rem' }}>{row.day}</span>
-                <span style={{ color: i === 2 ? '#6ee7b7' : 'rgba(255,255,255,0.9)', fontSize:'0.85rem', fontWeight:600 }}>{row.time}</span>
+                {i === 2 ? (
+                  <a
+                    href={`https://wa.me/${WA_NUMBER}`}
+                    target="_blank" rel="noreferrer"
+                    style={{
+                      color:'#6ee7b7', fontSize:'0.85rem', fontWeight:700,
+                      textDecoration:'underline', textDecorationColor:'rgba(110,231,183,0.45)',
+                      textUnderlineOffset:'3px', cursor:'pointer',
+                      transition:'color 0.2s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color='#34d399'}
+                    onMouseLeave={e => e.currentTarget.style.color='#6ee7b7'}
+                  >
+                    {row.time} ↗
+                  </a>
+                ) : (
+                  <span style={{ color:'rgba(255,255,255,0.9)', fontSize:'0.85rem', fontWeight:600 }}>{row.time}</span>
+                )}
               </div>
             ))}
             <div style={{ marginTop: '1.25rem' }}>
