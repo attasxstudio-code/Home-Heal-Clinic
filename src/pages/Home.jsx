@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, ArrowRight, CheckCircle } from 'lucide-react';
+import { MapPin, ArrowRight, CheckCircle, Phone } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
 
 /* ─── scroll helper ─── */
@@ -33,11 +33,11 @@ const Home = () => (
       aria-label="Chat on WhatsApp"
       style={{
         position: 'fixed',
-        bottom: '100px',
-        right: '20px',
+        bottom: '88px',
+        right: '16px',
         zIndex: 999,
-        width: '56px',
-        height: '56px',
+        width: '52px',
+        height: '52px',
         borderRadius: '50%',
         background: 'linear-gradient(135deg,#25D366,#128C7E)',
         color: '#fff',
@@ -48,32 +48,25 @@ const Home = () => (
         transition: 'all 0.25s ease',
         textDecoration: 'none',
       }}
-      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(37,211,102,0.55)'; }}
-      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(37,211,102,0.45)'; }}
+      onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.12)'; }}
+      onMouseLeave={e => { e.currentTarget.style.transform = 'scale(1)'; }}
     >
-      <WAIcon size={26} />
+      <WAIcon size={24} />
     </a>
 
     {/* ── Sticky bottom CTA bar (mobile only) ── */}
     <div className="sticky-cta-bar">
-      <a
-        href={WA_LINK}
-        target="_blank"
-        rel="noreferrer"
+      <button
+        onClick={() => scrollTo('booking')}
         className="sticky-cta-btn"
-        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', textDecoration: 'none' }}
       >
         📅 Book Appointment
-      </a>
+      </button>
     </div>
 
     <style>{`
-      /* Floating WhatsApp pulse ring */
-      @keyframes waPulse {
-        0%   { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0.4); }
-        70%  { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 14px rgba(37,211,102,0); }
-        100% { box-shadow: 0 4px 20px rgba(37,211,102,0.45), 0 0 0 0 rgba(37,211,102,0); }
-      }
+      /* ── Global mobile base ── */
+      *, *::before, *::after { box-sizing: border-box; }
 
       /* Sticky CTA bar */
       .sticky-cta-bar {
@@ -81,185 +74,246 @@ const Home = () => (
         position: fixed;
         bottom: 0; left: 0; right: 0;
         z-index: 998;
-        padding: 0.75rem 1rem;
-        background: rgba(255,255,255,0.97);
-        backdrop-filter: blur(16px);
-        border-top: 1px solid rgba(37,211,102,0.2);
+        padding: 0.65rem 1rem 0.75rem;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-top: 1px solid rgba(14,165,233,0.15);
         box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
       }
       .sticky-cta-btn {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.65rem;
+        gap: 0.5rem;
         width: 100%;
-        padding: 0.95rem 1rem;
-        background: linear-gradient(135deg,#25D366,#128C7E);
+        padding: 0.9rem 1rem;
+        background: linear-gradient(135deg,#0369a1,#0ea5e9);
         color: #fff;
         font-weight: 800;
         font-size: 1rem;
         border-radius: 14px;
-        text-decoration: none;
-        min-height: 54px;
-        box-shadow: 0 4px 16px rgba(37,211,102,0.35);
+        border: none;
+        cursor: pointer;
+        min-height: 52px;
+        box-shadow: 0 4px 16px rgba(3,105,161,0.35);
         transition: all 0.2s;
+        font-family: inherit;
+        letter-spacing: 0.01em;
       }
       .sticky-cta-btn:active { filter: brightness(0.92); transform: scale(0.99); }
 
       @media (max-width: 768px) {
         .sticky-cta-bar { display: block; }
-        /* Push floating button higher to avoid overlap with sticky CTA */
-        a[aria-label="Chat on WhatsApp"] {
-          bottom: 90px !important;
+        a[aria-label="Chat on WhatsApp"] { bottom: 80px !important; right: 12px !important; }
+      }
+
+      /* ── Hero mobile ── */
+      @media (max-width: 768px) {
+        .hero-section {
+          min-height: auto !important;
+          padding: 2.5rem 0 4.5rem !important;
+          align-items: flex-start !important;
         }
-      }
-
-      /* ── Hero mobile overrides ── */
-      @media (max-width: 768px) {
-        .hero-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
+        .hero-grid {
+          grid-template-columns: 1fr !important;
+          gap: 0 !important;
+        }
         .hero-visual-card { display: none !important; }
-        .hero-section { min-height: auto !important; padding: 3rem 0 5rem !important; }
-        .hero-badge-row { gap: 0.5rem !important; }
-        .hero-btn-row { flex-direction: column !important; gap: 0.75rem !important; }
-        .hero-btn-row .btn { width: 100% !important; min-height: 52px !important; font-size: 1.05rem !important; justify-content: center !important; }
-        .hero-h1 { font-size: clamp(2rem, 8vw, 3rem) !important; }
-        .hero-sub { font-size: 1rem !important; }
+        .hero-h1 { font-size: clamp(1.75rem, 7.5vw, 2.5rem) !important; line-height: 1.2 !important; }
+        .hero-sub { font-size: 0.95rem !important; line-height: 1.65 !important; }
+        .hero-badge-row { gap: 0.4rem !important; }
+        .hero-badge-row span { font-size: 0.72rem !important; padding: 0.28rem 0.65rem !important; }
+        .hero-btn-row { flex-direction: column !important; gap: 0.65rem !important; }
+        .hero-btn-row .btn, .hero-btn-row a {
+          width: 100% !important;
+          min-height: 50px !important;
+          font-size: 1rem !important;
+          justify-content: center !important;
+          text-align: center !important;
+        }
+        .hero-pill { margin-bottom: 0.85rem !important; font-size: 0.78rem !important; }
       }
 
-      /* ── Services mobile overrides ── */
+      /* ── Services mobile ── */
       @media (max-width: 768px) {
-        .services-grid { grid-template-columns: 1fr !important; gap: 1rem !important; }
-        .services-cta { flex-direction: column !important; gap: 1.5rem !important; }
-        .services-cta-btn { width: 100% !important; justify-content: center !important; }
+        #services { padding: 3rem 0 !important; }
+        .services-grid {
+          grid-template-columns: 1fr !important;
+          gap: 0.85rem !important;
+          margin-bottom: 2rem !important;
+        }
+        .services-cta {
+          flex-direction: column !important;
+          gap: 1.25rem !important;
+          padding: 1.5rem !important;
+          border-radius: 16px !important;
+        }
+        .services-cta-btn {
+          width: 100% !important;
+          justify-content: center !important;
+        }
         .services-phone-row { flex-direction: column !important; gap: 0.5rem !important; }
         .services-phone-row a { text-align: center !important; justify-content: center !important; }
+      }
+      @media (max-width: 480px) {
+        .services-grid { grid-template-columns: 1fr !important; }
       }
 
       /* ── Doctors mobile ── */
       @media (max-width: 768px) {
-        .doctors-grid { grid-template-columns: 1fr 1fr !important; gap: 1rem !important; }
+        #doctors { padding: 3rem 0 !important; }
+        .doctors-grid {
+          grid-template-columns: 1fr 1fr !important;
+          gap: 0.85rem !important;
+        }
+        .doctors-grid > div {
+          padding: 1.25rem 0.9rem !important;
+          border-radius: 16px !important;
+        }
       }
-      @media (max-width: 480px) {
+      @media (max-width: 430px) {
         .doctors-grid { grid-template-columns: 1fr !important; }
+      }
+
+      /* ── Testimonials mobile ── */
+      @media (max-width: 768px) {
+        #testimonials { padding: 3rem 0 !important; }
+        #testimonials .testi-grid {
+          grid-template-columns: 1fr !important;
+          gap: 1rem !important;
+        }
       }
 
       /* ── Booking section mobile ── */
       @media (max-width: 768px) {
-        .booking-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
-        .booking-section { padding: 3.5rem 0 5.5rem !important; }
+        .booking-section { padding: 3rem 0 5rem !important; }
+        .booking-grid {
+          grid-template-columns: 1fr !important;
+          gap: 2rem !important;
+        }
+        .booking-section iframe { height: 180px !important; }
+        .booking-contact-btns { flex-direction: column !important; }
+        .booking-contact-btns a { width: 100% !important; justify-content: center !important; }
+      }
+
+      /* ── Container padding tightening on mobile ── */
+      @media (max-width: 480px) {
+        .container { padding-left: 1rem !important; padding-right: 1rem !important; }
+        h2 { font-size: clamp(1.4rem, 6vw, 2rem) !important; }
+      }
+
+      /* ── Section headings scale ── */
+      @media (max-width: 768px) {
+        .section-header-desc { font-size: 0.9rem !important; }
+        h2 { font-size: clamp(1.5rem, 5.5vw, 2.2rem) !important; }
       }
     `}</style>
   </div>
 );
 
 /* ─── Hero ─── */
-const HeroSection = () => {
-  const [hov, setHov] = React.useState(null);
+const HeroSection = () => (
+  <section id="home" className="hero-section" style={{
+    position: 'relative', overflow: 'hidden',
+    background: 'linear-gradient(160deg,#f0f9ff 0%,#e0f2fe 40%,#ecfdf5 100%)',
+    minHeight: '88vh', display: 'flex', alignItems: 'center',
+    padding: '5rem 0',
+  }}>
+    {/* Background blobs */}
+    <div style={{ position:'absolute', top:'-120px', right:'-100px', width:'520px', height:'520px', borderRadius:'50%',
+      background:'radial-gradient(circle,rgba(14,165,233,0.13) 0%,transparent 70%)', pointerEvents:'none' }} />
+    <div style={{ position:'absolute', bottom:'-80px', left:'-80px', width:'400px', height:'400px', borderRadius:'50%',
+      background:'radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
 
-  return (
-    <section id="home" className="hero-section" style={{
-      position: 'relative', overflow: 'hidden',
-      background: 'linear-gradient(160deg,#f0f9ff 0%,#e0f2fe 40%,#ecfdf5 100%)',
-      minHeight: '88vh', display: 'flex', alignItems: 'center',
-      padding: '5rem 0',
-    }}>
-      {/* Background blobs */}
-      <div style={{ position:'absolute', top:'-120px', right:'-100px', width:'520px', height:'520px', borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(14,165,233,0.13) 0%,transparent 70%)', pointerEvents:'none' }} />
-      <div style={{ position:'absolute', bottom:'-80px', left:'-80px', width:'400px', height:'400px', borderRadius:'50%',
-        background:'radial-gradient(circle,rgba(16,185,129,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
+    <div className="container" style={{ position:'relative', zIndex:1 }}>
+      <div className="hero-grid" style={{
+        display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',
+        gap:'4rem', alignItems:'center',
+      }}>
 
-      <div className="container" style={{ position:'relative', zIndex:1 }}>
-        <div className="hero-grid" style={{
-          display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))',
-          gap:'4rem', alignItems:'center',
-        }}>
-
-          {/* Text */}
-          <div className="animate-fade-in">
-            <span className="pill" style={{ marginBottom:'1.25rem', display:'inline-block' }}>
-              🏥 Multi-Speciality Clinic · Karan Nagar, Srinagar
+        {/* Text */}
+        <div className="animate-fade-in">
+          <span className="pill hero-pill" style={{ marginBottom:'1.25rem', display:'inline-block' }}>
+            🏥 Multi-Speciality Clinic · Karan Nagar, Srinagar
+          </span>
+          <h1 className="hero-h1" style={{ color:'#0c4a6e', marginBottom:'1rem', lineHeight:1.15 }}>
+            Advanced Healthcare,<br />
+            <span style={{ background:'linear-gradient(135deg,#0ea5e9,#10b981)',
+              WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
+              Under One Roof
             </span>
-            <h1 className="hero-h1" style={{ color:'#0c4a6e', marginBottom:'1rem', lineHeight:1.15 }}>
-              Advanced Healthcare,<br />
-              <span style={{ background:'linear-gradient(135deg,#0ea5e9,#10b981)',
-                WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-                Under One Roof
-              </span>
-            </h1>
-            <p className="hero-sub" style={{ fontSize:'1.1rem', color:'#475569', lineHeight:1.7, marginBottom:'1.75rem', maxWidth:'480px' }}>
-              Apollo Clinic Srinagar brings together expert specialists, advanced diagnostics, and preventive healthcare — delivering a complete, patient-first experience in Karan Nagar.
-            </p>
+          </h1>
+          <p className="hero-sub" style={{ fontSize:'1.1rem', color:'#475569', lineHeight:1.7, marginBottom:'1.75rem', maxWidth:'480px' }}>
+            Apollo Clinic Srinagar brings together expert specialists, advanced diagnostics, and preventive healthcare — delivering a complete, patient-first experience in Karan Nagar.
+          </p>
 
-            {/* Trust badges */}
-            <div className="hero-badge-row" style={{ display:'flex', gap:'0.65rem', flexWrap:'wrap', marginBottom:'1.75rem' }}>
-              {['✅ Multi-Speciality', '🕐 Mon–Sat Open', '🔬 Advanced Diagnostics'].map((badge, i) => (
-                <span key={i} style={{
-                  background:'rgba(14,165,233,0.1)', color:'#0369a1',
-                  padding:'0.35rem 0.85rem', borderRadius:'20px',
-                  fontSize:'0.8rem', fontWeight:600, border:'1px solid rgba(14,165,233,0.2)',
-                }}>{badge}</span>
-              ))}
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="hero-btn-row" style={{ display:'flex', gap:'1rem', flexWrap:'wrap' }}>
-              <a
-                href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
-                target="_blank"
-                rel="noreferrer"
-                className="btn btn-whatsapp"
-                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:'0.5rem' }}
-              >
-                📅 Book Appointment
-              </a>
-              <button className="btn btn-outline"
-                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
-                onClick={() => scrollTo('services')}>
-                View Services <ArrowRight size={16} style={{ marginLeft: 6 }} />
-              </button>
-            </div>
+          {/* Trust badges */}
+          <div className="hero-badge-row" style={{ display:'flex', gap:'0.65rem', flexWrap:'wrap', marginBottom:'1.75rem' }}>
+            {['✅ Multi-Speciality', '🕐 Mon–Sat Open', '🔬 Advanced Diagnostics'].map((badge, i) => (
+              <span key={i} style={{
+                background:'rgba(14,165,233,0.1)', color:'#0369a1',
+                padding:'0.35rem 0.85rem', borderRadius:'20px',
+                fontSize:'0.8rem', fontWeight:600, border:'1px solid rgba(14,165,233,0.2)',
+              }}>{badge}</span>
+            ))}
           </div>
 
-          {/* Visual card — hidden on mobile */}
-          <div className="hero-visual-card animate-fade-in" style={{ display:'flex', justifyContent:'center' }}>
-            <div style={{
-              background:'linear-gradient(135deg,#0369a1 0%,#0ea5e9 50%,#059669 100%)',
-              borderRadius:'28px', padding:'2.5rem',
-              boxShadow:'0 24px 60px rgba(3,105,161,0.3)',
-              width:'100%', maxWidth:'380px',
-              position:'relative', overflow:'hidden',
-            }}>
-              <div style={{ position:'absolute', top:'-40px', right:'-40px', width:'180px', height:'180px', borderRadius:'50%',
-                background:'rgba(255,255,255,0.08)', pointerEvents:'none' }} />
-              <div style={{ fontSize:'3.5rem', marginBottom:'1rem' }}>🏥</div>
-              <h3 style={{ color:'#fff', fontWeight:800, fontSize:'1.35rem', marginBottom:'0.75rem' }}>
-                Apollo Clinic Srinagar
-              </h3>
-              <p style={{ color:'rgba(255,255,255,0.82)', fontSize:'0.9rem', lineHeight:1.65, marginBottom:'1.5rem' }}>
-                Trusted multi-speciality care with expert doctors, modern diagnostics, and a seamless patient experience.
-              </p>
-              {[
-                '🩺 Multiple Specialities',
-                '🔬 Advanced Diagnostics',
-                '❤️ Preventive Health Checks',
-                '👨‍👩‍👧 Family Healthcare',
-              ].map((item, i) => (
-                <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.6rem',
-                  padding:'0.55rem 0.85rem', borderRadius:'10px',
-                  background:'rgba(255,255,255,0.12)', marginBottom:'0.5rem',
-                  backdropFilter:'blur(4px)',
-                }}>
-                  <span style={{ fontSize:'0.88rem', color:'rgba(255,255,255,0.9)', fontWeight:500 }}>{item}</span>
-                </div>
-              ))}
-            </div>
+          {/* CTA Buttons — both scroll to booking */}
+          <div className="hero-btn-row" style={{ display:'flex', gap:'1rem', flexWrap:'wrap' }}>
+            <button
+              className="btn btn-primary"
+              style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
+              onClick={() => scrollTo('booking')}
+            >
+              📅 Book Appointment
+            </button>
+            <button className="btn btn-outline"
+              style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
+              onClick={() => scrollTo('services')}>
+              View Services <ArrowRight size={16} style={{ marginLeft: 6 }} />
+            </button>
+          </div>
+        </div>
+
+        {/* Visual card — hidden on mobile */}
+        <div className="hero-visual-card animate-fade-in" style={{ display:'flex', justifyContent:'center' }}>
+          <div style={{
+            background:'linear-gradient(135deg,#0369a1 0%,#0ea5e9 50%,#059669 100%)',
+            borderRadius:'28px', padding:'2.5rem',
+            boxShadow:'0 24px 60px rgba(3,105,161,0.3)',
+            width:'100%', maxWidth:'380px',
+            position:'relative', overflow:'hidden',
+          }}>
+            <div style={{ position:'absolute', top:'-40px', right:'-40px', width:'180px', height:'180px', borderRadius:'50%',
+              background:'rgba(255,255,255,0.08)', pointerEvents:'none' }} />
+            <div style={{ fontSize:'3.5rem', marginBottom:'1rem' }}>🏥</div>
+            <h3 style={{ color:'#fff', fontWeight:800, fontSize:'1.35rem', marginBottom:'0.75rem' }}>
+              Apollo Clinic Srinagar
+            </h3>
+            <p style={{ color:'rgba(255,255,255,0.82)', fontSize:'0.9rem', lineHeight:1.65, marginBottom:'1.5rem' }}>
+              Trusted multi-speciality care with expert doctors, modern diagnostics, and a seamless patient experience.
+            </p>
+            {[
+              '🩺 Multiple Specialities',
+              '🔬 Advanced Diagnostics',
+              '❤️ Preventive Health Checks',
+              '👨‍👩‍👧 Family Healthcare',
+            ].map((item, i) => (
+              <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.6rem',
+                padding:'0.55rem 0.85rem', borderRadius:'10px',
+                background:'rgba(255,255,255,0.12)', marginBottom:'0.5rem',
+                backdropFilter:'blur(4px)',
+              }}>
+                <span style={{ fontSize:'0.88rem', color:'rgba(255,255,255,0.9)', fontWeight:500 }}>{item}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </section>
-  );
-};
+    </div>
+  </section>
+);
 
 /* ─── Services ─── */
 const SERVICES = [
@@ -285,7 +339,7 @@ const HomecareServices = () => {
       (entries) => entries.forEach(e => {
         if (e.isIntersecting) setVisible(p => ({ ...p, [e.target.dataset.index]: true }));
       }),
-      { threshold: 0.08 }
+      { threshold: 0.06 }
     );
     refs.current.forEach(el => el && observer.observe(el));
     return () => observer.disconnect();
@@ -304,11 +358,11 @@ const HomecareServices = () => {
 
       <div className="container" style={{ position:'relative', zIndex:1 }}>
         {/* Header */}
-        <div className="text-center" style={{ marginBottom:'3rem' }}>
-          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>🏥 Our Services</span>
-          <h2 style={{ color:'#0c4a6e', margin:'0 0 1rem' }}>Comprehensive Healthcare Services</h2>
-          <p style={{ maxWidth:'580px', margin:'0 auto', color:'#475569', fontSize:'1rem', lineHeight:1.7 }}>
-            From primary consultations to advanced diagnostics — Apollo Clinic Srinagar offers a full spectrum of healthcare services under one roof for you and your family.
+        <div className="text-center" style={{ marginBottom:'2.5rem' }}>
+          <span className="pill" style={{ marginBottom:'0.85rem', display:'inline-block' }}>🏥 Our Services</span>
+          <h2 style={{ color:'#0c4a6e', margin:'0 0 0.85rem' }}>Comprehensive Healthcare Services</h2>
+          <p className="section-header-desc" style={{ maxWidth:'560px', margin:'0 auto', color:'#475569', fontSize:'1rem', lineHeight:1.65 }}>
+            From primary consultations to advanced diagnostics — Apollo Clinic Srinagar offers a full spectrum of healthcare services under one roof.
           </p>
         </div>
 
@@ -316,7 +370,7 @@ const HomecareServices = () => {
         <div className="services-grid" style={{
           display:'grid',
           gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',
-          gap:'1.1rem', marginBottom:'3rem',
+          gap:'1rem', marginBottom:'2.5rem',
         }}>
           {SERVICES.map((svc, i) => {
             const isVis = !!visible[i];
@@ -325,37 +379,36 @@ const HomecareServices = () => {
               <div key={i} data-index={i} ref={el => { refs.current[i] = el; }}
                 onMouseEnter={() => setHovered(i)} onMouseLeave={() => setHovered(null)}
                 style={{
-                  position:'relative', borderRadius:'16px', padding:'1.5rem',
+                  position:'relative', borderRadius:'16px', padding:'1.35rem',
                   border:`1.5px solid ${isHov ? '#0ea5e9' : '#e4f0fb'}`,
                   background: isHov ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
                   opacity: isVis ? 1 : 0,
-                  transform: isVis ? (isHov ? 'translateY(-6px) scale(1.015)' : 'translateY(0)') : 'translateY(28px)',
-                  transition: `opacity 0.5s ease ${i * 0.04}s, transform 0.28s ease, box-shadow 0.28s, border-color 0.25s, background 0.25s`,
-                  boxShadow: isHov ? '0 16px 40px rgba(14,165,233,0.16)' : '0 2px 10px rgba(0,0,0,0.04)',
-                  display: 'flex', flexDirection: 'column', gap: '0.6rem',
+                  transform: isVis ? (isHov ? 'translateY(-4px)' : 'translateY(0)') : 'translateY(24px)',
+                  transition: `opacity 0.45s ease ${i * 0.03}s, transform 0.28s ease, box-shadow 0.28s, border-color 0.25s, background 0.25s`,
+                  boxShadow: isHov ? '0 14px 36px rgba(14,165,233,0.15)' : '0 2px 8px rgba(0,0,0,0.04)',
+                  display: 'flex', flexDirection: 'column', gap: '0.5rem',
                 }}>
                 {/* Icon */}
                 <div style={{
-                  width:52, height:52, borderRadius:'14px', display:'flex', alignItems:'center', justifyContent:'center',
+                  width:48, height:48, borderRadius:'13px', display:'flex', alignItems:'center', justifyContent:'center',
                   background: isHov ? 'linear-gradient(135deg,#0ea5e9,#10b981)' : 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
-                  transform: isHov ? 'rotate(-5deg) scale(1.1)' : 'rotate(0) scale(1)',
                   transition:'all 0.28s ease', flexShrink: 0,
                 }}>
-                  <span style={{ fontSize:'1.65rem', lineHeight:1 }}>{svc.icon}</span>
+                  <span style={{ fontSize:'1.55rem', lineHeight:1 }}>{svc.icon}</span>
                 </div>
                 {/* Checkmark badge */}
                 <div style={{
-                  position:'absolute', top:'1.1rem', right:'1.1rem', width:22, height:22, borderRadius:'50%',
+                  position:'absolute', top:'1rem', right:'1rem', width:20, height:20, borderRadius:'50%',
                   background: isHov ? '#10b981' : '#e2e8f0',
                   display:'flex', alignItems:'center', justifyContent:'center', transition:'background 0.25s',
                 }}>
-                  <svg width="11" height="11" viewBox="0 0 10 10" fill="none">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <path d="M2 5l2.5 2.5L8 3" stroke="#fff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
-                <h3 style={{ fontSize:'1rem', fontWeight:700, lineHeight:1.35, color: isHov ? '#0c4a6e' : '#1e293b',
+                <h3 style={{ fontSize:'0.95rem', fontWeight:700, lineHeight:1.3, color: isHov ? '#0c4a6e' : '#1e293b',
                   margin:0, transition:'color 0.25s' }}>{svc.title}</h3>
-                <p style={{ fontSize:'0.85rem', color:'#64748b', lineHeight:1.6, margin:0 }}>{svc.desc}</p>
+                <p style={{ fontSize:'0.82rem', color:'#64748b', lineHeight:1.55, margin:0 }}>{svc.desc}</p>
               </div>
             );
           })}
@@ -369,14 +422,14 @@ const HomecareServices = () => {
           gap:'2rem', flexWrap:'wrap',
           boxShadow:'0 20px 50px rgba(3,105,161,0.28)',
         }}>
-          <div style={{ flex:1, minWidth:220 }}>
-            <div style={{ fontSize:'2rem', marginBottom:'0.4rem' }}>📞</div>
-            <h3 style={{ margin:'0 0 0.25rem', color:'#fff', fontSize:'1.35rem', fontWeight:800 }}>Book a Consultation</h3>
-            <p style={{ margin:'0 0 0.85rem', color:'rgba(255,255,255,0.82)', fontSize:'0.9rem' }}>Mon–Sat Open · Multi-Speciality Clinic · Karan Nagar, Srinagar</p>
-            <div className="services-phone-row" style={{ display:'flex', gap:'0.65rem', flexWrap:'wrap' }}>
+          <div style={{ flex:1, minWidth:200 }}>
+            <div style={{ fontSize:'1.75rem', marginBottom:'0.35rem' }}>📞</div>
+            <h3 style={{ margin:'0 0 0.2rem', color:'#fff', fontSize:'1.25rem', fontWeight:800 }}>Book a Consultation</h3>
+            <p style={{ margin:'0 0 0.75rem', color:'rgba(255,255,255,0.82)', fontSize:'0.88rem' }}>Mon–Sat · Multi-Speciality · Karan Nagar, Srinagar</p>
+            <div className="services-phone-row" style={{ display:'flex', gap:'0.6rem', flexWrap:'wrap' }}>
               {['+91 6006846560'].map(num => (
                 <a key={num} href={`tel:${num.replace(/\s/g,'')}`} style={{
-                  color:'#fff', fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
+                  color:'#fff', fontWeight:700, fontSize:'0.85rem', textDecoration:'none',
                   background:'rgba(255,255,255,0.18)', padding:'0.35rem 0.85rem',
                   borderRadius:'20px', border:'1px solid rgba(255,255,255,0.32)',
                   display: 'flex', alignItems: 'center', gap: '0.3rem',
@@ -384,10 +437,8 @@ const HomecareServices = () => {
               ))}
             </div>
           </div>
-          <a
-            href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
-            target="_blank"
-            rel="noreferrer"
+          {/* Book button scrolls to form */}
+          <button
             className="services-cta-btn"
             style={{
               display:'flex', alignItems:'center', gap:'0.6rem',
@@ -396,13 +447,14 @@ const HomecareServices = () => {
               padding:'0.9rem 1.75rem', fontWeight:800, fontSize:'0.95rem',
               cursor:'pointer', boxShadow:'0 4px 14px rgba(0,0,0,0.15)',
               transition:'all 0.25s ease', whiteSpace:'nowrap',
-              minHeight: '52px', textDecoration: 'none',
+              minHeight: '52px', fontFamily:'inherit',
             }}
             onMouseEnter={e => { e.currentTarget.style.transform='scale(1.05)'; e.currentTarget.style.boxShadow='0 10px 28px rgba(0,0,0,0.25)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'; }}
+            onClick={() => scrollTo('booking')}
           >
             📅 Book Appointment
-          </a>
+          </button>
         </div>
       </div>
     </section>
@@ -425,7 +477,7 @@ const DoctorsSection = () => {
   const ref = React.useRef(null);
 
   React.useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.12 });
+    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: 0.08 });
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, []);
@@ -433,56 +485,56 @@ const DoctorsSection = () => {
   return (
     <section id="doctors" style={{ background:'#fff', padding:'5rem 0' }} ref={ref}>
       <div className="container">
-        <div className="text-center" style={{ marginBottom:'3rem' }}>
-          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>👨‍⚕️ Our Specialists</span>
+        <div className="text-center" style={{ marginBottom:'2.5rem' }}>
+          <span className="pill" style={{ marginBottom:'0.85rem', display:'inline-block' }}>👨‍⚕️ Our Specialists</span>
           <h2 style={{ color:'#0c4a6e', margin:0 }}>Expert Doctors Across Specialities</h2>
-          <p style={{ color:'#64748b', marginTop:'0.75rem', fontSize:'1rem', maxWidth:540, margin:'0.75rem auto 0' }}>
-            Apollo Clinic Srinagar brings experienced specialists together — offering accurate diagnosis and compassionate care across multiple fields of medicine.
+          <p className="section-header-desc" style={{ color:'#64748b', marginTop:'0.65rem', fontSize:'1rem', maxWidth:520, margin:'0.65rem auto 0' }}>
+            Apollo Clinic Srinagar brings experienced specialists together — offering accurate diagnosis and compassionate care.
           </p>
         </div>
 
         <div className="doctors-grid" style={{
           display:'grid',
-          gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',
-          gap:'1.25rem',
+          gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))',
+          gap:'1.1rem',
         }}>
           {SPECIALISTS.map((spec, i) => (
             <div key={i}
               onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
               style={{
-                borderRadius:'20px', padding:'1.75rem 1.5rem', textAlign:'center',
+                borderRadius:'18px', padding:'1.5rem 1.25rem', textAlign:'center',
                 border:`1.5px solid ${hov === i ? '#0ea5e9' : '#e0eef8'}`,
                 background: hov === i ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
-                boxShadow: hov === i ? '0 20px 52px rgba(14,165,233,0.18)' : '0 4px 20px rgba(14,165,233,0.08)',
-                transform: vis ? (hov === i ? 'translateY(-8px)' : 'translateY(0)') : 'translateY(28px)',
+                boxShadow: hov === i ? '0 16px 40px rgba(14,165,233,0.16)' : '0 3px 14px rgba(14,165,233,0.07)',
+                transform: vis ? (hov === i ? 'translateY(-6px)' : 'translateY(0)') : 'translateY(24px)',
                 opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${i * 0.08}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
+                transition: `opacity 0.5s ease ${i * 0.07}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
                 cursor: 'default',
               }}
             >
               {/* Icon */}
               <div style={{
-                width: 72, height: 72, borderRadius: '50%', margin: '0 auto 1rem',
+                width: 64, height: 64, borderRadius: '50%', margin: '0 auto 0.85rem',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: hov === i ? 'linear-gradient(135deg,#0ea5e9,#10b981)' : 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
-                fontSize: '2rem',
+                fontSize: '1.75rem',
                 border: `3px solid ${hov === i ? '#0ea5e9' : '#cce5f6'}`,
                 transition: 'all 0.3s',
               }}>
                 {spec.icon}
               </div>
 
-              <h3 style={{ color: hov === i ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'1rem', marginBottom:'0.75rem' }}>
+              <h3 style={{ color: hov === i ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'0.95rem', marginBottom:'0.6rem' }}>
                 {spec.role}
               </h3>
 
               {/* Tags */}
-              <div style={{ display:'flex', flexWrap:'wrap', gap:'0.4rem', justifyContent:'center' }}>
+              <div style={{ display:'flex', flexWrap:'wrap', gap:'0.35rem', justifyContent:'center', marginBottom:'0.1rem' }}>
                 {spec.tags.map((tag, t) => (
                   <span key={t} style={{
                     background: hov === i ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.07)',
-                    color:'#0369a1', padding:'0.2rem 0.6rem', borderRadius:'20px',
-                    fontSize:'0.72rem', fontWeight:600, transition:'background 0.3s',
+                    color:'#0369a1', padding:'0.18rem 0.55rem', borderRadius:'20px',
+                    fontSize:'0.7rem', fontWeight:600, transition:'background 0.3s',
                   }}>{tag}</span>
                 ))}
               </div>
@@ -491,10 +543,10 @@ const DoctorsSection = () => {
               <div style={{
                 display:'flex', alignItems:'center', justifyContent:'center', gap:'0.45rem',
                 borderTop:`1px solid ${hov === i ? '#bae6fd' : '#e0eef8'}`,
-                paddingTop:'0.9rem', marginTop:'0.9rem', transition:'border-color 0.3s',
+                paddingTop:'0.8rem', marginTop:'0.8rem', transition:'border-color 0.3s',
               }}>
-                <CheckCircle size={14} color="#10b981" />
-                <span style={{ color:'#475569', fontSize:'0.78rem', fontWeight:500 }}>Qualified Specialist</span>
+                <CheckCircle size={13} color="#10b981" />
+                <span style={{ color:'#475569', fontSize:'0.75rem', fontWeight:500 }}>Qualified Specialist</span>
               </div>
             </div>
           ))}
@@ -517,32 +569,32 @@ const BookingSection = () => (
       background:'radial-gradient(circle,rgba(16,185,129,0.1) 0%,transparent 70%)', pointerEvents:'none' }} />
 
     <div className="container" style={{ position:'relative', zIndex:1 }}>
-      <div className="booking-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:'4rem', alignItems:'center' }}>
+      <div className="booking-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(300px,1fr))', gap:'4rem', alignItems:'start' }}>
         {/* Left info */}
         <div>
-          <span className="pill" style={{ marginBottom:'1.1rem', display:'inline-block' }}>📅 Book Your Consultation</span>
-          <h2 style={{ color:'#0c4a6e', marginBottom:'1rem' }}>Ready for Expert Healthcare?</h2>
-          <p style={{ fontSize:'1.05rem', color:'#475569', lineHeight:1.75, marginBottom:'2rem' }}>
-            Book your appointment at Apollo Clinic Srinagar. Fill in the form and we will confirm your slot via WhatsApp.
+          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>📅 Book Your Consultation</span>
+          <h2 style={{ color:'#0c4a6e', marginBottom:'0.85rem' }}>Ready for Expert Healthcare?</h2>
+          <p style={{ fontSize:'1rem', color:'#475569', lineHeight:1.7, marginBottom:'1.75rem' }}>
+            Book your appointment at Apollo Clinic Srinagar. Fill in the form and we will confirm your slot as soon as possible.
           </p>
 
           <div style={{
-            borderRadius:'18px', overflow:'hidden',
+            borderRadius:'16px', overflow:'hidden',
             border:'1.5px solid #cce5f6',
-            boxShadow:'0 8px 28px rgba(14,165,233,0.1)',
+            boxShadow:'0 6px 24px rgba(14,165,233,0.1)',
           }}>
             <div style={{
               background:'linear-gradient(135deg,#0369a1,#0ea5e9)',
-              padding:'0.9rem 1.25rem',
-              display:'flex', alignItems:'center', gap:'0.6rem',
+              padding:'0.85rem 1.1rem',
+              display:'flex', alignItems:'center', gap:'0.55rem',
             }}>
-              <MapPin size={16} color="#fff" />
-              <span style={{ color:'#fff', fontWeight:700, fontSize:'0.9rem' }}>
+              <MapPin size={15} color="#fff" />
+              <span style={{ color:'#fff', fontWeight:700, fontSize:'0.88rem' }}>
                 Karan Nagar, Near National School, Srinagar
               </span>
             </div>
             <iframe
-              width="100%" height="220"
+              width="100%" height="210"
               style={{ border:0, display:'block' }}
               allowFullScreen="" loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -551,27 +603,17 @@ const BookingSection = () => (
             />
           </div>
 
-          {/* Quick contact buttons */}
-          <div style={{ display:'flex', gap:'0.75rem', marginTop:'1.25rem', flexWrap:'wrap' }}>
+          {/* Call Us button only — WhatsApp button removed */}
+          <div className="booking-contact-btns" style={{ display:'flex', gap:'0.75rem', marginTop:'1.1rem', flexWrap:'wrap' }}>
             <a href="tel:+916006846560" style={{
               display:'flex', alignItems:'center', gap:'0.45rem',
               background:'linear-gradient(135deg,#0369a1,#0ea5e9)',
-              color:'#fff', padding:'0.65rem 1.25rem', borderRadius:'12px',
-              fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
+              color:'#fff', padding:'0.7rem 1.4rem', borderRadius:'12px',
+              fontWeight:700, fontSize:'0.9rem', textDecoration:'none',
               boxShadow:'0 4px 14px rgba(3,105,161,0.28)',
-            }}>📞 Call Us</a>
-            <a
-              href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
-              target="_blank" rel="noreferrer"
-              style={{
-                display:'flex', alignItems:'center', gap:'0.45rem',
-                background:'linear-gradient(135deg,#25D366,#128C7E)',
-                color:'#fff', padding:'0.65rem 1.25rem', borderRadius:'12px',
-                fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
-                boxShadow:'0 4px 14px rgba(37,211,102,0.3)',
-              }}>
-              <WAIcon size={16} />
-              WhatsApp Booking
+              flex: 1, justifyContent: 'center',
+            }}>
+              <Phone size={16} /> Call Us — +91 6006846560
             </a>
           </div>
         </div>
@@ -589,19 +631,16 @@ const BookingSection = () => (
 const TESTIMONIALS = [
   {
     name: 'Verified Patient',
-    initials: 'V',
     text: 'The clinic was very clean and hygienic, and the facilities were excellent. I didn\'t have to wait long and the staff provided great customer service.',
     rating: 5,
   },
   {
     name: 'Verified Patient',
-    initials: 'V',
     text: 'Highly impressed with the professionalism and efficiency of the staff. The entire experience felt smooth and well-organized.',
     rating: 5,
   },
   {
     name: 'Verified Patient',
-    initials: 'V',
     text: 'The doctors are kind and provide good care. Overall, a reliable place for quality healthcare.',
     rating: 5,
   },
@@ -615,7 +654,7 @@ const TestimonialsSection = () => {
   React.useEffect(() => {
     const observer = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) setVis(true); },
-      { threshold: 0.1 }
+      { threshold: 0.08 }
     );
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
@@ -624,47 +663,47 @@ const TestimonialsSection = () => {
   return (
     <section id="testimonials" style={{ background: 'linear-gradient(180deg,#f8fafc 0%,#fff 100%)', padding: '5rem 0' }} ref={ref}>
       <div className="container">
-        <div className="text-center" style={{ marginBottom: '3rem' }}>
-          <span className="pill" style={{ marginBottom: '1rem', display: 'inline-block' }}>⭐ Patient Reviews</span>
+        <div className="text-center" style={{ marginBottom: '2.5rem' }}>
+          <span className="pill" style={{ marginBottom: '0.85rem', display: 'inline-block' }}>⭐ Patient Reviews</span>
           <h2 style={{ color: '#0c4a6e', margin: 0 }}>What Our Patients Say</h2>
-          <p style={{ color: '#64748b', marginTop: '0.75rem', fontSize: '1rem', maxWidth: 520, margin: '0.75rem auto 0' }}>
-            Real experiences from patients who trusted Apollo Clinic Srinagar with their healthcare needs.
+          <p className="section-header-desc" style={{ color: '#64748b', marginTop: '0.65rem', fontSize: '1rem', maxWidth: 500, margin: '0.65rem auto 0' }}>
+            Real experiences from patients who trusted Apollo Clinic Srinagar.
           </p>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '1.25rem' }}>
+        <div className="testi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(270px,1fr))', gap: '1.1rem' }}>
           {TESTIMONIALS.map((t, i) => (
             <div key={i}
               onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
               style={{
-                borderRadius: '20px', padding: '2rem 1.75rem',
+                borderRadius: '18px', padding: '1.75rem 1.5rem',
                 border: `1.5px solid ${hov === i ? '#0ea5e9' : '#e0eef8'}`,
                 background: hov === i ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
-                boxShadow: hov === i ? '0 16px 42px rgba(14,165,233,0.18)' : '0 2px 12px rgba(14,165,233,0.06)',
-                transform: vis ? (hov === i ? 'translateY(-6px)' : 'translateY(0)') : 'translateY(28px)',
+                boxShadow: hov === i ? '0 14px 38px rgba(14,165,233,0.18)' : '0 2px 10px rgba(14,165,233,0.06)',
+                transform: vis ? (hov === i ? 'translateY(-5px)' : 'translateY(0)') : 'translateY(24px)',
                 opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
+                transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
               }}
             >
               {/* Stars */}
-              <div style={{ display: 'flex', gap: '3px', marginBottom: '1rem' }}>
+              <div style={{ display: 'flex', gap: '2px', marginBottom: '0.85rem' }}>
                 {Array.from({ length: t.rating }).map((_, s) => (
-                  <span key={s} style={{ color: '#f59e0b', fontSize: '1.15rem' }}>★</span>
+                  <span key={s} style={{ color: '#f59e0b', fontSize: '1.1rem' }}>★</span>
                 ))}
               </div>
-              <p style={{ color: '#475569', fontSize: '0.92rem', lineHeight: 1.7, margin: '0 0 1.25rem', fontStyle: 'italic' }}>
+              <p style={{ color: '#475569', fontSize: '0.9rem', lineHeight: 1.7, margin: '0 0 1.1rem', fontStyle: 'italic' }}>
                 "{t.text}"
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
                 <div style={{
-                  width: 40, height: 40, borderRadius: '50%',
+                  width: 36, height: 36, borderRadius: '50%',
                   background: hov === i ? 'linear-gradient(135deg,#0ea5e9,#10b981)' : 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: '1rem', fontWeight: 800, color: hov === i ? '#fff' : '#0369a1',
-                  transition: 'all 0.3s',
+                  fontSize: '0.9rem', fontWeight: 800, color: hov === i ? '#fff' : '#0369a1',
+                  transition: 'all 0.3s', flexShrink: 0,
                 }}>✓</div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: hov === i ? '#0c4a6e' : '#1e293b' }}>{t.name}</div>
-                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500 }}>Apollo Clinic Srinagar</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.85rem', color: hov === i ? '#0c4a6e' : '#1e293b' }}>{t.name}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#94a3b8', fontWeight: 500 }}>Apollo Clinic Srinagar</div>
                 </div>
               </div>
             </div>
