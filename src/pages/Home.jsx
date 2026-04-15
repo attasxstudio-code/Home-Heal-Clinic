@@ -55,15 +55,12 @@ const Home = () => (
 
     {/* ── Sticky bottom CTA bar (mobile only) ── */}
     <div className="sticky-cta-bar">
-      <a
-        href={WA_LINK}
-        target="_blank"
-        rel="noreferrer"
+      <button
+        onClick={() => scrollTo('booking')}
         className="sticky-cta-btn"
       >
-        <WAIcon size={20} />
-        Book Appointment on WhatsApp
-      </a>
+        📅 Book Appointment
+      </button>
     </div>
 
     <style>{`
@@ -203,15 +200,13 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="hero-btn-row" style={{ display:'flex', gap:'1rem', flexWrap:'wrap' }}>
-              <a
-                href={WA_LINK}
-                target="_blank" rel="noreferrer"
+              <button
                 className="btn btn-whatsapp"
-                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem', textDecoration:'none' }}
+                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
+                onClick={() => scrollTo('booking')}
               >
-                <WAIcon size={18} />
-                Book Appointment on WhatsApp
-              </a>
+                📅 Book Appointment
+              </button>
               <button className="btn btn-outline"
                 style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
                 onClick={() => scrollTo('services')}>
@@ -386,13 +381,11 @@ const HomecareServices = () => {
               ))}
             </div>
           </div>
-          <a
-            href={WA_LINK}
-            target="_blank" rel="noreferrer"
+          <button
             className="services-cta-btn"
             style={{
               display:'flex', alignItems:'center', gap:'0.6rem',
-              background:'#fff', color:'#059669', textDecoration: 'none',
+              background:'#fff', color:'#059669',
               border:'none', borderRadius:'12px',
               padding:'0.9rem 1.75rem', fontWeight:800, fontSize:'0.95rem',
               cursor:'pointer', boxShadow:'0 4px 14px rgba(0,0,0,0.15)',
@@ -401,10 +394,10 @@ const HomecareServices = () => {
             }}
             onMouseEnter={e => { e.currentTarget.style.transform='scale(1.05)'; e.currentTarget.style.boxShadow='0 10px 28px rgba(0,0,0,0.25)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'; }}
+            onClick={() => scrollTo('booking')}
           >
-            <WAIcon size={20} />
-            Book Now on WhatsApp
-          </a>
+            📅 Book Appointment
+          </button>
         </div>
       </div>
     </section>
