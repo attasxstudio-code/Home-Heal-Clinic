@@ -423,39 +423,76 @@ const DoctorsSection = () => {
     <section id="doctors" style={{ background:'#fff', padding:'5rem 0' }} ref={ref}>
       <div className="container">
         <div className="text-center" style={{ marginBottom:'3rem' }}>
-          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>👨‍⚕️ Our Experts</span>
+          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>👨‍⚕️ Your Dermatologist</span>
           <h2 style={{ color:'#0c4a6e', margin:0 }}>Meet Dr. Shah Aaqib Aslam</h2>
           <p style={{ color:'#64748b', marginTop:'0.75rem', fontSize:'1rem', maxWidth:500, margin:'0.75rem auto 0' }}>
             Specialized in medical and cosmetic dermatology — precise diagnosis and personalized skin care for every patient.
           </p>
         </div>
-        <div className="doctors-grid" style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(220px,1fr))', gap:'1.25rem' }}>
-          {DOCTORS.map((doc, i) => (
-            <div key={i}
-              onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
-              style={{
-                borderRadius:'20px', padding:'2rem 1.5rem', textAlign:'center',
-                border:`1.5px solid ${hov === i ? '#0ea5e9' : '#e0eef8'}`,
-                background: hov === i ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
-                boxShadow: hov === i ? '0 16px 42px rgba(14,165,233,0.18)' : '0 2px 12px rgba(14,165,233,0.06)',
-                transform: vis ? (hov === i ? 'translateY(-6px)' : 'translateY(0)') : 'translateY(28px)',
-                opacity: vis ? 1 : 0,
-                transition: `opacity 0.5s ease ${i * 0.1}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
-                cursor: 'default',
-              }}>
-              <div style={{
-                width:76, height:76, borderRadius:'50%', margin:'0 auto 1.1rem',
-                background: hov === i ? 'linear-gradient(135deg,#0ea5e9,#10b981)' : 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
-                display:'flex', alignItems:'center', justifyContent:'center',
-                fontSize:'2.1rem', transition:'background 0.3s',
-                boxShadow: hov === i ? '0 8px 24px rgba(14,165,233,0.3)' : '0 4px 12px rgba(14,165,233,0.1)',
-              }}>{doc.icon}</div>
-              <h3 style={{ color: hov === i ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'1rem', marginBottom:'0.35rem' }}>
-                {doc.name}
-              </h3>
-              <p style={{ color:'#64748b', fontSize:'0.83rem', lineHeight:1.55, margin:0 }}>{doc.role}</p>
+
+        {/* Single doctor — premium centered card */}
+        <div style={{ display:'flex', justifyContent:'center' }}>
+          <div
+            onMouseEnter={() => setHov(0)} onMouseLeave={() => setHov(null)}
+            style={{
+              borderRadius:'24px', padding:'2.5rem 2rem', textAlign:'center',
+              border:`1.5px solid ${hov === 0 ? '#0ea5e9' : '#e0eef8'}`,
+              background: hov === 0 ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
+              boxShadow: hov === 0 ? '0 20px 52px rgba(14,165,233,0.18)' : '0 4px 20px rgba(14,165,233,0.08)',
+              transform: vis ? (hov === 0 ? 'translateY(-8px)' : 'translateY(0)') : 'translateY(28px)',
+              opacity: vis ? 1 : 0,
+              transition: 'opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s',
+              cursor: 'default',
+              maxWidth: '360px',
+              width: '100%',
+            }}
+          >
+            {/* Photo */}
+            <div style={{
+              width: 150, height: 150, borderRadius: '50%', margin: '0 auto 1.25rem',
+              overflow: 'hidden',
+              border: `3px solid ${hov === 0 ? '#0ea5e9' : '#cce5f6'}`,
+              boxShadow: hov === 0 ? '0 10px 32px rgba(14,165,233,0.3)' : '0 4px 16px rgba(14,165,233,0.12)',
+              transition: 'border-color 0.3s, box-shadow 0.3s',
+              background: 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
+            }}>
+              <img
+                src="/dr-aaqib.jpg"
+                alt="Dr. Shah Aaqib Aslam"
+                style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top' }}
+                onError={e => { e.target.style.display='none'; e.target.parentNode.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem">🩺</div>'; }}
+              />
             </div>
-          ))}
+
+            {/* Name & role */}
+            <h3 style={{ color: hov === 0 ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'1.15rem', marginBottom:'0.3rem' }}>
+              Dr. Shah Aaqib Aslam
+            </h3>
+            <p style={{ color:'#0ea5e9', fontSize:'0.88rem', fontWeight:600, margin:'0 0 1rem' }}>
+              Dermatologist | Skin Specialist
+            </p>
+
+            {/* Specialization pills */}
+            <div style={{ display:'flex', flexWrap:'wrap', gap:'0.45rem', justifyContent:'center', marginBottom:'1.25rem' }}>
+              {['Medical Dermatology', 'Laser Treatments', 'Cosmetic Care', 'Skin Analysis'].map((tag, t) => (
+                <span key={t} style={{
+                  background: hov === 0 ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.07)',
+                  color:'#0369a1', padding:'0.25rem 0.7rem', borderRadius:'20px',
+                  fontSize:'0.75rem', fontWeight:600, transition:'background 0.3s',
+                }}>{tag}</span>
+              ))}
+            </div>
+
+            {/* Credential badge */}
+            <div style={{
+              display:'flex', alignItems:'center', justifyContent:'center', gap:'0.5rem',
+              borderTop:`1px solid ${hov === 0 ? '#bae6fd' : '#e0eef8'}`,
+              paddingTop:'1rem', transition:'border-color 0.3s',
+            }}>
+              <CheckCircle size={15} color="#10b981" />
+              <span style={{ color:'#475569', fontSize:'0.82rem', fontWeight:500 }}>Certified Dermatologist</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
