@@ -98,7 +98,7 @@ const Login = () => {
             </label>
             <input
               type="email" className="form-control"
-              placeholder="admin@apolloclinicsrg.com"
+              placeholder="admin@apolloclinicsgr.com"
               value={email} onChange={e => setEmail(e.target.value)}
               required autoComplete="email"
               style={{ minHeight:'52px', fontSize:'1rem' }}
