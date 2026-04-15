@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Invalid credentials.');
     }
 
-    const adminData = { email: ADMIN_EMAIL, role: 'admin', name: "Q'Derma Admin" };
+    const adminData = { email: ADMIN_EMAIL, role: 'admin', name: "Apollo Clinic Admin" };
     const session   = JSON.stringify({
       admin:     adminData,
       expiresAt: Date.now() + SESSION_TTL,

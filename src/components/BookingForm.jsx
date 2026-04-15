@@ -33,8 +33,8 @@ const BookingForm = () => {
     saveLeadToAdmin({ name, phone, date, message });
 
     // 2️⃣  Open WhatsApp
-    const text = `New Appointment Request — Q'Derma The Skin Clinic:\nName: ${name}\nPhone: ${phone}\nDate: ${date}\nMessage: ${message || 'No additional message.'}`;
-    window.open(`https://wa.me/916005348879?text=${encodeURIComponent(text)}`, '_blank');
+    const text = `New Appointment Request — Apollo Clinic Srinagar:\nName: ${name}\nPhone: ${phone}\nDate: ${date}\nMessage: ${message || 'No additional message.'}`;
+    window.open(`https://wa.me/916006846560?text=${encodeURIComponent(text)}`, '_blank');
 
     // 3️⃣  Show brief success state then reset
     setSubmitted(true);

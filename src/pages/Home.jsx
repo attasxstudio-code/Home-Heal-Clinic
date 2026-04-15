@@ -5,7 +5,7 @@ import BookingForm from '../components/BookingForm';
 /* ─── scroll helper ─── */
 const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
 
-const WA_LINK = `https://wa.me/916005348879?text=${encodeURIComponent('Hello! I would like to book an appointment at Q Derma The Skin Clinic.')}`;
+const WA_LINK = `https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
 
 /* WhatsApp SVG icon */
 const WAIcon = ({ size = 20 }) => (
@@ -56,12 +56,15 @@ const Home = () => (
 
     {/* ── Sticky bottom CTA bar (mobile only) ── */}
     <div className="sticky-cta-bar">
-      <button
-        onClick={() => scrollTo('booking')}
+      <a
+        href={WA_LINK}
+        target="_blank"
+        rel="noreferrer"
         className="sticky-cta-btn"
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', textDecoration: 'none' }}
       >
         📅 Book Appointment
-      </button>
+      </a>
     </div>
 
     <style>{`
@@ -175,22 +178,22 @@ const HeroSection = () => {
           {/* Text */}
           <div className="animate-fade-in">
             <span className="pill" style={{ marginBottom:'1.25rem', display:'inline-block' }}>
-              🧴 Dermatology Clinic · Jawahar Nagar, Srinagar
+              🏥 Multi-Speciality Clinic · Karan Nagar, Srinagar
             </span>
             <h1 className="hero-h1" style={{ color:'#0c4a6e', marginBottom:'1rem', lineHeight:1.15 }}>
-              Expert Skin Care,<br />
+              Advanced Healthcare,<br />
               <span style={{ background:'linear-gradient(135deg,#0ea5e9,#10b981)',
                 WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-                By a Specialist
+                Under One Roof
               </span>
             </h1>
             <p className="hero-sub" style={{ fontSize:'1.1rem', color:'#475569', lineHeight:1.7, marginBottom:'1.75rem', maxWidth:'480px' }}>
-              Advanced dermatology for all skin types — medical treatments, laser procedures, and cosmetic care by Dr. Shah Aaqib Aslam.
+              Apollo Clinic Srinagar brings together expert specialists, advanced diagnostics, and preventive healthcare — delivering a complete, patient-first experience in Karan Nagar.
             </p>
 
             {/* Trust badges */}
             <div className="hero-badge-row" style={{ display:'flex', gap:'0.65rem', flexWrap:'wrap', marginBottom:'1.75rem' }}>
-              {['✅ Certified Dermatologist', '🕐 Mon–Sun Open', '🏥 Advanced Technology'].map((badge, i) => (
+              {['✅ Multi-Speciality', '🕐 Mon–Sat Open', '🔬 Advanced Diagnostics'].map((badge, i) => (
                 <span key={i} style={{
                   background:'rgba(14,165,233,0.1)', color:'#0369a1',
                   padding:'0.35rem 0.85rem', borderRadius:'20px',
@@ -201,13 +204,15 @@ const HeroSection = () => {
 
             {/* CTA Buttons */}
             <div className="hero-btn-row" style={{ display:'flex', gap:'1rem', flexWrap:'wrap' }}>
-              <button
+              <a
+                href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
+                target="_blank"
+                rel="noreferrer"
                 className="btn btn-whatsapp"
-                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
-                onClick={() => scrollTo('booking')}
+                style={{ padding:'0.9rem 1.75rem', fontSize:'1rem', textDecoration:'none', display:'inline-flex', alignItems:'center', gap:'0.5rem' }}
               >
                 📅 Book Appointment
-              </button>
+              </a>
               <button className="btn btn-outline"
                 style={{ padding:'0.9rem 1.75rem', fontSize:'1rem' }}
                 onClick={() => scrollTo('services')}>
@@ -227,18 +232,18 @@ const HeroSection = () => {
             }}>
               <div style={{ position:'absolute', top:'-40px', right:'-40px', width:'180px', height:'180px', borderRadius:'50%',
                 background:'rgba(255,255,255,0.08)', pointerEvents:'none' }} />
-              <div style={{ fontSize:'3.5rem', marginBottom:'1rem' }}>🏠</div>
+              <div style={{ fontSize:'3.5rem', marginBottom:'1rem' }}>🏥</div>
               <h3 style={{ color:'#fff', fontWeight:800, fontSize:'1.35rem', marginBottom:'0.75rem' }}>
-                Q'Derma The Skin Clinic
+                Apollo Clinic Srinagar
               </h3>
               <p style={{ color:'rgba(255,255,255,0.82)', fontSize:'0.9rem', lineHeight:1.65, marginBottom:'1.5rem' }}>
-                Precision dermatology combining expert diagnosis with advanced laser and cosmetic skin treatments.
+                Trusted multi-speciality care with expert doctors, modern diagnostics, and a seamless patient experience.
               </p>
               {[
-                '✨ Laser Treatments',
-                '🔬 Precise Skin Analysis',
-                '🌟 Cosmetic Dermatology',
-                '💊 Medical Skin Care',
+                '🩺 Multiple Specialities',
+                '🔬 Advanced Diagnostics',
+                '❤️ Preventive Health Checks',
+                '👨‍👩‍👧 Family Healthcare',
               ].map((item, i) => (
                 <div key={i} style={{ display:'flex', alignItems:'center', gap:'0.6rem',
                   padding:'0.55rem 0.85rem', borderRadius:'10px',
@@ -256,18 +261,18 @@ const HeroSection = () => {
   );
 };
 
-/* ─── Homecare Services ─── */
+/* ─── Services ─── */
 const SERVICES = [
-  { icon: '✨', title: 'Acne & Acne Scar Treatment',          desc: 'Targeted treatment for active acne and lasting scar reduction using clinically proven methods.' },
-  { icon: '🧴', title: 'Eczema & Psoriasis Management',      desc: 'Expert management of chronic skin conditions with personalized plans to reduce flare-ups.' },
-  { icon: '🌟', title: 'Pigmentation & Melasma Treatment',   desc: 'Precise treatment for dark spots, uneven tone, and melasma for a clearer complexion.' },
-  { icon: '💇', title: 'Hair Loss & Alopecia Treatment',     desc: 'Comprehensive evaluation and advanced treatment for hair thinning and scalp conditions.' },
-  { icon: '🔬', title: 'Skin Allergy & Infection Treatment', desc: 'Accurate diagnosis and targeted treatment of skin allergies, rashes, and infections.' },
-  { icon: '💡', title: 'Laser Hair Reduction',               desc: 'Safe, long-lasting laser hair removal for all skin types with minimal downtime.' },
-  { icon: '💎', title: 'Skin Rejuvenation & Glow Therapy',   desc: 'Advanced treatments to refresh and brighten skin tone, leaving it radiant and healthy.' },
-  { icon: '🌸', title: 'Anti-Aging Treatments',             desc: 'Tailored procedures to reduce fine lines, improve texture, and restore a youthful look.' },
-  { icon: '🩹', title: 'Scar Reduction Procedures',          desc: 'Medical-grade treatments to minimize the appearance of surgical, acne, and injury scars.' },
-  { icon: '🔍', title: 'Advanced Skin Analysis',             desc: 'In-depth skin assessment using advanced diagnostic tools for precise diagnosis and planning.' },
+  { icon: '👨‍⚕️', title: 'General Physician Consultation',      desc: 'Comprehensive evaluation and treatment for common illnesses, chronic conditions, and general wellbeing.' },
+  { icon: '🧴', title: 'Dermatology & Skin Care',               desc: 'Expert care for skin conditions, infections, cosmetic concerns, and long-term skin health.' },
+  { icon: '👶', title: 'Pediatrics (Child Care)',                desc: 'Specialized healthcare for infants, children, and adolescents — safe, gentle, and family-friendly.' },
+  { icon: '🌸', title: 'Gynecology & Women\'s Health',           desc: 'Comprehensive women\'s health services from routine checkups to specialist consultations.' },
+  { icon: '🦴', title: 'Orthopedics',                           desc: 'Diagnosis and management of bone, joint, and muscle conditions for lasting mobility and comfort.' },
+  { icon: '❤️', title: 'ECG, ECHO & Cardiac Testing',           desc: 'Accurate cardiac diagnostics with ECG and ECHO to monitor and protect your heart health.' },
+  { icon: '🔬', title: 'Blood Tests & Laboratory Services',      desc: 'Comprehensive blood panels and lab reports delivered quickly with high precision.' },
+  { icon: '🫁', title: 'Pulmonary Function Tests (PFT)',         desc: 'Lung capacity and respiratory health assessments for respiratory conditions and monitoring.' },
+  { icon: '🛡️', title: 'Preventive Health Checkups',            desc: 'Routine screening packages to detect risks early and keep you in optimal health year-round.' },
+  { icon: '💪', title: 'Physiotherapy',                         desc: 'Specialized rehabilitation and physiotherapy programs for pain relief and faster recovery.' },
 ];
 
 const HomecareServices = () => {
@@ -300,15 +305,14 @@ const HomecareServices = () => {
       <div className="container" style={{ position:'relative', zIndex:1 }}>
         {/* Header */}
         <div className="text-center" style={{ marginBottom:'3rem' }}>
-          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>🏥 Dermatology Services</span>
-          <h2 style={{ color:'#0c4a6e', margin:'0 0 1rem' }}>Our Treatments</h2>
+          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>🏥 Our Services</span>
+          <h2 style={{ color:'#0c4a6e', margin:'0 0 1rem' }}>Comprehensive Healthcare Services</h2>
           <p style={{ maxWidth:'580px', margin:'0 auto', color:'#475569', fontSize:'1rem', lineHeight:1.7 }}>
-            From medical skin care to advanced cosmetic procedures — Q'Derma offers expert dermatology
-            tailored to your unique skin type and concerns.
+            From primary consultations to advanced diagnostics — Apollo Clinic Srinagar offers a full spectrum of healthcare services under one roof for you and your family.
           </p>
         </div>
 
-        {/* Grid — 1 col on mobile, 2 on tablet, 3 on desktop */}
+        {/* Grid */}
         <div className="services-grid" style={{
           display:'grid',
           gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))',
@@ -368,9 +372,9 @@ const HomecareServices = () => {
           <div style={{ flex:1, minWidth:220 }}>
             <div style={{ fontSize:'2rem', marginBottom:'0.4rem' }}>📞</div>
             <h3 style={{ margin:'0 0 0.25rem', color:'#fff', fontSize:'1.35rem', fontWeight:800 }}>Book a Consultation</h3>
-            <p style={{ margin:'0 0 0.85rem', color:'rgba(255,255,255,0.82)', fontSize:'0.9rem' }}>Mon–Sun Open · Expert Dermatologist · Jawahar Nagar, Srinagar</p>
+            <p style={{ margin:'0 0 0.85rem', color:'rgba(255,255,255,0.82)', fontSize:'0.9rem' }}>Mon–Sat Open · Multi-Speciality Clinic · Karan Nagar, Srinagar</p>
             <div className="services-phone-row" style={{ display:'flex', gap:'0.65rem', flexWrap:'wrap' }}>
-              {['+91 6005348879'].map(num => (
+              {['+91 6006846560'].map(num => (
                 <a key={num} href={`tel:${num.replace(/\s/g,'')}`} style={{
                   color:'#fff', fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
                   background:'rgba(255,255,255,0.18)', padding:'0.35rem 0.85rem',
@@ -380,7 +384,10 @@ const HomecareServices = () => {
               ))}
             </div>
           </div>
-          <button
+          <a
+            href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
+            target="_blank"
+            rel="noreferrer"
             className="services-cta-btn"
             style={{
               display:'flex', alignItems:'center', gap:'0.6rem',
@@ -389,14 +396,13 @@ const HomecareServices = () => {
               padding:'0.9rem 1.75rem', fontWeight:800, fontSize:'0.95rem',
               cursor:'pointer', boxShadow:'0 4px 14px rgba(0,0,0,0.15)',
               transition:'all 0.25s ease', whiteSpace:'nowrap',
-              minHeight: '52px',
+              minHeight: '52px', textDecoration: 'none',
             }}
             onMouseEnter={e => { e.currentTarget.style.transform='scale(1.05)'; e.currentTarget.style.boxShadow='0 10px 28px rgba(0,0,0,0.25)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform='scale(1)'; e.currentTarget.style.boxShadow='0 4px 14px rgba(0,0,0,0.15)'; }}
-            onClick={() => scrollTo('booking')}
           >
             📅 Book Appointment
-          </button>
+          </a>
         </div>
       </div>
     </section>
@@ -404,8 +410,13 @@ const HomecareServices = () => {
 };
 
 /* ─── Doctors ─── */
-const DOCTORS = [
-  { name: 'Dr. Shah Aaqib Aslam', role: 'Dermatologist | Skin Specialist', icon: '🩺' },
+const SPECIALISTS = [
+  { role: 'General Physician',        icon: '👨‍⚕️', tags: ['Internal Medicine', 'Chronic Care', 'Wellness'] },
+  { role: 'Dermatologist',            icon: '🧴', tags: ['Skin Conditions', 'Cosmetic Care', 'Hair Health'] },
+  { role: 'Pediatrician',             icon: '👶', tags: ['Child Care', 'Vaccinations', 'Growth Monitoring'] },
+  { role: 'Gynecologist',             icon: '🌸', tags: ["Women's Health", 'Reproductive Care', 'Checkups'] },
+  { role: 'Orthopedic Specialist',    icon: '🦴', tags: ['Bone & Joint', 'Spine Care', 'Rehabilitation'] },
+  { role: 'Psychologist',             icon: '🧠', tags: ['Mental Health', 'Therapy', 'Counseling'] },
 ];
 
 const DoctorsSection = () => {
@@ -423,76 +434,70 @@ const DoctorsSection = () => {
     <section id="doctors" style={{ background:'#fff', padding:'5rem 0' }} ref={ref}>
       <div className="container">
         <div className="text-center" style={{ marginBottom:'3rem' }}>
-          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>👨‍⚕️ Your Dermatologist</span>
-          <h2 style={{ color:'#0c4a6e', margin:0 }}>Meet Dr. Shah Aaqib Aslam</h2>
-          <p style={{ color:'#64748b', marginTop:'0.75rem', fontSize:'1rem', maxWidth:500, margin:'0.75rem auto 0' }}>
-            Specialized in medical and cosmetic dermatology — precise diagnosis and personalized skin care for every patient.
+          <span className="pill" style={{ marginBottom:'1rem', display:'inline-block' }}>👨‍⚕️ Our Specialists</span>
+          <h2 style={{ color:'#0c4a6e', margin:0 }}>Expert Doctors Across Specialities</h2>
+          <p style={{ color:'#64748b', marginTop:'0.75rem', fontSize:'1rem', maxWidth:540, margin:'0.75rem auto 0' }}>
+            Apollo Clinic Srinagar brings experienced specialists together — offering accurate diagnosis and compassionate care across multiple fields of medicine.
           </p>
         </div>
 
-        {/* Single doctor — premium centered card */}
-        <div style={{ display:'flex', justifyContent:'center' }}>
-          <div
-            onMouseEnter={() => setHov(0)} onMouseLeave={() => setHov(null)}
-            style={{
-              borderRadius:'24px', padding:'2.5rem 2rem', textAlign:'center',
-              border:`1.5px solid ${hov === 0 ? '#0ea5e9' : '#e0eef8'}`,
-              background: hov === 0 ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
-              boxShadow: hov === 0 ? '0 20px 52px rgba(14,165,233,0.18)' : '0 4px 20px rgba(14,165,233,0.08)',
-              transform: vis ? (hov === 0 ? 'translateY(-8px)' : 'translateY(0)') : 'translateY(28px)',
-              opacity: vis ? 1 : 0,
-              transition: 'opacity 0.5s ease, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s',
-              cursor: 'default',
-              maxWidth: '360px',
-              width: '100%',
-            }}
-          >
-            {/* Photo */}
-            <div style={{
-              width: 150, height: 150, borderRadius: '50%', margin: '0 auto 1.25rem',
-              overflow: 'hidden',
-              border: `3px solid ${hov === 0 ? '#0ea5e9' : '#cce5f6'}`,
-              boxShadow: hov === 0 ? '0 10px 32px rgba(14,165,233,0.3)' : '0 4px 16px rgba(14,165,233,0.12)',
-              transition: 'border-color 0.3s, box-shadow 0.3s',
-              background: 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
-            }}>
-              <img
-                src="/dr-aaqib.jpg"
-                alt="Dr. Shah Aaqib Aslam"
-                style={{ width:'100%', height:'100%', objectFit:'cover', objectPosition:'center top' }}
-                onError={e => { e.target.style.display='none'; e.target.parentNode.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:3rem">🩺</div>'; }}
-              />
-            </div>
+        <div className="doctors-grid" style={{
+          display:'grid',
+          gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))',
+          gap:'1.25rem',
+        }}>
+          {SPECIALISTS.map((spec, i) => (
+            <div key={i}
+              onMouseEnter={() => setHov(i)} onMouseLeave={() => setHov(null)}
+              style={{
+                borderRadius:'20px', padding:'1.75rem 1.5rem', textAlign:'center',
+                border:`1.5px solid ${hov === i ? '#0ea5e9' : '#e0eef8'}`,
+                background: hov === i ? 'linear-gradient(140deg,#f0f9ff,#ecfdf5)' : '#fff',
+                boxShadow: hov === i ? '0 20px 52px rgba(14,165,233,0.18)' : '0 4px 20px rgba(14,165,233,0.08)',
+                transform: vis ? (hov === i ? 'translateY(-8px)' : 'translateY(0)') : 'translateY(28px)',
+                opacity: vis ? 1 : 0,
+                transition: `opacity 0.5s ease ${i * 0.08}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
+                cursor: 'default',
+              }}
+            >
+              {/* Icon */}
+              <div style={{
+                width: 72, height: 72, borderRadius: '50%', margin: '0 auto 1rem',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: hov === i ? 'linear-gradient(135deg,#0ea5e9,#10b981)' : 'linear-gradient(135deg,#e0f2fe,#d1fae5)',
+                fontSize: '2rem',
+                border: `3px solid ${hov === i ? '#0ea5e9' : '#cce5f6'}`,
+                transition: 'all 0.3s',
+              }}>
+                {spec.icon}
+              </div>
 
-            {/* Name & role */}
-            <h3 style={{ color: hov === 0 ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'1.15rem', marginBottom:'0.3rem' }}>
-              Dr. Shah Aaqib Aslam
-            </h3>
-            <p style={{ color:'#0ea5e9', fontSize:'0.88rem', fontWeight:600, margin:'0 0 1rem' }}>
-              Dermatologist | Skin Specialist
-            </p>
+              <h3 style={{ color: hov === i ? '#0c4a6e' : '#1e293b', fontWeight:800, fontSize:'1rem', marginBottom:'0.75rem' }}>
+                {spec.role}
+              </h3>
 
-            {/* Specialization pills */}
-            <div style={{ display:'flex', flexWrap:'wrap', gap:'0.45rem', justifyContent:'center', marginBottom:'1.25rem' }}>
-              {['Medical Dermatology', 'Laser Treatments', 'Cosmetic Care', 'Skin Analysis'].map((tag, t) => (
-                <span key={t} style={{
-                  background: hov === 0 ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.07)',
-                  color:'#0369a1', padding:'0.25rem 0.7rem', borderRadius:'20px',
-                  fontSize:'0.75rem', fontWeight:600, transition:'background 0.3s',
-                }}>{tag}</span>
-              ))}
-            </div>
+              {/* Tags */}
+              <div style={{ display:'flex', flexWrap:'wrap', gap:'0.4rem', justifyContent:'center' }}>
+                {spec.tags.map((tag, t) => (
+                  <span key={t} style={{
+                    background: hov === i ? 'rgba(14,165,233,0.12)' : 'rgba(14,165,233,0.07)',
+                    color:'#0369a1', padding:'0.2rem 0.6rem', borderRadius:'20px',
+                    fontSize:'0.72rem', fontWeight:600, transition:'background 0.3s',
+                  }}>{tag}</span>
+                ))}
+              </div>
 
-            {/* Credential badge */}
-            <div style={{
-              display:'flex', alignItems:'center', justifyContent:'center', gap:'0.5rem',
-              borderTop:`1px solid ${hov === 0 ? '#bae6fd' : '#e0eef8'}`,
-              paddingTop:'1rem', transition:'border-color 0.3s',
-            }}>
-              <CheckCircle size={15} color="#10b981" />
-              <span style={{ color:'#475569', fontSize:'0.82rem', fontWeight:500 }}>Certified Dermatologist</span>
+              {/* Verified badge */}
+              <div style={{
+                display:'flex', alignItems:'center', justifyContent:'center', gap:'0.45rem',
+                borderTop:`1px solid ${hov === i ? '#bae6fd' : '#e0eef8'}`,
+                paddingTop:'0.9rem', marginTop:'0.9rem', transition:'border-color 0.3s',
+              }}>
+                <CheckCircle size={14} color="#10b981" />
+                <span style={{ color:'#475569', fontSize:'0.78rem', fontWeight:500 }}>Qualified Specialist</span>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -516,10 +521,9 @@ const BookingSection = () => (
         {/* Left info */}
         <div>
           <span className="pill" style={{ marginBottom:'1.1rem', display:'inline-block' }}>📅 Book Your Consultation</span>
-          <h2 style={{ color:'#0c4a6e', marginBottom:'1rem' }}>Ready for Expert Skin Care?</h2>
+          <h2 style={{ color:'#0c4a6e', marginBottom:'1rem' }}>Ready for Expert Healthcare?</h2>
           <p style={{ fontSize:'1.05rem', color:'#475569', lineHeight:1.75, marginBottom:'2rem' }}>
-            Schedule your consultation with Dr. Shah Aaqib Aslam. Fill the form below and we will
-            confirm your appointment via WhatsApp at the earliest available slot.
+            Book your appointment at Apollo Clinic Srinagar. Fill in the form and we will confirm your slot via WhatsApp.
           </p>
 
           <div style={{
@@ -534,7 +538,7 @@ const BookingSection = () => (
             }}>
               <MapPin size={16} color="#fff" />
               <span style={{ color:'#fff', fontWeight:700, fontSize:'0.9rem' }}>
-                Jawahar Nagar / Raj Bagh · Srinagar
+                Karan Nagar, Near National School, Srinagar
               </span>
             </div>
             <iframe
@@ -542,9 +546,33 @@ const BookingSection = () => (
               style={{ border:0, display:'block' }}
               allowFullScreen="" loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              src="https://maps.google.com/maps?q=34.0611327,74.8187207&hl=en&z=17&output=embed"
-              title="Q'Derma The Skin Clinic - Jawahar Nagar, Srinagar"
+              src="https://maps.google.com/maps?q=Karan+Nagar,+Srinagar,+Jammu+and+Kashmir&hl=en&z=15&output=embed"
+              title="Apollo Clinic - Karan Nagar, Srinagar"
             />
+          </div>
+
+          {/* Quick contact buttons */}
+          <div style={{ display:'flex', gap:'0.75rem', marginTop:'1.25rem', flexWrap:'wrap' }}>
+            <a href="tel:+916006846560" style={{
+              display:'flex', alignItems:'center', gap:'0.45rem',
+              background:'linear-gradient(135deg,#0369a1,#0ea5e9)',
+              color:'#fff', padding:'0.65rem 1.25rem', borderRadius:'12px',
+              fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
+              boxShadow:'0 4px 14px rgba(3,105,161,0.28)',
+            }}>📞 Call Us</a>
+            <a
+              href={`https://wa.me/916006846560?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`}
+              target="_blank" rel="noreferrer"
+              style={{
+                display:'flex', alignItems:'center', gap:'0.45rem',
+                background:'linear-gradient(135deg,#25D366,#128C7E)',
+                color:'#fff', padding:'0.65rem 1.25rem', borderRadius:'12px',
+                fontWeight:700, fontSize:'0.88rem', textDecoration:'none',
+                boxShadow:'0 4px 14px rgba(37,211,102,0.3)',
+              }}>
+              <WAIcon size={16} />
+              WhatsApp Booking
+            </a>
           </div>
         </div>
 
@@ -560,18 +588,21 @@ const BookingSection = () => (
 /* ─── Testimonials ─── */
 const TESTIMONIALS = [
   {
-    name: 'Aisha R.',
-    text: 'The doctor makes you feel completely comfortable and actually listens to your concerns patiently. The whole experience felt very professional and reassuring.',
+    name: 'Verified Patient',
+    initials: 'V',
+    text: 'The clinic was very clean and hygienic, and the facilities were excellent. I didn\'t have to wait long and the staff provided great customer service.',
     rating: 5,
   },
   {
-    name: 'Mudasir K.',
-    text: 'Everything was explained clearly before starting the treatment. I really appreciated how transparent and detailed the consultation was.',
+    name: 'Verified Patient',
+    initials: 'V',
+    text: 'Highly impressed with the professionalism and efficiency of the staff. The entire experience felt smooth and well-organized.',
     rating: 5,
   },
   {
-    name: 'Zara B.',
-    text: "I've seen consistent improvement in my skin after following the treatment plan. Highly satisfied with the results and care.",
+    name: 'Verified Patient',
+    initials: 'V',
+    text: 'The doctors are kind and provide good care. Overall, a reliable place for quality healthcare.',
     rating: 5,
   },
 ];
@@ -597,7 +628,7 @@ const TestimonialsSection = () => {
           <span className="pill" style={{ marginBottom: '1rem', display: 'inline-block' }}>⭐ Patient Reviews</span>
           <h2 style={{ color: '#0c4a6e', margin: 0 }}>What Our Patients Say</h2>
           <p style={{ color: '#64748b', marginTop: '0.75rem', fontSize: '1rem', maxWidth: 520, margin: '0.75rem auto 0' }}>
-            Real experiences from patients who trusted Q'Derma with their skin health.
+            Real experiences from patients who trusted Apollo Clinic Srinagar with their healthcare needs.
           </p>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: '1.25rem' }}>
@@ -614,9 +645,10 @@ const TestimonialsSection = () => {
                 transition: `opacity 0.5s ease ${i * 0.12}s, transform 0.3s ease, box-shadow 0.3s, border-color 0.3s, background 0.3s`,
               }}
             >
+              {/* Stars */}
               <div style={{ display: 'flex', gap: '3px', marginBottom: '1rem' }}>
                 {Array.from({ length: t.rating }).map((_, s) => (
-                  <span key={s} style={{ color: '#f59e0b', fontSize: '1.1rem' }}>★</span>
+                  <span key={s} style={{ color: '#f59e0b', fontSize: '1.15rem' }}>★</span>
                 ))}
               </div>
               <p style={{ color: '#475569', fontSize: '0.92rem', lineHeight: 1.7, margin: '0 0 1.25rem', fontStyle: 'italic' }}>
@@ -629,8 +661,11 @@ const TestimonialsSection = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   fontSize: '1rem', fontWeight: 800, color: hov === i ? '#fff' : '#0369a1',
                   transition: 'all 0.3s',
-                }}>{t.name[0]}</div>
-                <div style={{ fontWeight: 700, fontSize: '0.9rem', color: hov === i ? '#0c4a6e' : '#1e293b' }}>{t.name}</div>
+                }}>✓</div>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: hov === i ? '#0c4a6e' : '#1e293b' }}>{t.name}</div>
+                  <div style={{ fontSize: '0.75rem', color: '#94a3b8', fontWeight: 500 }}>Apollo Clinic Srinagar</div>
+                </div>
               </div>
             </div>
           ))}

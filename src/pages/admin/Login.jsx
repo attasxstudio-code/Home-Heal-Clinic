@@ -74,7 +74,7 @@ const Login = () => {
             Admin Login
           </h2>
           <p style={{ color:'#64748b', fontSize:'0.9rem', margin:0 }}>
-            Q'Derma — Admin Dashboard
+            Apollo Clinic — Admin Dashboard
           </p>
         </div>
 
@@ -147,7 +147,7 @@ const Login = () => {
         </form>
 
         <p style={{ textAlign:'center', marginTop:'1.5rem', color:'#94a3b8', fontSize:'0.78rem', marginBottom:0 }}>
-          🔒 Secure admin access · Q'Derma The Skin Clinic
+          🔒 Secure admin access · Apollo Clinic Srinagar
         </p>
       </div>
 
