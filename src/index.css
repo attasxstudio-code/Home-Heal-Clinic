@@ -1,10 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ═══════════════════════════════════════════
+   UTILITY BAR
+═══════════════════════════════════════════ */
+.utility-bar {
+  background: #0c4a6e;
+  color: rgba(255,255,255,0.82);
+  font-size: 0.76rem;
+  font-weight: 500;
+  padding: 0.42rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  line-height: 1;
+}
+.utility-bar a {
+  color: rgba(255,255,255,0.85);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.utility-bar a:hover { color: #fff; }
+.utility-bar-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.utility-bar-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: nowrap;
+}
+.utility-bar-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+.utility-bar-divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(255,255,255,0.2);
+  flex-shrink: 0;
+}
+.utility-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.utility-open-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.12rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-left: 0.35rem;
+}
+.utility-open-badge.open  { background: #059669; color: #fff; }
+.utility-open-badge.closed { background: #dc2626; color: #fff; }
+.utility-wa-pill {
+  background: #25D366;
+  color: #fff !important;
+  padding: 0.22rem 0.65rem;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 0.72rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+@media (max-width: 900px) {
+  .utility-bar-left .utility-bar-item:nth-child(3),
+  .utility-bar-left .utility-bar-divider:nth-child(4) { display: none; }
+}
+@media (max-width: 640px) {
+  .utility-bar { display: none; }
+}
+
 /* ═══════════════════════════════════════════
    APOLLO CLINIC SRINAGAR — Global Design System
    Palette: Medical Blue · Deep Navy · Clean White
 ═══════════════════════════════════════════ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
+/* ═══════════════════════════════════════════
+   APOLLO CLINIC SRINAGAR — Global Design System
+═══════════════════════════════════════════ */
 :root {
   /* Brand colours */
   --blue-900:  #0c4a6e;
