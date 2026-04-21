@@ -713,3 +713,169 @@ p  { margin-bottom: 1rem; color: var(--color-text-muted); font-size: clamp(0.9re
   .container { padding: 0 0.875rem; }
   h2 { font-size: clamp(1.4rem, 6.5vw, 1.85rem); }
 }
+
+/* ═══════════════════════════════════════════
+   PREMIUM HOVER EFFECTS
+   Subtle, medical-grade lift + shadow pop.
+   Applies to all interactive/card elements.
+═══════════════════════════════════════════ */
+
+/* ── Info Boxes: hours, address, contact panels ── */
+.info-box {
+  transition: var(--transition);
+}
+.info-box:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(14,165,233,0.12);
+  border-color: var(--blue-200);
+}
+
+/* ── Pill badges ── */
+.pill {
+  transition: var(--transition);
+}
+.pill:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(14,165,233,0.15);
+}
+
+/* ── Trust strip items ── */
+.trust-item {
+  transition: var(--transition);
+  border-radius: 8px;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.trust-item:hover {
+  transform: translateY(-2px);
+  background: var(--blue-50);
+}
+
+/* ── FAQ items — subtle lift on hover (closed state) ── */
+.faq-item {
+  transition: var(--transition);
+}
+.faq-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(14,165,233,0.08);
+  border-color: var(--blue-200);
+}
+
+/* ── Package cards — enhanced pop ── */
+.package-card {
+  transition: var(--transition);
+}
+.package-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 50px rgba(14,165,233,0.16);
+  border-color: var(--blue-500);
+}
+
+/* ── CTA banner — subtle scale ── */
+.cta-banner {
+  transition: var(--transition);
+}
+.cta-banner:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 24px 60px rgba(3,105,161,0.3);
+}
+
+/* ── Contact rows ── */
+.contact-row {
+  transition: var(--transition);
+  border-radius: 10px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.contact-row:hover {
+  background: var(--blue-50);
+  transform: translateX(4px);
+}
+
+/* ── Stat blocks ── */
+.stat-number {
+  transition: transform 0.25s ease;
+}
+
+/* ── Buttons — ensure all variants have the lift ── */
+.btn-outline:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(3,105,161,0.12);
+}
+
+/* ── Nav links (if wrapped in anchors) ── */
+nav a {
+  transition: var(--transition);
+}
+nav a:hover {
+  transform: translateY(-1px);
+}
+
+/* ── Timing rows — subtle slide ── */
+.timing-row {
+  transition: var(--transition);
+  border-radius: 8px;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.timing-row:hover {
+  background: var(--blue-50);
+  transform: translateX(3px);
+}
+
+/* ── Utility bar WhatsApp pill ── */
+.utility-wa-pill {
+  transition: var(--transition);
+}
+.utility-wa-pill:hover {
+  transform: translateY(-1px) scale(1.04);
+  box-shadow: 0 4px 14px rgba(37,211,102,0.35);
+}
+
+/* ── Contact icon wrap — pop on parent hover ── */
+.contact-icon-wrap {
+  transition: var(--transition);
+}
+.contact-row:hover .contact-icon-wrap {
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(14,165,233,0.18);
+}
+
+/* ── Service icon — pop on card hover ── */
+.service-icon-wrap {
+  transition: var(--transition);
+}
+.service-card:hover .service-icon-wrap {
+  transform: scale(1.1);
+}
+
+/* ── Doctor avatar — grow on hover ── */
+.doctor-avatar {
+  transition: var(--transition);
+}
+.doctor-card:hover .doctor-avatar {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(14,165,233,0.2);
+}
+
+/* ── Disable hover transforms on mobile (prevents sticky hover states) ── */
+@media (hover: none) {
+  .card:hover,
+  .doctor-card:hover,
+  .service-card:hover,
+  .diag-card:hover,
+  .why-card:hover,
+  .testi-card:hover,
+  .info-box:hover,
+  .faq-item:hover,
+  .package-card:hover,
+  .cta-banner:hover,
+  .contact-row:hover,
+  .timing-row:hover,
+  .trust-item:hover,
+  .pill:hover {
+    transform: none;
+    box-shadow: initial;
+  }
+}
+
