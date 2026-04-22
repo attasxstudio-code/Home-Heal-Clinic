@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   LogOut, Plus, Trash2, CheckCircle, Clock, Phone,
   User, Calendar, ArrowRight, TrendingUp, Star, X,
   ShieldCheck, FlaskConical, Stethoscope,
+  FileText, Copy, Send, Upload, Eye, Loader2, LinkIcon,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { sanitizeObject } from '../../utils/security';
@@ -401,6 +402,565 @@ const Section = ({ storageKey, label, isCheckup, icon }) => {
 };
 
 /* ══════════════════════════════════════════
+   TEST REPORTS SECTION
+══════════════════════════════════════════ */
+const REPORT_STATUS = {
+  Pending: { color:'#f59e0b', bg:'#fffbeb', border:'#fde68a', icon:<Clock size={13}/> },
+  Sent:    { color:'#0ea5e9', bg:'#eff9ff', border:'#bae6fd', icon:<Send size={13}/> },
+  Viewed:  { color:'#10b981', bg:'#ecfdf5', border:'#a7f3d0', icon:<Eye size={13}/> },
+};
+
+const ALLOWED_FILE_TYPES = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+const MAX_FILE_MB = 2;
+
+const TestReportsSection = () => {
+  const { authFetch } = useAuth();
+  const [reports, setReports] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState('');
+  const [copyFeedback, setCopyFeedback] = useState('');
+  const [filterStatus, setFilterStatus] = useState('All');
+  const fileInputRef = useRef(null);
+
+  const [form, setForm] = useState({
+    patientName:'', phone:'', dob:'', reportTitle:'',
+    reportDate:'', testType:'', notes:'',
+  });
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  useEffect(() => { loadReports(); }, []);
+
+  const loadReports = () => {
+    const saved = localStorage.getItem('clinic_reports');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setReports(Array.isArray(parsed) ? parsed.map(sanitizeObject) : []);
+      } catch { setReports([]); }
+    }
+  };
+
+  const saveReports = (data) => {
+    setReports(data);
+    localStorage.setItem('clinic_reports', JSON.stringify(data));
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      setUploadError('Only PDF, JPG, JPEG, and PNG files are allowed.');
+      return;
+    }
+    if (file.size > MAX_FILE_MB * 1024 * 1024) {
+      setUploadError(`File too large. Maximum size is ${MAX_FILE_MB}MB.`);
+      return;
+    }
+    setUploadError('');
+    setSelectedFile(file);
+  };
+
+  const handleUpload = async (e) => {
+    e.preventDefault();
+    setUploadError('');
+
+    if (!selectedFile) return setUploadError('Please select a file.');
+    if (!form.patientName.trim()) return setUploadError('Patient name is required.');
+    if (!form.phone.trim()) return setUploadError('Phone number is required.');
+    if (!form.dob) return setUploadError('Date of birth is required.');
+    if (!form.reportTitle.trim()) return setUploadError('Report title is required.');
+    if (!form.reportDate) return setUploadError('Report date is required.');
+
+    setUploading(true);
+
+    try {
+      // Read file as base64
+      const fileData = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsDataURL(selectedFile);
+      });
+
+      const res = await authFetch('/api/reports/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fileData,
+          fileName: selectedFile.name,
+          patientName: form.patientName.trim(),
+          phone: form.phone.trim(),
+          dob: form.dob,
+          reportTitle: form.reportTitle.trim(),
+          reportDate: form.reportDate,
+          testType: form.testType.trim(),
+          notes: form.notes.trim(),
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Upload failed.');
+      }
+
+      // Save to localStorage for dashboard
+      const newReport = {
+        id: data.reportId,
+        token: data.token,
+        patientName: form.patientName.trim(),
+        phone: form.phone.trim(),
+        dob: form.dob,
+        reportTitle: form.reportTitle.trim(),
+        reportDate: form.reportDate,
+        testType: form.testType.trim(),
+        notes: form.notes.trim(),
+        status: 'Pending',
+        createdAt: new Date().toISOString(),
+        blobUrl: data.blobUrl,
+      };
+
+      saveReports([newReport, ...reports]);
+
+      // Reset form
+      setForm({ patientName:'', phone:'', dob:'', reportTitle:'', reportDate:'', testType:'', notes:'' });
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setShowModal(false);
+    } catch (err) {
+      setUploadError(err.message || 'Upload failed. Please try again.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const getReportLink = (token) => {
+    const base = window.location.origin;
+    return `${base}/report/${token}`;
+  };
+
+  const getWhatsAppMessage = (report) => {
+    const link = getReportLink(report.token);
+    return `Hello ${report.patientName},\n\nYour test report from Apollo Clinic Srinagar is ready.\n\n📋 Report: ${report.reportTitle}\n📅 Date: ${report.reportDate}\n\nPlease use the secure link below to access your report:\n${link}\n\nTo protect your privacy, you will need:\n• Your FULL NAME IN CAPITAL LETTERS\n• Your Date of Birth\n\nThis link is confidential. Please do not share it.\n\nApollo Clinic Srinagar\n📍 Karan Nagar, Near National School\n📞 +91 9000000000`;
+  };
+
+  const openWhatsApp = (report) => {
+    const phone = report.phone.replace(/[\s\-+()]/g, '');
+    const phoneNum = phone.startsWith('91') ? phone : `91${phone}`;
+    const msg = getWhatsAppMessage(report);
+    window.open(`https://wa.me/${phoneNum}?text=${encodeURIComponent(msg)}`, '_blank');
+
+    // Update status to Sent
+    const updated = reports.map(r =>
+      r.id === report.id ? { ...r, status: 'Sent' } : r
+    );
+    saveReports(updated);
+  };
+
+  const copyToClipboard = (text, label) => {
+    navigator.clipboard.writeText(text).then(() => {
+      setCopyFeedback(label);
+      setTimeout(() => setCopyFeedback(''), 2000);
+    });
+  };
+
+  const deleteReport = (id) => {
+    if (!confirm('Delete this report? This cannot be undone.')) return;
+    saveReports(reports.filter(r => r.id !== id));
+  };
+
+  const toggleStatus = (id) => {
+    const updated = reports.map(r => {
+      if (r.id !== id) return r;
+      const next = r.status === 'Pending' ? 'Sent' : r.status === 'Sent' ? 'Viewed' : 'Pending';
+      return { ...r, status: next };
+    });
+    saveReports(updated);
+  };
+
+  const filtered = filterStatus === 'All' ? reports : reports.filter(r => r.status === filterStatus);
+  const counts = {
+    total: reports.length,
+    pending: reports.filter(r => r.status === 'Pending').length,
+    sent: reports.filter(r => r.status === 'Sent').length,
+    viewed: reports.filter(r => r.status === 'Viewed').length,
+  };
+
+  const inputStyle = {
+    width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #ddd6fe',
+    borderRadius:'10px', background:'#faf5ff', fontSize:'0.9rem',
+    fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+  };
+
+  return (
+    <div>
+      {/* Stats row */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(130px, 1fr))', gap:'0.75rem', marginBottom:'1.5rem' }}>
+        {[
+          { label:'Total', value:counts.total, color:'#7c3aed', bg:'#f5f3ff', border:'#ddd6fe' },
+          { label:'Pending', value:counts.pending, color:'#f59e0b', bg:'#fffbeb', border:'#fde68a' },
+          { label:'Sent', value:counts.sent, color:'#0ea5e9', bg:'#eff9ff', border:'#bae6fd' },
+          { label:'Viewed', value:counts.viewed, color:'#10b981', bg:'#ecfdf5', border:'#a7f3d0' },
+        ].map(s => (
+          <div key={s.label} style={{
+            background:s.bg, borderRadius:'14px', padding:'1rem 1.1rem',
+            border:`1.5px solid ${s.border}`, textAlign:'center',
+          }}>
+            <div style={{ fontSize:'1.5rem', fontWeight:900, color:s.color }}>{s.value}</div>
+            <div style={{ fontSize:'0.75rem', fontWeight:600, color:'#64748b', marginTop:'0.15rem' }}>{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Actions bar */}
+      <div style={{ display:'flex', gap:'0.75rem', marginBottom:'1.25rem', flexWrap:'wrap', alignItems:'center' }}>
+        <button onClick={() => setShowModal(true)} style={{
+          display:'flex', alignItems:'center', gap:'0.4rem',
+          padding:'0.65rem 1.25rem', borderRadius:'10px',
+          background:'linear-gradient(135deg,#7c3aed,#a855f7)',
+          color:'#fff', fontWeight:700, fontSize:'0.85rem',
+          cursor:'pointer', border:'none', fontFamily:'inherit',
+          boxShadow:'0 4px 14px rgba(124,58,237,0.3)',
+        }}>
+          <Upload size={15} /> Upload Report
+        </button>
+
+        {/* Filter */}
+        <div style={{ display:'flex', gap:'0.35rem', marginLeft:'auto' }}>
+          {['All','Pending','Sent','Viewed'].map(s => (
+            <button key={s} onClick={() => setFilterStatus(s)} style={{
+              padding:'0.4rem 0.85rem', borderRadius:'8px', border:'none',
+              background: filterStatus === s ? '#7c3aed' : '#f5f3ff',
+              color: filterStatus === s ? '#fff' : '#7c3aed',
+              fontWeight:700, fontSize:'0.78rem', cursor:'pointer',
+              fontFamily:'inherit', transition:'all 0.2s',
+            }}>
+              {s}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Copy feedback toast */}
+      {copyFeedback && (
+        <div style={{
+          position:'fixed', bottom:'2rem', right:'2rem', zIndex:9999,
+          background:'#065f46', color:'#fff', padding:'0.7rem 1.25rem',
+          borderRadius:'12px', fontWeight:700, fontSize:'0.85rem',
+          boxShadow:'0 8px 24px rgba(0,0,0,0.15)', animation:'fadeIn 0.3s ease',
+        }}>
+          ✅ {copyFeedback} copied!
+        </div>
+      )}
+
+      {/* Reports table */}
+      {filtered.length === 0 ? (
+        <div style={{
+          textAlign:'center', padding:'3rem 1.5rem', borderRadius:'16px',
+          background:'#fff', border:'1.5px dashed #ddd6fe', color:'#94a3b8',
+        }}>
+          <FileText size={40} color="#ddd6fe" style={{ marginBottom:'0.75rem' }} />
+          <p style={{ fontWeight:600, color:'#64748b', margin:0 }}>
+            {filterStatus === 'All' ? 'No reports uploaded yet' : `No ${filterStatus.toLowerCase()} reports`}
+          </p>
+          <p style={{ fontSize:'0.82rem', margin:'0.4rem 0 0' }}>
+            Click "Upload Report" to add a patient test report.
+          </p>
+        </div>
+      ) : (
+        <div style={{ display:'flex', flexDirection:'column', gap:'0.65rem' }}>
+          {filtered.map(report => {
+            const cfg = REPORT_STATUS[report.status] || REPORT_STATUS.Pending;
+            return (
+              <div key={report.id} style={{
+                background:'#fff', borderRadius:'14px', padding:'1.1rem 1.25rem',
+                border:`1.5px solid #ede9fe`,
+                boxShadow:'0 2px 8px rgba(124,58,237,0.06)',
+                transition:'all 0.25s',
+              }}>
+                {/* Row 1: Name + Status */}
+                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'0.5rem' }}>
+                  <div style={{ display:'flex', alignItems:'center', gap:'0.6rem', flex:1, minWidth:0 }}>
+                    <div style={{
+                      width:38, height:38, borderRadius:'50%', flexShrink:0,
+                      background:'linear-gradient(135deg,#f5f3ff,#ede9fe)',
+                      display:'flex', alignItems:'center', justifyContent:'center',
+                    }}>
+                      <FileText size={16} color="#7c3aed" />
+                    </div>
+                    <div style={{ minWidth:0 }}>
+                      <div style={{ fontWeight:700, fontSize:'0.92rem', color:'#0f172a',
+                        whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>
+                        {report.patientName}
+                      </div>
+                      <a href={`tel:${report.phone}`} style={{
+                        color:'#64748b', fontSize:'0.78rem', display:'flex',
+                        alignItems:'center', gap:4, textDecoration:'none',
+                      }}>
+                        <Phone size={11} /> {report.phone}
+                      </a>
+                    </div>
+                  </div>
+                  <div style={{ display:'flex', alignItems:'center', gap:'0.5rem' }}>
+                    <button onClick={() => toggleStatus(report.id)} style={{
+                      display:'inline-flex', alignItems:'center', gap:4,
+                      background:cfg.bg, color:cfg.color, border:`1px solid ${cfg.border}`,
+                      borderRadius:'20px', padding:'3px 10px', fontSize:'0.73rem',
+                      fontWeight:700, cursor:'pointer', fontFamily:'inherit',
+                    }}>
+                      {cfg.icon} {report.status}
+                    </button>
+                    <button onClick={() => deleteReport(report.id)} style={{
+                      background:'none', border:'none', cursor:'pointer',
+                      color:'#cbd5e1', padding:'4px',
+                    }}>
+                      <Trash2 size={14} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Row 2: Report details */}
+                <div style={{ display:'flex', flexWrap:'wrap', gap:'0.75rem', fontSize:'0.78rem', color:'#64748b', marginBottom:'0.65rem' }}>
+                  <span style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <FileText size={11} /> {report.reportTitle}
+                  </span>
+                  <span style={{ display:'flex', alignItems:'center', gap:4 }}>
+                    <Calendar size={11} /> {report.reportDate}
+                  </span>
+                  {report.testType && (
+                    <span style={{ display:'flex', alignItems:'center', gap:4 }}>
+                      <FlaskConical size={11} /> {report.testType}
+                    </span>
+                  )}
+                  <span style={{ display:'flex', alignItems:'center', gap:4, color:'#94a3b8' }}>
+                    <Clock size={11} /> {new Date(report.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
+
+                {/* Row 3: Action buttons */}
+                <div style={{ display:'flex', gap:'0.4rem', flexWrap:'wrap' }}>
+                  {/* Send via WhatsApp */}
+                  <button onClick={() => openWhatsApp(report)} style={{
+                    display:'flex', alignItems:'center', gap:'0.3rem',
+                    padding:'0.45rem 0.85rem', borderRadius:'8px',
+                    background:'linear-gradient(135deg,#25D366,#128C7E)',
+                    color:'#fff', fontWeight:700, fontSize:'0.76rem',
+                    cursor:'pointer', border:'none', fontFamily:'inherit',
+                    boxShadow:'0 2px 8px rgba(37,211,102,0.25)',
+                  }}>
+                    <Send size={12} /> Send via WhatsApp
+                  </button>
+
+                  {/* Copy Link */}
+                  <button onClick={() => copyToClipboard(getReportLink(report.token), 'Link')} style={{
+                    display:'flex', alignItems:'center', gap:'0.3rem',
+                    padding:'0.45rem 0.75rem', borderRadius:'8px',
+                    background:'#f5f3ff', color:'#7c3aed',
+                    fontWeight:700, fontSize:'0.76rem', cursor:'pointer',
+                    border:'1px solid #ddd6fe', fontFamily:'inherit',
+                  }}>
+                    <LinkIcon size={12} /> Copy Link
+                  </button>
+
+                  {/* Copy Message */}
+                  <button onClick={() => copyToClipboard(getWhatsAppMessage(report), 'Message')} style={{
+                    display:'flex', alignItems:'center', gap:'0.3rem',
+                    padding:'0.45rem 0.75rem', borderRadius:'8px',
+                    background:'#f0f9ff', color:'#0369a1',
+                    fontWeight:700, fontSize:'0.76rem', cursor:'pointer',
+                    border:'1px solid #bae6fd', fontFamily:'inherit',
+                  }}>
+                    <Copy size={12} /> Copy Message
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {/* ── Upload Modal ── */}
+      {showModal && (
+        <div style={{
+          position:'fixed', inset:0, zIndex:9999,
+          background:'rgba(0,0,0,0.5)', backdropFilter:'blur(4px)',
+          display:'flex', alignItems:'center', justifyContent:'center',
+          padding:'1rem',
+        }} onClick={(e) => { if (e.target === e.currentTarget) setShowModal(false); }}>
+          <div style={{
+            background:'#fff', borderRadius:'20px', width:'100%', maxWidth:'520px',
+            maxHeight:'90vh', overflow:'auto', padding:'2rem',
+            boxShadow:'0 20px 60px rgba(0,0,0,0.2)',
+          }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'1.5rem' }}>
+              <div>
+                <h3 style={{ margin:0, color:'#7c3aed', fontWeight:800, fontSize:'1.15rem' }}>
+                  📋 Upload Test Report
+                </h3>
+                <p style={{ margin:'0.25rem 0 0', color:'#94a3b8', fontSize:'0.82rem' }}>
+                  Upload a patient report and generate a secure link
+                </p>
+              </div>
+              <button onClick={() => { setShowModal(false); setUploadError(''); }} style={{
+                background:'#f1f5f9', border:'none', borderRadius:'10px',
+                width:36, height:36, cursor:'pointer', display:'flex',
+                alignItems:'center', justifyContent:'center',
+              }}>
+                <X size={18} color="#64748b" />
+              </button>
+            </div>
+
+            {uploadError && (
+              <div style={{
+                background:'#fff1f2', border:'1.5px solid #fecdd3', color:'#be123c',
+                padding:'0.75rem 1rem', borderRadius:'10px', marginBottom:'1rem',
+                fontSize:'0.82rem', textAlign:'center',
+              }}>
+                ⚠️ {uploadError}
+              </div>
+            )}
+
+            <form onSubmit={handleUpload}>
+              {/* Patient Name */}
+              <div style={{ marginBottom:'0.85rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Patient Full Name *
+                </label>
+                <input type="text" required maxLength={100} placeholder="e.g. Aisha Bhat"
+                  value={form.patientName} onChange={e => setForm({...form, patientName: e.target.value})}
+                  style={inputStyle}
+                  onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                  onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                />
+              </div>
+
+              {/* Phone + DOB row */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.85rem' }}>
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Phone Number *
+                  </label>
+                  <input type="tel" required maxLength={15} placeholder="+91 XXXXX XXXXX"
+                    value={form.phone} onChange={e => setForm({...form, phone: e.target.value})}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Date of Birth *
+                  </label>
+                  <input type="date" required
+                    value={form.dob} onChange={e => setForm({...form, dob: e.target.value})}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                  />
+                </div>
+              </div>
+
+              {/* Report Title */}
+              <div style={{ marginBottom:'0.85rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Report Title *
+                </label>
+                <input type="text" required maxLength={200} placeholder="e.g. Complete Blood Count (CBC)"
+                  value={form.reportTitle} onChange={e => setForm({...form, reportTitle: e.target.value})}
+                  style={inputStyle}
+                  onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                  onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                />
+              </div>
+
+              {/* Report Date + Test Type row */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.85rem' }}>
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Report Date *
+                  </label>
+                  <input type="date" required
+                    value={form.reportDate} onChange={e => setForm({...form, reportDate: e.target.value})}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                  />
+                </div>
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Test Type
+                  </label>
+                  <input type="text" maxLength={100} placeholder="e.g. Blood Test"
+                    value={form.testType} onChange={e => setForm({...form, testType: e.target.value})}
+                    style={inputStyle}
+                    onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                  />
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div style={{ marginBottom:'0.85rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Notes (Optional)
+                </label>
+                <textarea rows={2} maxLength={500} placeholder="Optional notes for the admin..."
+                  value={form.notes} onChange={e => setForm({...form, notes: e.target.value})}
+                  style={{ ...inputStyle, resize:'vertical' }}
+                  onFocus={e => { e.target.style.borderColor='#7c3aed'; e.target.style.background='#fff'; }}
+                  onBlur={e => { e.target.style.borderColor='#ddd6fe'; e.target.style.background='#faf5ff'; }}
+                />
+              </div>
+
+              {/* File Upload */}
+              <div style={{ marginBottom:'1.25rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Report File (PDF, JPG, PNG — max 2MB) *
+                </label>
+                <div style={{
+                  border:'2px dashed #ddd6fe', borderRadius:'12px', padding:'1.25rem',
+                  textAlign:'center', background:'#faf5ff', cursor:'pointer',
+                  transition:'all 0.2s',
+                }} onClick={() => fileInputRef.current?.click()}>
+                  <input ref={fileInputRef} type="file" accept=".pdf,.jpg,.jpeg,.png"
+                    onChange={handleFileSelect} style={{ display:'none' }} />
+                  <Upload size={24} color="#7c3aed" style={{ marginBottom:'0.5rem' }} />
+                  <p style={{ color:'#7c3aed', fontWeight:600, fontSize:'0.85rem', margin:0 }}>
+                    {selectedFile ? `📄 ${selectedFile.name}` : 'Click to select a file'}
+                  </p>
+                  {selectedFile && (
+                    <p style={{ color:'#94a3b8', fontSize:'0.75rem', margin:'0.3rem 0 0' }}>
+                      {(selectedFile.size / 1024).toFixed(0)} KB · {selectedFile.type}
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              {/* Submit */}
+              <button type="submit" disabled={uploading} style={{
+                width:'100%', minHeight:'50px', borderRadius:'12px', border:'none',
+                background: uploading
+                  ? 'linear-gradient(135deg,#c4b5fd,#a5b4fc)'
+                  : 'linear-gradient(135deg,#7c3aed,#a855f7)',
+                color:'#fff', fontWeight:800, fontSize:'0.95rem', cursor: uploading ? 'wait' : 'pointer',
+                fontFamily:'inherit', display:'flex', alignItems:'center', justifyContent:'center', gap:'0.5rem',
+                boxShadow:'0 4px 16px rgba(124,58,237,0.3)',
+              }}>
+                {uploading
+                  ? <><Loader2 size={16} style={{ animation:'spin 0.8s linear infinite' }} /> Uploading…</>
+                  : <><Upload size={16} /> Upload & Generate Secure Link</>
+                }
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* ══════════════════════════════════════════
    DASHBOARD
 ══════════════════════════════════════════ */
 const Dashboard = () => {
@@ -430,6 +990,7 @@ const Dashboard = () => {
   const SECTIONS = [
     { key:'appointments', label:'Appointments', icon:<Stethoscope size={15}/>, color:'#0369a1' },
     { key:'checkups',     label:'Health Checkups', icon:<FlaskConical size={15}/>, color:'#059669' },
+    { key:'reports',      label:'Test Reports', icon:<FileText size={15}/>, color:'#7c3aed' },
   ];
 
   return (
@@ -533,6 +1094,11 @@ const Dashboard = () => {
             isCheckup={true}
             icon={<FlaskConical size={16} color="#059669"/>}
           />
+        )}
+
+        {/* Test Reports section */}
+        {activeSection === 'reports' && (
+          <TestReportsSection />
         )}
       </div>
 

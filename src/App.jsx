@@ -15,6 +15,7 @@ import BookCheckup from './pages/BookCheckup';
 import FAQ from './pages/FAQ';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
+import ReportVerify from './pages/ReportVerify';
 
 function App() {
   return (
@@ -32,6 +33,9 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* ── Report verification — standalone, no navbar/footer ── */}
+            <Route path="/report/:token" element={<ReportVerify />} />
 
             {/* ── Public routes — with Navbar and Footer ── */}
             <Route path="/*" element={
