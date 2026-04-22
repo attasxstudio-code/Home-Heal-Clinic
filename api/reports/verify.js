@@ -74,7 +74,7 @@ function decryptData(encryptedStr) {
   return JSON.parse(decrypted);
 }
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   setCors(req, res);
 
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -131,15 +131,36 @@ export default function handler(req, res) {
     return res.status(401).json({ error: 'Verification failed. Please check your full name (in CAPITAL LETTERS) and date of birth.' });
   }
 
-  /* ── Success — return report data ── */
-  return res.status(200).json({
-    verified: true,
-    report: {
-      fileUrl: payload.blobUrl,
-      title: payload.title || 'Test Report',
-      date: payload.date || '',
-      type: payload.type || '',
-      mimeType: payload.mime || 'application/pdf',
-    },
-  });
+  /* ── Fetch private blob and return as base64 ── */
+  try {
+    const blobResponse = await fetch(payload.blobUrl, {
+      headers: {
+        authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`,
+      },
+    });
+
+    if (!blobResponse.ok) {
+      console.error('[Report Verify] Blob fetch failed:', blobResponse.status);
+      return res.status(500).json({ error: 'Unable to retrieve report file. Please contact Apollo Clinic.' });
+    }
+
+    const arrayBuffer = await blobResponse.arrayBuffer();
+    const base64 = Buffer.from(arrayBuffer).toString('base64');
+    const mimeType = payload.mime || 'application/pdf';
+    const dataUri = `data:${mimeType};base64,${base64}`;
+
+    return res.status(200).json({
+      verified: true,
+      report: {
+        fileData: dataUri,
+        title: payload.title || 'Test Report',
+        date: payload.date || '',
+        type: payload.type || '',
+        mimeType,
+      },
+    });
+  } catch (err) {
+    console.error('[Report Verify] File fetch error:', err.message);
+    return res.status(500).json({ error: 'Unable to retrieve report file. Please contact Apollo Clinic.' });
+  }
 }

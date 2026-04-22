@@ -253,22 +253,24 @@ const ReportVerify = () => {
             </div>
 
             <div style={{ display:'flex', gap:'0.5rem' }}>
-              <a
-                href={report.fileUrl}
-                download={`${report.title || 'report'}.${isPdf ? 'pdf' : 'jpg'}`}
-                target="_blank"
-                rel="noreferrer"
+              <button
+                onClick={() => {
+                  const link = document.createElement('a');
+                  link.href = report.fileData;
+                  link.download = `${report.title || 'report'}.${isPdf ? 'pdf' : 'jpg'}`;
+                  link.click();
+                }}
                 style={{
                   display:'flex', alignItems:'center', gap:'0.35rem',
                   padding:'0.5rem 1rem', borderRadius:'10px',
                   background:'linear-gradient(135deg,#0369a1,#0ea5e9)',
                   color:'#fff', fontWeight:700, fontSize:'0.8rem',
-                  textDecoration:'none', transition:'all 0.2s',
+                  cursor:'pointer', border:'none', fontFamily:'inherit',
                   boxShadow:'0 3px 12px rgba(3,105,161,0.25)',
                 }}
               >
                 <Download size={15} /> Download
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -309,7 +311,7 @@ const ReportVerify = () => {
           }}>
             {isPdf && (
               <iframe
-                src={report.fileUrl}
+                src={report.fileData}
                 title="Test Report"
                 style={{ width:'100%', height:'80vh', border:'none', display:'block' }}
               />
@@ -317,7 +319,7 @@ const ReportVerify = () => {
             {isImage && (
               <div style={{ padding:'1.5rem', textAlign:'center', background:'#fafcff' }}>
                 <img
-                  src={report.fileUrl}
+                  src={report.fileData}
                   alt="Test Report"
                   style={{
                     maxWidth:'100%', maxHeight:'80vh',

@@ -155,11 +155,10 @@ export default async function handler(req, res) {
   /* ── Generate unique report ID ── */
   const reportId = crypto.randomBytes(16).toString('hex');
 
-  /* ── Upload to Vercel Blob ── */
+  /* ── Upload to Vercel Blob (private) ── */
   let blob;
   try {
     blob = await put(`reports/${reportId}.${fileExt}`, fileBuffer, {
-      access: 'public',
       contentType: mimeType,
       addRandomSuffix: true,
       token: process.env.BLOB_READ_WRITE_TOKEN,
