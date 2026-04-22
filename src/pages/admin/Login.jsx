@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, Link } from 'react-router-dom';
 import { ShieldCheck, Eye, EyeOff, Loader2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -209,9 +209,14 @@ const Login = () => {
           </button>
         </form>
 
-        <p style={{ textAlign:'center', marginTop:'1.5rem', color:'#94a3b8', fontSize:'0.78rem', marginBottom:0 }}>
+        <p style={{ textAlign:'center', marginTop:'1.5rem', color:'#94a3b8', fontSize:'0.78rem', marginBottom:'0.5rem' }}>
           🔒 Secure admin access · Apollo Clinic Srinagar
         </p>
+        <div style={{ textAlign:'center' }}>
+          <Link to="/" style={{ color:'#0369a1', fontSize:'0.82rem', fontWeight:600 }}>
+            ← Back to Apollo Clinic
+          </Link>
+        </div>
       </div>
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
