@@ -162,10 +162,11 @@ export default async function handler(req, res) {
       access: 'public',
       contentType: mimeType,
       addRandomSuffix: true,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
     });
   } catch (err) {
-    console.error('[Report Upload Error]', err.message);
-    return res.status(500).json({ error: 'Failed to store report file. Please try again.' });
+    console.error('[Report Upload Error]', err.message, err.stack);
+    return res.status(500).json({ error: `Failed to store report file: ${err.message}` });
   }
 
   /* ── Create verification hashes ── */
