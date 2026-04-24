@@ -2,15 +2,19 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShieldCheck, User, Calendar, Loader2, FileText, Download, AlertTriangle, CheckCircle, Lock } from 'lucide-react';
 
-/* ── PDF Viewer: converts data URI → blob URL for CSP-safe iframe embed ── */
-const PdfViewer = ({ dataUri, title }) => {
+/* ── PDF Viewer: blob URL iframe on desktop, download card on mobile ── */
+const PdfViewer = ({ dataUri, title, onDownload }) => {
   const [blobUrl, setBlobUrl] = useState(null);
   const [error, setError]     = useState(false);
+
+  // Mobile browsers (Android, iOS) can't render PDFs inside iframes
+  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+    typeof navigator !== 'undefined' ? navigator.userAgent : ''
+  );
 
   useEffect(() => {
     if (!dataUri) return;
     try {
-      // Extract base64 from data URI
       const match = dataUri.match(/^data:([^;]+);base64,(.+)$/);
       if (!match) { setError(true); return; }
 
@@ -31,11 +35,56 @@ const PdfViewer = ({ dataUri, title }) => {
     }
   }, [dataUri]);
 
-  if (error) {
+  /* Mobile → show download card instead of blank iframe */
+  if (isMobile || error) {
     return (
-      <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>
-        <p style={{ marginBottom: '0.75rem', fontSize: '0.9rem' }}>
-          Unable to preview this PDF in-browser. Please use the Download button above.
+      <div style={{
+        padding: 'clamp(2rem,6vw,3rem) 1.5rem', textAlign: 'center',
+        background: 'linear-gradient(135deg,#f8fafc,#f0f9ff)',
+      }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: '18px', margin: '0 auto 1.25rem',
+          background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 8px 24px rgba(3,105,161,0.25)',
+        }}>
+          <FileText size={32} color="#fff" strokeWidth={2} />
+        </div>
+        <h3 style={{ color: '#0c4a6e', fontWeight: 800, fontSize: '1.1rem', margin: '0 0 0.4rem' }}>
+          Your Report is Ready
+        </h3>
+        <p style={{ color: '#64748b', fontSize: '0.85rem', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+          {isMobile && !error
+            ? 'Tap the button below to download and view your report.'
+            : 'Unable to preview this PDF. Please download it instead.'}
+        </p>
+        <button
+          onClick={() => {
+            if (blobUrl) {
+              const link = document.createElement('a');
+              link.href = blobUrl;
+              link.download = `${title || 'report'}.pdf`;
+              link.click();
+            } else if (dataUri) {
+              const link = document.createElement('a');
+              link.href = dataUri;
+              link.download = `${title || 'report'}.pdf`;
+              link.click();
+            }
+          }}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+            padding: '0.9rem 2rem', borderRadius: '12px',
+            background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
+            color: '#fff', fontWeight: 800, fontSize: '1rem',
+            border: 'none', cursor: 'pointer', fontFamily: 'inherit',
+            boxShadow: '0 6px 20px rgba(3,105,161,0.3)',
+          }}
+        >
+          <Download size={18} /> Download Report (PDF)
+        </button>
+        <p style={{ color: '#94a3b8', fontSize: '0.72rem', marginTop: '1rem' }}>
+          The file will open in your device's PDF viewer
         </p>
       </div>
     );
@@ -49,6 +98,7 @@ const PdfViewer = ({ dataUri, title }) => {
     );
   }
 
+  /* Desktop → inline iframe preview */
   return (
     <iframe
       src={blobUrl}
