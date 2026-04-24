@@ -1,6 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ShieldCheck, User, Calendar, Loader2, FileText, Download, AlertTriangle, CheckCircle, Lock } from 'lucide-react';
+
+/* ── PDF Viewer: converts data URI → blob URL for CSP-safe iframe embed ── */
+const PdfViewer = ({ dataUri, title }) => {
+  const [blobUrl, setBlobUrl] = useState(null);
+  const [error, setError]     = useState(false);
+
+  useEffect(() => {
+    if (!dataUri) return;
+    try {
+      // Extract base64 from data URI
+      const match = dataUri.match(/^data:([^;]+);base64,(.+)$/);
+      if (!match) { setError(true); return; }
+
+      const mimeType = match[1];
+      const base64   = match[2];
+      const binary   = atob(base64);
+      const bytes    = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+
+      const blob = new Blob([bytes], { type: mimeType });
+      const url  = URL.createObjectURL(blob);
+      setBlobUrl(url);
+
+      return () => URL.revokeObjectURL(url);
+    } catch (e) {
+      console.error('PDF blob conversion failed:', e);
+      setError(true);
+    }
+  }, [dataUri]);
+
+  if (error) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>
+        <p style={{ marginBottom: '0.75rem', fontSize: '0.9rem' }}>
+          Unable to preview this PDF in-browser. Please use the Download button above.
+        </p>
+      </div>
+    );
+  }
+
+  if (!blobUrl) {
+    return (
+      <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
+        Loading preview…
+      </div>
+    );
+  }
+
+  return (
+    <iframe
+      src={blobUrl}
+      title={title || 'Test Report'}
+      style={{ width: '100%', height: '80vh', border: 'none', display: 'block' }}
+    />
+  );
+};
 
 const ReportVerify = () => {
   const { token } = useParams();
@@ -309,13 +365,7 @@ const ReportVerify = () => {
             background:'#fff', borderRadius:'20px', overflow:'hidden',
             border:'1.5px solid #e2e8f0', boxShadow:'0 8px 32px rgba(14,165,233,0.1)',
           }}>
-            {isPdf && (
-              <iframe
-                src={report.fileData}
-                title="Test Report"
-                style={{ width:'100%', height:'80vh', border:'none', display:'block' }}
-              />
-            )}
+            {isPdf && <PdfViewer dataUri={report.fileData} title={report.title} />}
             {isImage && (
               <div style={{ padding:'1.5rem', textAlign:'center', background:'#fafcff' }}>
                 <img

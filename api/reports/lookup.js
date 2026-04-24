@@ -107,7 +107,8 @@ export default async function handler(req, res) {
   }
 
   /* ── Hash name + DOB ── */
-  const nameHash = crypto.createHash('sha256').update(fullName.toUpperCase().trim()).digest('hex');
+  const normalizedName = fullName.toUpperCase().replace(/\s+/g, ' ').trim();
+  const nameHash = crypto.createHash('sha256').update(normalizedName).digest('hex');
   const dobHash  = crypto.createHash('sha256').update(dob.trim()).digest('hex');
 
   /* ── Search for matching lookup entries ── */
