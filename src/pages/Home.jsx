@@ -1425,64 +1425,257 @@ const WhyChooseUs = ({ goBook }) => {
    6. DIAGNOSTICS
 ═══════════════════════════════════ */
 const DIAG_ITEMS = [
-  { icon: '❤️', name: 'ECG (12-Lead)',            why: 'Heart rhythm & electrical activity. Done in-clinic, results same day.' },
-  { icon: '🔊', name: 'ECHO (Echocardiogram)',    why: 'Ultrasound assessment of heart structure and function.' },
-  { icon: '🫁', name: 'Pulmonary Function (PFT)', why: 'Lung capacity testing for asthma, COPD, and breathlessness.' },
-  { icon: '🔬', name: 'Blood Tests & Lab',        why: 'CBC, LFT, KFT, lipid profile, thyroid, HbA1c — in-house lab.' },
-  { icon: '🩸', name: 'Diabetes Panel',           why: 'Fasting glucose, post-meal sugar, HbA1c for screening & monitoring.' },
-  { icon: '🛡️', name: 'Health Checkup Packages', why: 'Annual wellness packages covering key markers for early detection.' },
+  {
+    id: 'ecg', accent: '#db2777', accentLight: '#fce7f3',
+    tag: 'Cardiac',
+    name: 'ECG (12-Lead)',
+    why: 'Heart rhythm & electrical activity assessment. Done in-clinic with results available the same day.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'echo', accent: '#0891b2', accentLight: '#e0f7fa',
+    tag: 'Cardiac',
+    name: 'ECHO (Echocardiogram)',
+    why: 'Ultrasound imaging of heart structure, valves, and pump function for precise cardiac evaluation.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'pft', accent: '#7c3aed', accentLight: '#ede9fe',
+    tag: 'Respiratory',
+    name: 'Pulmonary Function (PFT)',
+    why: 'Lung capacity and airflow testing for asthma, COPD, and breathlessness — reliable respiratory diagnosis.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22V8M12 8C12 8 9 5 6 5c-2 0-3 1.5-3 3 0 4 3 6 3 9h12c0-3 3-5 3-9 0-1.5-1-3-3-3-3 0-6 3-6 3z"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'lab', accent: '#0369a1', accentLight: '#e0f2fe',
+    tag: 'Laboratory',
+    name: 'Blood Tests & Lab',
+    why: 'CBC, LFT, KFT, lipid profile, thyroid, HbA1c — comprehensive in-house lab with fast turnaround.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8l-5-5H9z"/>
+        <polyline points="9 3 9 8 19 8"/>
+        <line x1="7" y1="13" x2="17" y2="13"/>
+        <line x1="7" y1="17" x2="13" y2="17"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'diabetes', accent: '#d97706', accentLight: '#fef3c7',
+    tag: 'Metabolic',
+    name: 'Diabetes Panel',
+    why: 'Fasting glucose, post-meal sugar, and HbA1c for early detection and ongoing diabetes monitoring.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+        <path d="M8 12h8M12 8v8"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'checkup', accent: '#047857', accentLight: '#d1fae5',
+    tag: 'Preventive',
+    name: 'Health Checkup Packages',
+    why: 'Annual wellness packages covering essential markers for early detection and long-term health management.',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M9 11l3 3L22 4"/>
+        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+      </svg>
+    ),
+  },
 ];
+
+/* ── Diag mini-card ── */
+const DiagCard = ({ d, vis, delay }) => {
+  const [hov, setHov] = React.useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        background: '#fff',
+        borderRadius: '16px',
+        padding: '1.4rem 1.3rem',
+        border: `1.5px solid ${hov ? d.accent + '38' : '#edf2f7'}`,
+        boxShadow: hov ? `0 14px 36px rgba(0,0,0,0.07), 0 0 0 1px ${d.accent}12` : '0 2px 10px rgba(14,31,63,0.045)',
+        transform: hov ? 'translateY(-4px)' : 'translateY(0)',
+        transition: 'all 0.26s cubic-bezier(0.34,1.4,0.64,1)',
+        opacity: vis ? 1 : 0,
+        transitionDelay: `${delay}s`,
+        position: 'relative',
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
+        background: `linear-gradient(90deg,${d.accent},${d.accent}55)`,
+        opacity: hov ? 1 : 0.3,
+        transition: 'opacity 0.25s',
+      }} />
+
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.9rem' }}>
+        <div style={{
+          width: 44, height: 44, borderRadius: '12px',
+          background: hov ? d.accent : d.accentLight,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: hov ? '#fff' : d.accent,
+          transition: 'all 0.25s ease',
+          boxShadow: hov ? `0 5px 14px ${d.accent}40` : 'none',
+        }}>
+          {d.icon}
+        </div>
+        <span style={{
+          background: d.accentLight, color: d.accent,
+          fontSize: '0.6rem', fontWeight: 700,
+          textTransform: 'uppercase', letterSpacing: '0.08em',
+          padding: '0.18rem 0.55rem', borderRadius: '999px',
+        }}>
+          {d.tag}
+        </span>
+      </div>
+
+      <h4 style={{ color: '#0c1f3f', fontWeight: 800, fontSize: '0.88rem', margin: '0 0 0.4rem', lineHeight: 1.25 }}>
+        {d.name}
+      </h4>
+      <p style={{ color: '#64748b', fontSize: '0.78rem', lineHeight: 1.65, margin: 0, flex: 1 }}>
+        {d.why}
+      </p>
+    </div>
+  );
+};
 
 const Diagnostics = ({ goBook }) => {
   const [ref, vis] = useInView(0.06);
+  const navigate   = useNavigate();
+
   return (
-    <section id="diagnostics" style={{ background: '#fff', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
-      <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '3rem', alignItems: 'start' }}>
+    <section id="diagnostics" style={{
+      background: '#fafbfc',
+      padding: '5.5rem 0',
+      borderTop: '1px solid #f0f4f8',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none',
+        backgroundImage: 'radial-gradient(circle at 90% 20%,rgba(219,39,119,0.025) 0%,transparent 50%), radial-gradient(circle at 5% 75%,rgba(3,105,161,0.025) 0%,transparent 50%)',
+      }} />
+
+      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+
+        {/* ── Split: left text / right grid ── */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0,420px) minmax(0,1fr)',
+          gap: '3.5rem',
+          alignItems: 'start',
+          marginBottom: '2.5rem',
+        }}>
+          {/* Left — heading + bullets */}
           <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-              Lab & Diagnostics
+            <div style={{
+              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
+              background: '#e0f2fe', borderRadius: '999px',
+              padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
+            }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
+              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                Lab & Diagnostics
+              </span>
             </div>
-            <h2 style={{ color: '#0c4a6e', marginBottom: '0.75rem', fontSize: 'clamp(1.5rem,4vw,2.2rem)' }}>
-              In-House Diagnostics & Health Checkups
+            <h2 style={{
+              color: '#0c1f3f',
+              fontSize: 'clamp(1.6rem,3.5vw,2.3rem)',
+              fontWeight: 800, lineHeight: 1.18,
+              margin: '0 0 0.8rem',
+            }}>
+              In-House Diagnostics &{' '}
+              <span style={{
+                background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
+                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
+              }}>
+                Health Checkups
+              </span>
             </h2>
-            <p style={{ color: '#64748b', lineHeight: 1.7, marginBottom: '1.25rem', fontSize: '0.95rem' }}>
-              No external lab visits. Tests done on-site, results available quickly, reviewed by your doctor at Apollo Clinic.
+            <p style={{ color: '#64748b', lineHeight: 1.72, marginBottom: '1.4rem', fontSize: '0.92rem' }}>
+              No external lab visits. Tests done on-site, results available quickly — reviewed by your doctor at Apollo Clinic, Karan Nagar.
             </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1.5rem' }}>
-              {['Same-day results for routine tests', 'Quality-controlled, certified equipment', 'Results reviewed by your consulting doctor', 'Walk in and test — no referral needed'].map((pt, i) => (
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.75rem' }}>
+              {[
+                'Same-day results for routine tests',
+                'Quality-controlled, certified equipment',
+                'Results reviewed by your consulting doctor',
+                'Walk in and test — no referral needed',
+              ].map((pt, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.55rem', fontSize: '0.86rem', color: '#334155' }}>
                   <CheckCircle size={14} color="#059669" style={{ flexShrink: 0, marginTop: '2px' }} />
                   {pt}
                 </div>
               ))}
             </div>
-            <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-              <Link to="/book-checkup" className="btn btn-primary" style={{ fontSize: '0.88rem', padding: '0.7rem 1.3rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem', textDecoration: 'none' }}>Book a Checkup</Link>
-              <Link to="/diagnostics" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.7rem 1.1rem', background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: '9999px', color: '#334155', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none' }}>
-                View Packages <ArrowRight size={14} />
+
+            <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => { navigate('/book-checkup'); window.scrollTo(0,0); }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                  padding: '0.72rem 1.35rem',
+                  background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
+                  color: '#fff', border: 'none', borderRadius: '12px',
+                  fontWeight: 800, fontSize: '0.87rem',
+                  cursor: 'pointer', fontFamily: 'inherit',
+                  boxShadow: '0 4px 16px rgba(3,105,161,0.3)',
+                  transition: 'all 0.2s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
+                onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
+              >
+                <Calendar size={14} /> Book a Checkup
+              </button>
+              <Link to="/diagnostics" onClick={() => window.scrollTo(0,0)} style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                padding: '0.72rem 1.1rem',
+                border: '1.5px solid #0369a1',
+                borderRadius: '12px', color: '#0369a1',
+                fontWeight: 700, fontSize: '0.85rem',
+                textDecoration: 'none', transition: 'all 0.2s',
+              }}
+                onMouseEnter={e => { e.currentTarget.style.background='#0369a1'; e.currentTarget.style.color='#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#0369a1'; }}
+              >
+                View Packages <ArrowRight size={13} />
               </Link>
             </div>
           </div>
 
-          <div ref={ref} className="diag-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2,1fr)', gap: '1px', background: '#e2e8f0', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden' }}>
+          {/* Right — 2x3 diagnostic cards */}
+          <div ref={ref} style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))',
+            gap: '0.9rem',
+          }}>
             {DIAG_ITEMS.map((d, i) => (
-              <div key={i} style={{
-                background: '#fff', padding: '1.1rem',
-                opacity: vis ? 1 : 0,
-                transform: vis ? 'none' : 'translateY(12px)',
-                transition: `opacity 0.4s ease ${i * 0.06}s, transform 0.4s ease ${i * 0.06}s, background 0.15s`,
-              }}
-                onMouseEnter={e => e.currentTarget.style.background = '#f8fafc'}
-                onMouseLeave={e => e.currentTarget.style.background = '#fff'}
-              >
-                <div style={{ fontSize: '1.3rem', marginBottom: '0.3rem' }}>{d.icon}</div>
-                <h4 style={{ color: '#0c4a6e', fontWeight: 800, fontSize: '0.83rem', margin: '0 0 0.25rem' }}>{d.name}</h4>
-                <p style={{ color: '#64748b', fontSize: '0.76rem', lineHeight: 1.5, margin: 0 }}>{d.why}</p>
-              </div>
+              <DiagCard key={d.id} d={d} vis={vis} delay={i * 0.06} />
             ))}
           </div>
         </div>
+
       </div>
     </section>
   );
