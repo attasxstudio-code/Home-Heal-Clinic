@@ -321,67 +321,120 @@ const Section = ({ storageKey, label, isCheckup, icon }) => {
       {showModal && (
         <div onClick={() => setShowModal(false)} style={{
           position:'fixed', inset:0, background:'rgba(15,23,42,0.55)',
-          display:'flex', alignItems:'flex-end', zIndex:1000, backdropFilter:'blur(6px)',
+          display:'flex', alignItems:'center', justifyContent:'center',
+          zIndex:1000, backdropFilter:'blur(6px)', padding:'1rem',
         }}>
           <div onClick={e => e.stopPropagation()} style={{
-            background:'#fff', width:'100%',
-            borderRadius:'24px 24px 0 0',
-            padding:'1.75rem 1.5rem 2rem',
-            boxShadow:'0 -8px 40px rgba(14,165,233,0.2)',
-            border:'1.5px solid #cce5f6',
+            background:'#fff', width:'100%', maxWidth:'520px',
+            borderRadius:'20px',
+            padding:'2rem',
+            boxShadow:'0 20px 60px rgba(0,0,0,0.2)',
             position:'relative', overflow:'hidden',
-            maxHeight:'92vh', overflowY:'auto',
+            maxHeight:'90vh', overflowY:'auto',
           }}>
-            <div style={{ position:'absolute', top:0, left:0, right:0, height:'4px',
-              background: isCheckup
-                ? 'linear-gradient(90deg,#059669,#10b981,#0ea5e9)'
-                : 'linear-gradient(90deg,#0369a1,#0ea5e9,#10b981)' }} />
-            <div style={{ width:40, height:4, background:'#e0eef8', borderRadius:4, margin:'0 auto 1.5rem' }} />
 
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'1.25rem' }}>
+            {/* Header */}
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:'1.5rem' }}>
               <div>
-                <h3 style={{ color:'#0c4a6e', fontWeight:800, margin:'0 0 0.2rem', fontSize:'1.2rem' }}>
-                  Add {isCheckup ? 'Checkup' : 'Appointment'}
+                <h3 style={{ color: isCheckup ? '#059669' : '#0369a1', fontWeight:800, margin:'0 0 0.25rem', fontSize:'1.15rem' }}>
+                  {isCheckup ? '🔬' : '🗓️'} Add {isCheckup ? 'Checkup' : 'Appointment'}
                 </h3>
-                <p style={{ color:'#94a3b8', fontSize:'0.84rem', margin:0 }}>Enter patient details manually</p>
+                <p style={{ color:'#94a3b8', fontSize:'0.82rem', margin:0 }}>Enter patient details manually</p>
               </div>
               <button onClick={() => setShowModal(false)} style={{
                 background:'#f1f5f9', border:'none', borderRadius:'10px',
                 width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center',
-                cursor:'pointer', color:'#64748b',
+                cursor:'pointer', color:'#64748b', flexShrink:0,
               }}><X size={16}/></button>
             </div>
 
             <form onSubmit={handleAdd}>
-              {[
-                { placeholder:'Patient Name', type:'text', field:'name',  required:true  },
-                { placeholder:'Phone Number', type:'text', field:'phone', required:true  },
-                { placeholder:'Date',         type:'date', field:'date',  required:false },
-              ].map(({ placeholder, type, field, required }) => (
-                <div key={field} style={{ marginBottom:'1rem' }}>
+              {/* Patient Name */}
+              <div style={{ marginBottom:'0.85rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Patient Full Name *
+                </label>
+                <input
+                  type="text" required maxLength={100} placeholder="e.g. Aisha Bhat"
+                  value={newLead.name} onChange={e => setNewLead({...newLead, name: e.target.value})}
+                  style={{ width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #cce5f6',
+                    borderRadius:'10px', background:'#f0f9ff', fontSize:'0.9rem',
+                    fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+                    boxSizing:'border-box' }}
+                  onFocus={e => { e.target.style.borderColor='#0ea5e9'; e.target.style.background='#fff'; }}
+                  onBlur={e => { e.target.style.borderColor='#cce5f6'; e.target.style.background='#f0f9ff'; }}
+                />
+              </div>
+
+              {/* Phone + Date row */}
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'0.75rem', marginBottom:'0.85rem' }}>
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Phone Number *
+                  </label>
                   <input
-                    className="form-control" type={type} placeholder={placeholder} required={required}
-                    value={newLead[field]} onChange={e => setNewLead({...newLead, [field]: e.target.value})}
-                    style={{ minHeight:'52px', fontSize:'1rem' }}
+                    type="tel" required maxLength={15} placeholder="+91 XXXXX XXXXX"
+                    value={newLead.phone} onChange={e => setNewLead({...newLead, phone: e.target.value})}
+                    style={{ width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #cce5f6',
+                      borderRadius:'10px', background:'#f0f9ff', fontSize:'0.9rem',
+                      fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+                      boxSizing:'border-box' }}
+                    onFocus={e => { e.target.style.borderColor='#0ea5e9'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#cce5f6'; e.target.style.background='#f0f9ff'; }}
                   />
                 </div>
-              ))}
+                <div>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Preferred Date
+                  </label>
+                  <input
+                    type="date"
+                    value={newLead.date} onChange={e => setNewLead({...newLead, date: e.target.value})}
+                    style={{ width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #cce5f6',
+                      borderRadius:'10px', background:'#f0f9ff', fontSize:'0.9rem',
+                      fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+                      boxSizing:'border-box' }}
+                    onFocus={e => { e.target.style.borderColor='#0ea5e9'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#cce5f6'; e.target.style.background='#f0f9ff'; }}
+                  />
+                </div>
+              </div>
 
+              {/* Checkup Type (only for checkups) */}
               {isCheckup && (
-                <div style={{ marginBottom:'1rem' }}>
-                  <select className="form-control" value={newLead.checkupType}
-                    onChange={e => setNewLead({...newLead, checkupType: e.target.value})}
-                    style={{ minHeight:'52px', fontSize:'1rem' }}>
+                <div style={{ marginBottom:'0.85rem' }}>
+                  <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                    Checkup / Test Type *
+                  </label>
+                  <select
+                    value={newLead.checkupType} onChange={e => setNewLead({...newLead, checkupType: e.target.value})}
+                    style={{ width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #cce5f6',
+                      borderRadius:'10px', background:'#f0f9ff', fontSize:'0.9rem',
+                      fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+                      boxSizing:'border-box', appearance:'none', cursor:'pointer' }}
+                    onFocus={e => { e.target.style.borderColor='#0ea5e9'; e.target.style.background='#fff'; }}
+                    onBlur={e => { e.target.style.borderColor='#cce5f6'; e.target.style.background='#f0f9ff'; }}
+                  >
                     <option value="">Select Checkup Type</option>
                     {CHECKUP_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
               )}
 
+              {/* Status */}
               <div style={{ marginBottom:'1.25rem' }}>
-                <select className="form-control" value={newLead.status}
-                  onChange={e => setNewLead({...newLead, status: e.target.value})}
-                  style={{ minHeight:'52px', fontSize:'1rem' }}>
+                <label style={{ display:'block', fontWeight:700, fontSize:'0.8rem', color:'#374151', marginBottom:'0.3rem' }}>
+                  Status
+                </label>
+                <select
+                  value={newLead.status} onChange={e => setNewLead({...newLead, status: e.target.value})}
+                  style={{ width:'100%', padding:'0.75rem 1rem', border:'1.5px solid #cce5f6',
+                    borderRadius:'10px', background:'#f0f9ff', fontSize:'0.9rem',
+                    fontFamily:'inherit', color:'#0f172a', outline:'none', transition:'all 0.2s',
+                    boxSizing:'border-box', appearance:'none', cursor:'pointer' }}
+                  onFocus={e => { e.target.style.borderColor='#0ea5e9'; e.target.style.background='#fff'; }}
+                  onBlur={e => { e.target.style.borderColor='#cce5f6'; e.target.style.background='#f0f9ff'; }}
+                >
                   <option>Pending</option>
                   <option>Contacted</option>
                   <option>Confirmed</option>
@@ -390,15 +443,15 @@ const Section = ({ storageKey, label, isCheckup, icon }) => {
 
               <div style={{ display:'flex', gap:'0.75rem' }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{
-                  flex:1, minHeight:'52px', borderRadius:'14px', border:'1.5px solid #e0eef8',
-                  background:'#fff', color:'#64748b', fontWeight:600, cursor:'pointer', fontSize:'0.95rem', fontFamily:'inherit',
+                  flex:1, minHeight:'50px', borderRadius:'12px', border:'1.5px solid #e0eef8',
+                  background:'#fff', color:'#64748b', fontWeight:600, cursor:'pointer', fontSize:'0.92rem', fontFamily:'inherit',
                 }}>Cancel</button>
                 <button type="submit" style={{
-                  flex:1, minHeight:'52px', borderRadius:'14px', border:'none',
+                  flex:1, minHeight:'50px', borderRadius:'12px', border:'none',
                   background: isCheckup
                     ? 'linear-gradient(135deg,#059669,#10b981)'
-                    : 'linear-gradient(135deg,#0369a1,#0ea5e9,#10b981)',
-                  color:'#fff', fontWeight:800, cursor:'pointer', fontSize:'0.95rem',
+                    : 'linear-gradient(135deg,#0369a1,#0ea5e9)',
+                  color:'#fff', fontWeight:800, cursor:'pointer', fontSize:'0.92rem',
                   boxShadow:'0 4px 14px rgba(14,165,233,0.3)', fontFamily:'inherit',
                 }}>Save Entry</button>
               </div>
