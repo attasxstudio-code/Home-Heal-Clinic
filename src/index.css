@@ -219,6 +219,30 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
   background: var(--bg);
 }
 
+/* Call Now */
+.btn-call {
+  background: var(--bg);
+  color: var(--navy);
+  border-color: var(--border);
+}
+.btn-call:hover {
+  background: var(--border);
+  transform: translateY(-1px);
+}
+
+/* WhatsApp */
+.btn-whatsapp {
+  background: #22c55e;
+  color: #fff;
+  border-color: #22c55e;
+}
+.btn-whatsapp:hover {
+  background: #16a34a;
+  border-color: #16a34a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+}
+
 /* Sizes */
 .btn-sm { font-size: 0.8rem; padding: 0.45rem 1rem; }
 .btn-lg { font-size: 1rem; padding: 0.82rem 1.75rem; }
