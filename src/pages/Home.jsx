@@ -137,30 +137,21 @@ const Hero = ({ goBook, goTo }) => {
             borderRadius: '20px',
             overflow: 'hidden',
           }}>
-            {/* Map/photo placeholder — clinic building visual */}
+            {/* Clinic interior photo */}
             <div style={{
-              background: 'linear-gradient(135deg, #e8f4fd 0%, #dbeafe 100%)',
               height: 240,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              position: 'relative', overflow: 'hidden',
+              overflow: 'hidden',
+              position: 'relative',
             }}>
-              {/* Simple clinic illustration */}
-              <svg width="180" height="160" viewBox="0 0 180 160" fill="none" opacity="0.55">
-                <rect x="20" y="60" width="140" height="90" rx="4" fill="#1e3a8a" fillOpacity="0.15"/>
-                <rect x="40" y="30" width="100" height="35" rx="4" fill="#1e3a8a" fillOpacity="0.2"/>
-                <rect x="65" y="8" width="50" height="26" rx="3" fill="#2563eb" fillOpacity="0.3"/>
-                <rect x="75" y="90" width="30" height="60" rx="2" fill="#1e3a8a" fillOpacity="0.25"/>
-                <rect x="25" y="80" width="40" height="30" rx="2" fill="#2563eb" fillOpacity="0.15"/>
-                <rect x="115" y="80" width="40" height="30" rx="2" fill="#2563eb" fillOpacity="0.15"/>
-                {/* Cross */}
-                <rect x="85" y="14" width="10" height="14" rx="1" fill="#1e3a8a" fillOpacity="0.6"/>
-                <rect x="81" y="18" width="18" height="6" rx="1" fill="#1e3a8a" fillOpacity="0.6"/>
-                {/* Windows */}
-                <rect x="28" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
-                <rect x="48" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
-                <rect x="118" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
-                <rect x="138" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
-              </svg>
+              <img
+                src="/clinic-interior.jpg"
+                alt="Apollo Clinic Srinagar Interior"
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center',
+                  display: 'block',
+                }}
+              />
             </div>
 
             {/* Info block */}
