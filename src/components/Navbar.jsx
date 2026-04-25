@@ -15,6 +15,7 @@ function getClinicStatus() {
 }
 
 const NAV_LINKS = [
+  { label: 'Home',        path: '/'            },
   { label: 'Services',    path: '/services'    },
   { label: 'Doctors',     path: '/doctors'     },
   { label: 'Diagnostics', path: '/diagnostics' },
@@ -49,13 +50,11 @@ const Navbar = () => {
             onClick={() => goTo('/')}
             aria-label="Apollo Clinic Srinagar — home"
           >
-            <div className="navbar-logo-icon">
-              {/* Caduceus / cross mark */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2v20M2 12h20"/>
-              </svg>
-            </div>
-            <span>Apollo Clinic <span style={{ fontWeight: 500, color: 'var(--body)' }}>Srinagar</span></span>
+            <img 
+              src="/logo.jpg" 
+              alt="Apollo Clinic Srinagar Logo" 
+              style={{ height: '44px', width: 'auto', objectFit: 'contain' }} 
+            />
           </button>
 
           {/* ── Desktop Nav Links ── */}
