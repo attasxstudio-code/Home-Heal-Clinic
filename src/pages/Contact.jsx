@@ -3,7 +3,7 @@ import { Phone, MapPin, Clock, MessageCircle, Calendar } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
 import { Link } from 'react-router-dom';
 
-const WA_NUMBER = '919000000000';
+const WA_NUMBER = '919149425496';
 const WA_LINK   = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
 
 const TIMINGS = [
@@ -33,7 +33,7 @@ const Contact = () => (
       <div className="container">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '1rem' }}>
           {[
-            { icon: <Phone size={20} color="#0369a1" />, label: 'Call Us', value: '+91 9000000000', href: 'tel:+919000000000' },
+            { icon: <Phone size={20} color="#0369a1" />, label: 'Call Us', value: '+91 9149425496', href: 'tel:+919149425496' },
             { icon: <MessageCircle size={20} color="#25D366" />, label: 'WhatsApp', value: 'Chat Now →', href: WA_LINK, ext: true },
             { icon: <Clock size={20} color="#0369a1" />, label: 'Mon – Sat Hours', value: '12:00 PM – 7:00 PM', href: null },
             { icon: <MapPin size={20} color="#0369a1" />, label: 'Address', value: 'Karan Nagar, Srinagar', href: 'https://maps.google.com/?q=34.0806043,74.7988594', ext: true },
@@ -120,7 +120,7 @@ const Contact = () => (
 
             {/* Quick contact buttons */}
             <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              <a href="tel:+919000000000" className="btn btn-call" style={{ flex: 1, minWidth: 150 }}>
+              <a href="tel:+919149425496" className="btn btn-call" style={{ flex: 1, minWidth: 150 }}>
                 <Phone size={16} /> Call Now
               </a>
               <a href={WA_LINK} target="_blank" rel="noreferrer" className="btn btn-whatsapp" style={{ flex: 1, minWidth: 150 }}>

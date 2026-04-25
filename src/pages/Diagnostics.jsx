@@ -243,7 +243,7 @@ const Diagnostics = () => {
             </p>
           </div>
 
-          <div ref={servRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(310px, 1fr))', gap: '1rem' }}>
+          <div ref={servRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
             {DIAG_SERVICES.map((svc, i) => (
               <div key={i} style={{
                 background: '#fff',

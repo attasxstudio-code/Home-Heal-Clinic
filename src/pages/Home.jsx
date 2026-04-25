@@ -58,6 +58,7 @@ const Hero = ({ goBook, goTo }) => {
       <div className="container">
         <div className="hero-split" style={{
           display: 'grid',
+          gridTemplateColumns: '1fr 420px',
           gap: '3.5rem',
           alignItems: 'center',
         }}>
@@ -501,7 +502,7 @@ const DiagnosticsSection = ({ goTo }) => {
           </div>
 
           {/* Right — list */}
-          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+          <div ref={ref} className="diag-mini-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
             {DIAG_LIST.map((d, i) => (
               <div key={i} style={{
                 background: '#fff',
@@ -601,7 +602,7 @@ const GuidingPrinciples = ({ goBook, goTo }) => {
           </div>
 
           {/* Right — 2x2 principle cards */}
-          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+          <div ref={ref} className="principles-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
             {PRINCIPLES.map((p, i) => (
               <div key={i} style={{
                 background: 'var(--bg)',
@@ -649,7 +650,7 @@ const QuickActions = ({ goBook, goTo }) => (
         <div className="section-label">Patient Services</div>
         <h2 style={{ marginBottom: '0.5rem', fontSize: 'clamp(1.3rem,3vw,1.9rem)' }}>Everything You Need, In One Place</h2>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.85rem' }}>
+      <div className="quick-actions-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.85rem' }}>
         {[
           { icon: <Calendar size={20} />, label: 'Book Appointment', sub: 'Online scheduling',       action: goBook },
           { icon: <Phone size={20} />,    label: 'Call Clinic',      sub: 'Speak to our team',       action: () => { window.location.href = PHONE_HREF; } },
@@ -750,7 +751,7 @@ const Testimonials = () => {
 const ContactSection = ({ goTo }) => (
   <section style={{ background: 'var(--bg)', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
     <div className="container">
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', alignItems: 'start' }}>
+      <div id="contact-section-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', alignItems: 'start' }}>
         <div>
           <div className="section-label">Find Us</div>
           <h2 style={{ marginBottom: '0.75rem' }}>Visit Apollo Clinic<br /><span style={{ color: 'var(--blue)' }}>Karan Nagar, Srinagar</span></h2>
@@ -928,8 +929,9 @@ const Home = () => {
       <a
         href={WA_LINK} target="_blank" rel="noreferrer"
         aria-label="Chat on WhatsApp"
+        className="wa-float-btn"
         style={{
-          position: 'fixed', bottom: '84px', right: '14px', zIndex: 999,
+          position: 'fixed', bottom: '24px', right: '14px', zIndex: 999,
           width: 50, height: 50, borderRadius: '50%',
           background: '#25D366', color: '#fff',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -945,7 +947,8 @@ const Home = () => {
       {/* Mobile sticky bar */}
       <style>{`
         @media (max-width: 640px) {
-          #mobile-sticky-bar { display: flex !important; }
+          #mobile-sticky-bar { display: grid !important; }
+          .wa-float-btn { bottom: 76px !important; }
         }
       `}</style>
       <div id="mobile-sticky-bar" style={{
@@ -962,11 +965,11 @@ const Home = () => {
         ].map((b, i) => (
           b.href
             ? <a key={i} href={b.href} target={b.ext ? '_blank' : undefined} rel="noreferrer"
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0.5rem', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, textDecoration: 'none', borderRight: '1px solid var(--border)' }}>
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, textDecoration: 'none' }}>
                 {b.icon}{b.label}
               </a>
             : <button key={i} onClick={b.action}
-                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0.5rem', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, background: 'none', border: 'none', borderRight: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
                 {b.icon}{b.label}
               </button>
         ))}

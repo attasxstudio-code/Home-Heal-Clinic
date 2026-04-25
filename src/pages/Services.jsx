@@ -301,7 +301,7 @@ const Services = () => {
             </p>
           </div>
 
-          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
+          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem' }}>
             {SPECIALTIES.map((svc, i) => (
               <ServiceCard key={svc.id} svc={svc} vis={vis} delay={i * 0.04} onBook={goBook} onDoctor={() => goDoctor(svc.doctorId)} />
             ))}
