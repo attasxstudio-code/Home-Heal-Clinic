@@ -1,17 +1,21 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Phone, MapPin, ArrowRight, ChevronDown, CheckCircle, ExternalLink, Calendar, FileText, MessageCircle, Navigation } from 'lucide-react';
-import BookingForm from '../components/BookingForm';
+import { useNavigate } from 'react-router-dom';
+import {
+  Phone, MapPin, ArrowRight, Calendar, CheckCircle,
+  Clock, Star, ChevronDown, Shield, Heart, Activity,
+  FileText, Navigation,
+} from 'lucide-react';
 
 /* ─── Constants ─── */
-const PHONE      = '+91 9000000000';
-const PHONE_HREF = 'tel:+919000000000';
-const WA_LINK    = `https://wa.me/919000000000?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
+const PHONE      = '+91 9149425496';
+const PHONE_HREF = 'tel:+919149425496';
+const WA_NUMBER  = '919149425496';
+const WA_LINK    = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
 const MAPS_LINK  = 'https://maps.google.com/?q=34.0806043,74.7988594';
 const MAPS_EMBED = 'https://maps.google.com/maps?q=34.0806043,74.7988594&hl=en&z=17&output=embed&iwloc=near';
 
-/* ─── WhatsApp icon ─── */
-const WAIcon = ({ size = 18 }) => (
+/* ─── WhatsApp Icon ─── */
+const WAIcon = ({ size = 20 }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
   </svg>
@@ -29,2046 +33,708 @@ function useInView(threshold = 0.07) {
   return [ref, vis];
 }
 
-/* ─── Clinic status helper ─── */
+/* ─── Clinic status ─── */
 function getClinicStatus() {
   const now  = new Date();
   const day  = now.getDay();
   const mins = now.getHours() * 60 + now.getMinutes();
-  if (day >= 1 && day <= 6) {
-    return { open: mins >= 720 && mins < 1140, hours: '12:00 PM – 7:00 PM', label: 'Mon–Sat' };
-  } else {
-    return { open: mins >= 600 && mins < 810, hours: '10:00 AM – 1:30 PM', label: 'Sunday' };
-  }
+  if (day >= 1 && day <= 6) return { open: mins >= 720 && mins < 1140, hours: '12:00 PM – 7:00 PM' };
+  return { open: mins >= 600 && mins < 810, hours: '10:00 AM – 1:30 PM' };
 }
 
-/* ════════════════════════════════════════════
-   HOME PAGE
-════════════════════════════════════════════ */
-const Home = () => {
-  const navigate = useNavigate();
-  const goBook   = () => { navigate('/book'); window.scrollTo(0, 0); };
+/* ════════════════════════════════════
+   1. HERO
+════════════════════════════════════ */
+const HERO_SPECIALTIES = ['General Physician','Cardiologist','Paediatrician','Gynaecologist','Dermatologist'];
 
-  return (
-    <div style={{ background: '#fff' }}>
-      <Hero    goBook={goBook} />
-      <TrustStrip />
-      <Services goBook={goBook} />
-      <Doctors  goBook={goBook} />
-      <WhyChooseUs goBook={goBook} />
-      <Diagnostics goBook={goBook} />
-      <PatientServices goBook={goBook} />
-      <CareGuide />
-      <Testimonials />
-      <ContactSection />
-      <FAQSection goBook={goBook} />
-      <FinalCTA goBook={goBook} />
-
-      {/* Floating WhatsApp */}
-      <a href={WA_LINK} target="_blank" rel="noreferrer" aria-label="Chat on WhatsApp"
-        style={{
-          position: 'fixed', bottom: '86px', right: '14px', zIndex: 999,
-          width: '50px', height: '50px', borderRadius: '50%',
-          background: '#25D366', color: '#fff',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          boxShadow: '0 4px 18px rgba(37,211,102,0.4)',
-          textDecoration: 'none', transition: 'transform 0.2s',
-        }}
-        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
-        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
-      >
-        <WAIcon size={23} />
-      </a>
-
-      {/* Sticky mobile bottom bar — 4 buttons */}
-      <div style={{
-        display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0,
-        zIndex: 998, background: '#fff',
-        borderTop: '1px solid #e2e8f0',
-        boxShadow: '0 -2px 16px rgba(0,0,0,0.07)',
-      }} id="mobile-cta">
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 0 }}>
-          <a href={PHONE_HREF} style={{
-            padding: '0.65rem 0', background: '#0369a1',
-            color: '#fff', fontWeight: 700, fontSize: '0.72rem',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem',
-            textDecoration: 'none',
-          }}>
-            <Phone size={16} /> Call
-          </a>
-          <a href={WA_LINK} target="_blank" rel="noreferrer" style={{
-            padding: '0.65rem 0', background: '#25D366',
-            color: '#fff', fontWeight: 700, fontSize: '0.72rem',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem',
-            textDecoration: 'none',
-          }}>
-            <WAIcon size={16} /> WhatsApp
-          </a>
-          <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{
-            padding: '0.65rem 0', background: '#0c4a6e',
-            color: '#fff', fontWeight: 700, fontSize: '0.72rem',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem',
-            textDecoration: 'none',
-          }}>
-            <Navigation size={16} /> Directions
-          </a>
-          <button onClick={goBook} style={{
-            padding: '0.65rem 0', background: 'linear-gradient(135deg,#059669,#10b981)',
-            color: '#fff', border: 'none', fontWeight: 700, fontSize: '0.72rem',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem',
-            cursor: 'pointer', fontFamily: 'inherit',
-          }}>
-            <Calendar size={16} /> Book
-          </button>
-        </div>
-      </div>
-
-      <style>{`
-        *, *::before, *::after { box-sizing: border-box; }
-
-        @media (max-width: 768px) {
-          #mobile-cta { display: block !important; }
-          body { padding-bottom: 68px; }
-          a[aria-label="Chat on WhatsApp"] { bottom: 78px !important; }
-        }
-        @media (max-width: 640px) {
-          .hero-btns { flex-direction: column !important; }
-          .hero-btns > * { width: 100% !important; justify-content: center !important; }
-          .hero-grid { grid-template-columns: 1fr !important; }
-          .hero-right { display: none !important; }
-        }
-        @media (max-width: 768px) {
-          .svc-grid { grid-template-columns: repeat(2,1fr) !important; }
-          .doc-grid  { grid-template-columns: repeat(2,1fr) !important; }
-          .testi-grid { grid-template-columns: 1fr !important; }
-          .contact-split { grid-template-columns: 1fr !important; }
-          .diag-grid { grid-template-columns: repeat(2,1fr) !important; }
-          .faq-split { grid-template-columns: 1fr !important; }
-          .patient-svc-grid { grid-template-columns: repeat(2,1fr) !important; }
-        }
-        @media (max-width: 480px) {
-          .svc-grid { grid-template-columns: 1fr !important; }
-          .doc-grid  { grid-template-columns: 1fr !important; }
-          .diag-grid { grid-template-columns: 1fr !important; }
-          .patient-svc-grid { grid-template-columns: 1fr !important; }
-        }
-      `}</style>
-    </div>
-  );
-};
-
-/* ═══════════════════════════════════
-   1. HERO — Utility-first, action-focused
-═══════════════════════════════════ */
-const Hero = ({ goBook }) => {
+const Hero = ({ goBook, goTo }) => {
   const status = getClinicStatus();
-  return (
-  <section id="home" style={{
-    background: '#fff',
-    borderBottom: '1px solid #e2e8f0',
-    padding: '3rem 0 2.5rem',
-    position: 'relative',
-    overflow: 'hidden',
-  }}>
-    {/* Subtle background accent */}
-    <div style={{
-      position: 'absolute', top: 0, right: 0,
-      width: '50%', height: '100%',
-      background: 'linear-gradient(135deg,transparent 0%,#f0f9ff 100%)',
-      pointerEvents: 'none', zIndex: 0,
-    }} />
-
-    <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-      <div className="hero-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '3rem', alignItems: 'center' }}>
-
-        {/* Left */}
-        <div>
-          {/* Location + Open status */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '1rem', flexWrap: 'wrap' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-              background: '#f0f9ff', border: '1px solid #bae6fd',
-              color: '#0369a1', fontSize: '0.78rem', fontWeight: 700,
-              padding: '0.3rem 0.75rem', borderRadius: '6px',
-            }}>
-              <MapPin size={12} />
-              Karan Nagar, Srinagar
-            </div>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-              background: status.open ? '#f0fdf4' : '#fff1f2',
-              border: `1px solid ${status.open ? '#bbf7d0' : '#fecdd3'}`,
-              color: status.open ? '#047857' : '#be123c',
-              fontSize: '0.78rem', fontWeight: 800,
-              padding: '0.3rem 0.75rem', borderRadius: '6px',
-            }}>
-              <span style={{ width: 6, height: 6, borderRadius: '50%', background: status.open ? '#059669' : '#dc2626' }} />
-              {status.open ? 'Open Now' : 'Closed'} · Today: {status.hours}
-            </div>
-          </div>
-
-          <h1 style={{
-            color: '#0c4a6e', fontWeight: 900,
-            fontSize: 'clamp(1.85rem,4.2vw,2.9rem)',
-            lineHeight: 1.1, letterSpacing: '-0.03em',
-            marginBottom: '0.85rem',
-          }}>
-            Trusted Multi-Speciality<br />
-            Healthcare in Srinagar
-          </h1>
-
-          <p style={{
-            color: '#475569', fontSize: '1rem', lineHeight: 1.7,
-            marginBottom: '1.25rem', maxWidth: '520px',
-          }}>
-            Expert consultations across General Medicine, Dermatology, Paediatrics, Gynaecology, Orthopaedics & more. In-house ECG, ECHO, PFT & blood tests. Preventive health checkups. One clinic, complete care.
-          </p>
-
-          {/* Address + hours — compact */}
-          <div style={{
-            display: 'flex', flexDirection: 'column', gap: '0.35rem',
-            marginBottom: '1.5rem', padding: '0.85rem 1rem',
-            background: '#f8fafc', borderRadius: '10px',
-            border: '1px solid #e2e8f0', maxWidth: '520px',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.85rem', color: '#334155' }}>
-              <MapPin size={14} color="#0369a1" style={{ flexShrink: 0, marginTop: '1px' }} />
-              <span>Arham Towers, Near National School, Karan Nagar, Srinagar, J&K</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: '#334155' }}>
-              <span style={{ fontSize: '0.8rem', color: '#64748b' }}>🕐</span>
-              <span>Mon–Sat: 12 PM – 7 PM &nbsp;·&nbsp; Sun: 10 AM – 1:30 PM</span>
-            </div>
-          </div>
-
-          {/* CTAs */}
-          <div className="hero-btns" style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-            <button onClick={goBook} className="btn btn-primary" style={{ padding: '0.8rem 1.5rem', fontSize: '0.92rem' }}>
-              <Calendar size={15} /> Book Appointment
-            </button>
-            <Link to="/book-checkup" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.8rem 1.5rem', background: 'linear-gradient(135deg,#059669,#10b981)',
-              borderRadius: '9999px',
-              color: '#fff', fontWeight: 700, fontSize: '0.92rem',
-              textDecoration: 'none', transition: 'all 0.2s',
-              boxShadow: '0 4px 16px rgba(5,150,105,0.25)',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.filter = 'brightness(1.08)'; }}
-              onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
-            >
-              🔬 Book Health Checkup
-            </Link>
-            <a href={PHONE_HREF} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.8rem 1.3rem', background: '#f0f9ff',
-              border: '1.5px solid #bae6fd', borderRadius: '9999px',
-              color: '#0369a1', fontWeight: 700, fontSize: '0.9rem',
-              textDecoration: 'none', transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#e0f2fe'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#f0f9ff'; }}
-            >
-              <Phone size={14} /> Call Now
-            </a>
-            <a href={WA_LINK} target="_blank" rel="noreferrer" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.8rem 1.3rem', background: '#f0fdf4',
-              border: '1.5px solid #a7f3d0', borderRadius: '9999px',
-              color: '#047857', fontWeight: 700, fontSize: '0.9rem',
-              textDecoration: 'none', transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#dcfce7'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#f0fdf4'; }}
-            >
-              <WAIcon size={14} /> WhatsApp
-            </a>
-            <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.8rem 1.3rem', background: '#f8fafc',
-              border: '1.5px solid #e2e8f0', borderRadius: '9999px',
-              color: '#64748b', fontWeight: 700, fontSize: '0.9rem',
-              textDecoration: 'none', transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#f1f5f9'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#f8fafc'; }}
-            >
-              <MapPin size={13} /> Directions
-            </a>
-          </div>
-        </div>
-
-        {/* Right: Clinic Info Card */}
-        <div className="hero-right" style={{
-          background: '#fff',
-          border: '1.5px solid #e2e8f0',
-          borderRadius: '16px',
-          overflow: 'hidden',
-          boxShadow: '0 4px 24px rgba(14,165,233,0.09)',
-        }}>
-          {/* Card header */}
-          <div style={{
-            background: 'linear-gradient(135deg,#0c4a6e,#0369a1)',
-            padding: '1.15rem 1.3rem',
-          }}>
-            <div style={{ color: '#fff', fontWeight: 800, fontSize: '0.95rem', marginBottom: '0.15rem' }}>Apollo Clinic Srinagar</div>
-            <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: '0.78rem' }}>Multi-Speciality Healthcare · Karan Nagar</div>
-          </div>
-
-          {/* Specialities */}
-          <div style={{ padding: '1rem 1.3rem', borderBottom: '1px solid #f1f5f9' }}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.6rem' }}>Available Specialities</div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-              {['General Medicine','Cardiology','Dermatology','Paediatrics','Gynaecology','Orthopaedics','Pulmonology','Diagnostics'].map((s, i) => (
-                <span key={i} style={{
-                  background: '#f0f9ff', color: '#0369a1', border: '1px solid #bae6fd',
-                  fontSize: '0.71rem', fontWeight: 600,
-                  padding: '0.18rem 0.55rem', borderRadius: '5px',
-                }}>{s}</span>
-              ))}
-            </div>
-          </div>
-
-          {/* Hours */}
-          <div style={{ padding: '1rem 1.3rem', borderBottom: '1px solid #f1f5f9' }}>
-            <div style={{ fontSize: '0.7rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.6rem' }}>Clinic Hours</div>
-            {[
-              { day: 'Mon – Sat', time: '12:00 PM – 7:00 PM' },
-              { day: 'Sunday',    time: '10:00 AM – 1:30 PM' },
-            ].map((t, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.83rem', marginBottom: '0.35rem' }}>
-                <span style={{ color: '#64748b' }}>{t.day}</span>
-                <span style={{ color: '#0c4a6e', fontWeight: 700 }}>{t.time}</span>
-              </div>
-            ))}
-          </div>
-
-          {/* Quick actions */}
-          <div style={{ padding: '1rem 1.3rem', display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-            <button onClick={goBook} style={{
-              width: '100%', padding: '0.7rem', background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-              color: '#fff', border: 'none', borderRadius: '10px', fontWeight: 800,
-              fontSize: '0.88rem', cursor: 'pointer', fontFamily: 'inherit',
-            }}>Book Appointment</button>
-            <Link to="/book-checkup" style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-              padding: '0.7rem', background: 'linear-gradient(135deg,#059669,#10b981)',
-              borderRadius: '10px', color: '#fff', fontWeight: 800, fontSize: '0.85rem',
-              textDecoration: 'none',
-            }}>🔬 Book Health Checkup</Link>
-            <a href={PHONE_HREF} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-              padding: '0.7rem', background: '#f8fafc', border: '1.5px solid #e2e8f0',
-              borderRadius: '10px', color: '#0369a1', fontWeight: 700, fontSize: '0.85rem',
-              textDecoration: 'none',
-            }}>
-              <Phone size={13} /> {PHONE}
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  );
-};
-
-/* ═══════════════════════════════════
-   2. TRUST STRIP
-═══════════════════════════════════ */
-const TRUST_ITEMS = [
-  { icon: '🏥', label: '6+ Medical Specialities' },
-  { icon: '👨‍⚕️', label: 'Experienced Specialists' },
-  { icon: '🔬', label: 'In-House Diagnostics' },
-  { icon: '🛡️', label: 'Preventive Health Checkups' },
-  { icon: '📅', label: 'Easy Appointment Booking' },
-  { icon: '📍', label: 'Karan Nagar, Srinagar' },
-];
-
-const TrustStrip = () => (
-  <div style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-    <div style={{
-      display: 'flex', alignItems: 'stretch', justifyContent: 'center',
-      minWidth: 'max-content', margin: '0 auto', maxWidth: 1200,
-      padding: '0 2rem',
-    }}>
-      {TRUST_ITEMS.map((item, i) => (
-        <div key={i} style={{
-          display: 'flex', alignItems: 'center', gap: '0.5rem',
-          padding: '0.75rem 1.5rem',
-          borderRight: i < TRUST_ITEMS.length - 1 ? '1px solid #e2e8f0' : 'none',
-          whiteSpace: 'nowrap',
-        }}>
-          <span style={{ fontSize: '0.9rem' }}>{item.icon}</span>
-          <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#475569' }}>{item.label}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-/* ═══════════════════════════════════
-   3. SERVICES / SPECIALITIES
-═══════════════════════════════════ */
-const SPECIALTIES = [
-  {
-    id: 'gp',
-    accent: '#0369a1', accentLight: '#e0f2fe',
-    tag: 'Primary Care',
-    label: 'General Physician',
-    desc: 'Comprehensive primary care focused on diagnosis, preventive health, and long-term wellness for patients of all ages.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'peds',
-    accent: '#0891b2', accentLight: '#e0f7fa',
-    tag: 'Child Health',
-    label: 'Pediatrics',
-    desc: 'Specialized child healthcare with expert attention to growth, development, immunization, and common childhood illnesses.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="7" r="4"/>
-        <path d="M8 14s-4 .5-4 4v1h16v-1c0-3.5-4-4-4-4"/>
-        <line x1="12" y1="11" x2="12" y2="14"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'obgyn',
-    accent: '#7c3aed', accentLight: '#ede9fe',
-    tag: "Women's Health",
-    label: 'Obstetrics & Gynecology',
-    desc: 'Complete women\'s healthcare covering pregnancy, reproductive wellness, gynecological concerns, and lifelong support.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="8" r="5"/>
-        <line x1="12" y1="13" x2="12" y2="21"/>
-        <line x1="8.5" y1="17" x2="15.5" y2="17"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'derm',
-    accent: '#db2777', accentLight: '#fce7f3',
-    tag: 'Skin Care',
-    label: 'Dermatology',
-    desc: 'Advanced care for skin, hair, and nail conditions with personalized treatment and expert clinical guidance.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M14.5 4.5c1 1 1.5 2.5 1.5 4a6 6 0 01-6 6c-1.5 0-3-.5-4-1.5"/>
-        <path d="M5 15c-.5 2 .5 4 2.5 5s4.5.5 6-1l1-1.5"/>
-        <path d="M20 4l-1 1"/>
-        <circle cx="17" cy="7" r="1"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'ortho',
-    accent: '#d97706', accentLight: '#fef3c7',
-    tag: 'Bone & Joint',
-    label: 'Orthopedics',
-    desc: 'Specialized treatment for bone, joint, muscle, and spine conditions to restore strength, mobility, and comfort.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M18 8h1a4 4 0 010 8h-1"/>
-        <path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/>
-        <line x1="6" y1="1" x2="6" y2="4"/>
-        <line x1="10" y1="1" x2="10" y2="4"/>
-        <line x1="14" y1="1" x2="14" y2="4"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'ent',
-    accent: '#059669', accentLight: '#d1fae5',
-    tag: 'ENT',
-    label: 'ENT (Otolaryngology)',
-    desc: 'Expert care for ear, nose, and throat conditions, including sinus issues, infections, hearing concerns, and more.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2a7 7 0 00-7 7c0 3 1.5 5.5 3.5 7l.5 4h6l.5-4c2-1.5 3.5-4 3.5-7a7 7 0 00-7-7z"/>
-        <line x1="9" y1="20" x2="15" y2="20"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'eye',
-    accent: '#0e7490', accentLight: '#cffafe',
-    tag: 'Eye Care',
-    label: 'Ophthalmology',
-    desc: 'Comprehensive eye care focused on vision protection, diagnosis, treatment, and long-term visual health.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-        <circle cx="12" cy="12" r="3"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'dental',
-    accent: '#0369a1', accentLight: '#dbeafe',
-    tag: 'Dental',
-    label: 'Dentistry',
-    desc: 'Complete dental care ranging from routine check-ups to restorative and smile-enhancing treatments.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2C8.5 2 6 4.5 6 7c0 1.5.5 3 1 4-.5 3-1 5-1 7 0 2 1 4 3 4 1 0 2-1 3-3 1 2 2 3 3 3 2 0 3-2 3-4 0-2-.5-4-1-7 .5-1 1-2.5 1-4 0-2.5-2.5-5-6-5z"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'path',
-    accent: '#6d28d9', accentLight: '#ede9fe',
-    tag: 'Lab & Diagnostics',
-    label: 'Pathology',
-    desc: 'Accurate laboratory diagnostics and timely reporting to support reliable medical decisions and better patient care.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8l-5-5H9z"/>
-        <polyline points="9 3 9 8 19 8"/>
-        <line x1="7" y1="13" x2="17" y2="13"/>
-        <line x1="7" y1="17" x2="13" y2="17"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'physio',
-    accent: '#047857', accentLight: '#d1fae5',
-    tag: 'Rehabilitation',
-    label: 'Physiotherapy',
-    desc: 'Personalized rehabilitation and movement therapy to reduce pain, improve mobility, and restore daily function.',
-    icon: (
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="5" r="2"/>
-        <path d="M8 22v-8l-2-4h12l-2 4v8"/>
-        <path d="M8 14h8"/>
-      </svg>
-    ),
-  },
-];
-
-/* ── Specialty card sub-component ── */
-const SpecCard = ({ sp, vis, delay, navigate }) => {
-  const [hov, setHov] = React.useState(false);
-  return (
-    <div
-      onClick={() => { navigate('/services'); window.scrollTo(0, 0); }}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: '#fff',
-        borderRadius: '18px',
-        padding: '1.75rem 1.6rem 1.5rem',
-        border: `1.5px solid ${hov ? sp.accent + '35' : '#edf2f7'}`,
-        boxShadow: hov
-          ? `0 18px 44px rgba(0,0,0,0.07), 0 0 0 1px ${sp.accent}15`
-          : '0 2px 12px rgba(14,31,63,0.045)',
-        cursor: 'pointer',
-        transform: hov ? 'translateY(-5px)' : 'translateY(0)',
-        transition: 'all 0.26s cubic-bezier(0.34,1.4,0.64,1)',
-        opacity: vis ? 1 : 0,
-        transitionDelay: `${delay}s`,
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {/* Top accent strip */}
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-        background: `linear-gradient(90deg,${sp.accent},${sp.accent}55)`,
-        opacity: hov ? 1 : 0.35,
-        transition: 'opacity 0.26s ease',
-      }} />
-
-      {/* Icon bubble */}
-      <div style={{
-        width: 52, height: 52, borderRadius: '14px',
-        background: hov ? sp.accent : sp.accentLight,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        marginBottom: '1.1rem',
-        color: hov ? '#fff' : sp.accent,
-        transition: 'all 0.26s ease',
-        boxShadow: hov ? `0 6px 18px ${sp.accent}45` : 'none',
-        flexShrink: 0,
-      }}>
-        {sp.icon}
-      </div>
-
-      {/* Tag */}
-      <div style={{
-        fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase',
-        letterSpacing: '0.1em', color: sp.accent, marginBottom: '0.3rem',
-      }}>
-        {sp.tag}
-      </div>
-
-      {/* Title */}
-      <h3 style={{
-        color: '#0c1f3f', fontWeight: 800, fontSize: '0.97rem',
-        lineHeight: 1.25, margin: '0 0 0.65rem',
-      }}>
-        {sp.label}
-      </h3>
-
-      {/* Description */}
-      <p style={{
-        color: '#64748b', fontSize: '0.82rem', lineHeight: 1.68,
-        margin: '0 0 1.25rem', flex: 1,
-      }}>
-        {sp.desc}
-      </p>
-
-      {/* CTA */}
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
-        color: sp.accent, fontWeight: 700, fontSize: '0.8rem',
-        transform: hov ? 'translateX(4px)' : 'translateX(0)',
-        transition: 'transform 0.22s ease',
-        marginTop: 'auto',
-      }}>
-        Learn More
-        <ArrowRight size={13} />
-      </div>
-    </div>
-  );
-};
-
-const Services = ({ goBook }) => {
-  const [ref, vis] = useInView(0.04);
-  const navigate   = useNavigate();
-
-  return (
-    <section id="services" style={{
-      background: '#fff',
-      padding: '5.5rem 0',
-      borderTop: '1px solid #f0f4f8',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Subtle background texture */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(circle at 80% 20%, rgba(3,105,161,0.03) 0%, transparent 60%), radial-gradient(circle at 10% 80%, rgba(5,150,105,0.025) 0%, transparent 55%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* ── Section heading ── */}
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', marginBottom: '3rem',
-          gap: '1rem', flexWrap: 'wrap',
-        }}>
-          <div style={{ maxWidth: 600 }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
-              background: '#e0f2fe', borderRadius: '999px',
-              padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Clinical Specialties
-              </span>
-            </div>
-            <h2 style={{
-              color: '#0c1f3f', fontSize: 'clamp(1.7rem,3.8vw,2.4rem)',
-              fontWeight: 800, lineHeight: 1.18, margin: '0 0 0.75rem',
-            }}>
-              Specialized Care,{' '}
-              <span style={{
-                background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>
-                All Under One Roof
-              </span>
-            </h2>
-            <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: 1.7, margin: 0, maxWidth: 520 }}>
-              Delivering trusted, patient-centered care across 10 essential specialties — with clinical excellence, comfort, and continuity at Karan Nagar.
-            </p>
-          </div>
-
-          <Link to="/services" onClick={() => window.scrollTo(0,0)} style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-            padding: '0.6rem 1.2rem', border: '1.5px solid #0369a1',
-            borderRadius: '9999px', color: '#0369a1', fontWeight: 700,
-            fontSize: '0.82rem', textDecoration: 'none',
-            transition: 'all 0.2s ease', flexShrink: 0,
-            background: 'transparent',
-          }}
-            onMouseEnter={e => { e.currentTarget.style.background='#0369a1'; e.currentTarget.style.color='#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#0369a1'; }}
-          >
-            All Specialties <ArrowRight size={13} />
-          </Link>
-        </div>
-
-        {/* ── Specialty card grid ── */}
-        <div
-          ref={ref}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gap: '1.1rem',
-          }}
-        >
-          {SPECIALTIES.map((sp, i) => (
-            <SpecCard key={sp.id} sp={sp} vis={vis} delay={i * 0.055} navigate={navigate} />
-          ))}
-        </div>
-
-        {/* ── CTA bar ── */}
-        <div style={{
-          marginTop: '2.5rem',
-          background: 'linear-gradient(135deg,#0c1f3f 0%,#0369a1 60%,#0ea5e9 100%)',
-          borderRadius: '18px',
-          padding: 'clamp(1.5rem,3vw,2rem) clamp(1.5rem,3vw,2.5rem)',
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          gap: '1.25rem', flexWrap: 'wrap',
-        }}>
-          <div>
-            <div style={{ color: '#bae6fd', fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.07em', marginBottom: '0.35rem' }}>
-              Apollo Clinic Srinagar
-            </div>
-            <div style={{ color: '#fff', fontWeight: 800, fontSize: 'clamp(1rem,2.5vw,1.25rem)', lineHeight: 1.25, marginBottom: '0.3rem' }}>
-              Need a consultation with a specialist?
-            </div>
-            <div style={{ color: '#94d3f7', fontSize: '0.84rem' }}>
-              Walk in or book ahead · Mon–Sat 12PM–7PM · Sun 10AM–1:30PM
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: '0.7rem', flexWrap: 'wrap' }}>
-            <button onClick={goBook} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.7rem 1.4rem', background: '#fff',
-              color: '#0369a1', fontWeight: 800, fontSize: '0.88rem',
-              border: 'none', borderRadius: '10px', cursor: 'pointer',
-              fontFamily: 'inherit', transition: 'all 0.2s',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.15)',
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
-              onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
-            >
-              <Calendar size={14} /> Book Appointment
-            </button>
-            <a href={PHONE_HREF} style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.7rem 1.2rem',
-              background: 'rgba(255,255,255,0.12)',
-              border: '1.5px solid rgba(255,255,255,0.3)',
-              borderRadius: '10px', color: '#fff',
-              fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none',
-              transition: 'all 0.2s',
-            }}
-              onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.12)'}
-            >
-              <Phone size={13} /> {PHONE}
-            </a>
-          </div>
-        </div>
-
-      </div>
-    </section>
-  );
-};
-
-
-/* ═══════════════════════════════════
-   4. DOCTORS
-═══════════════════════════════════ */
-const DOCTORS = [
-  {
-    initials: 'SA', color: '#0369a1', accentLight: '#e0f2fe',
-    name: 'Dr. Shabir Ahmad Mir',
-    dept: 'General Physician',
-    specialty: 'General Medicine & Internal Care',
-    qual: 'MBBS, MD — Internal Medicine',
-    exp: '12+ Years',
-    days: 'Mon – Sat',
-    bio: 'A highly experienced and patient-focused general physician committed to delivering attentive, evidence-based primary care with professionalism and compassion.',
-  },
-  {
-    initials: 'NR', color: '#db2777', accentLight: '#fce7f3',
-    name: 'Dr. Nazia Rashid',
-    dept: 'Dermatology',
-    specialty: 'Skin, Hair & Nail Care',
-    qual: 'MBBS, MD — Dermatology',
-    exp: '9+ Years',
-    days: 'Mon – Sat',
-    bio: 'A specialist in clinical and cosmetic dermatology, offering personalized treatment protocols for skin, hair, and nail conditions with a gentle and thorough approach.',
-  },
-  {
-    initials: 'AH', color: '#0891b2', accentLight: '#e0f7fa',
-    name: 'Dr. Aijaz Hussain',
-    dept: 'Pediatrics',
-    specialty: 'Child Health & Development',
-    qual: 'MBBS, DCH, MD — Paediatrics',
-    exp: '10+ Years',
-    days: 'Mon – Fri',
-    bio: 'Dedicated to providing expert child healthcare from infancy through adolescence, with a warm and reassuring approach to diagnosis, immunization, and wellness.',
-  },
-  {
-    initials: 'SB', color: '#7c3aed', accentLight: '#ede9fe',
-    name: 'Dr. Saima Bano',
-    dept: "Obstetrics & Gynecology",
-    specialty: "Women's Health & Reproductive Care",
-    qual: 'MBBS, DGO, MS — Obs & Gynaecology',
-    exp: '11+ Years',
-    days: 'Mon – Sat',
-    bio: 'Committed to delivering comprehensive, sensitive, and evidence-based care across all stages of women\'s health — from reproductive wellness to antenatal and postnatal support.',
-  },
-  {
-    initials: 'MA', color: '#047857', accentLight: '#d1fae5',
-    name: 'Dr. Mushtaq Ahmed',
-    dept: 'Orthopedics',
-    specialty: 'Bone, Joint & Spine Health',
-    qual: 'MBBS, MS — Orthopaedics',
-    exp: '14+ Years',
-    days: 'Tue, Thu & Sat',
-    bio: 'An experienced orthopedic specialist focused on restoring movement and quality of life through precise diagnosis, conservative management, and surgical excellence.',
-  },
-  {
-    initials: 'AY', color: '#b45309', accentLight: '#fef3c7',
-    name: 'Dr. Asma Yousuf',
-    dept: 'Clinical Psychology',
-    specialty: 'Mental Health & Wellness',
-    qual: 'M.Phil — Clinical Psychology',
-    exp: '8+ Years',
-    days: 'Mon, Wed & Fri',
-    bio: 'A compassionate mental health professional providing structured psychological support, counselling, and therapeutic interventions tailored to each patient\'s unique needs.',
-  },
-];
-
-/* ── Doctor card sub-component ── */
-const DoctorCard = ({ doc, vis, delay, goBook }) => {
-  const [hov, setHov] = React.useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: '#fff',
-        borderRadius: '20px',
-        border: `1.5px solid ${hov ? doc.color + '35' : '#edf2f7'}`,
-        boxShadow: hov
-          ? `0 20px 48px rgba(0,0,0,0.08), 0 0 0 1px ${doc.color}12`
-          : '0 2px 14px rgba(14,31,63,0.05)',
-        transform: hov ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'all 0.28s cubic-bezier(0.34,1.4,0.64,1)',
-        opacity: vis ? 1 : 0,
-        transitionDelay: `${delay}s`,
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      {/* Top accent strip */}
-      <div style={{
-        height: '3px',
-        background: `linear-gradient(90deg,${doc.color},${doc.color}55)`,
-        opacity: hov ? 1 : 0.4,
-        transition: 'opacity 0.26s ease',
-        flexShrink: 0,
-      }} />
-
-      {/* Card body */}
-      <div style={{ padding: '1.75rem 1.6rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-
-        {/* Avatar + name block */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.2rem' }}>
-          {/* Avatar */}
-          <div style={{
-            width: 64, height: 64, borderRadius: '18px',
-            background: hov ? doc.color : doc.accentLight,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: hov ? '#fff' : doc.color,
-            fontWeight: 900, fontSize: '1.25rem', letterSpacing: '-0.02em',
-            flexShrink: 0,
-            transition: 'all 0.26s ease',
-            boxShadow: hov ? `0 8px 22px ${doc.color}40` : 'none',
-          }}>
-            {doc.initials}
-          </div>
-
-          {/* Name + dept */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            {/* Dept badge */}
-            <div style={{
-              display: 'inline-block',
-              background: doc.accentLight,
-              color: doc.color,
-              fontSize: '0.62rem', fontWeight: 700,
-              textTransform: 'uppercase', letterSpacing: '0.09em',
-              padding: '0.2rem 0.6rem', borderRadius: '999px',
-              marginBottom: '0.4rem',
-            }}>
-              {doc.dept}
-            </div>
-            <h3 style={{
-              color: '#0c1f3f', fontWeight: 800,
-              fontSize: '1rem', lineHeight: 1.2,
-              margin: '0 0 0.2rem',
-            }}>
-              {doc.name}
-            </h3>
-            <p style={{
-              color: doc.color, fontWeight: 600,
-              fontSize: '0.78rem', margin: 0, lineHeight: 1.3,
-            }}>
-              {doc.specialty}
-            </p>
-          </div>
-        </div>
-
-        {/* Divider */}
-        <div style={{ height: '1px', background: '#f0f4f8', marginBottom: '1rem' }} />
-
-        {/* Bio */}
-        <p style={{
-          color: '#64748b', fontSize: '0.83rem', lineHeight: 1.7,
-          margin: '0 0 1rem', flex: 1,
-        }}>
-          {doc.bio}
-        </p>
-
-        {/* Qual line */}
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: '0.4rem',
-          marginBottom: '1.1rem',
-        }}>
-          <CheckCircle size={13} color={doc.color} style={{ flexShrink: 0 }} />
-          <span style={{ color: '#475569', fontSize: '0.78rem', fontWeight: 600 }}>
-            {doc.qual}
-          </span>
-        </div>
-
-        {/* Tags row */}
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-          <span style={{
-            background: doc.accentLight, color: doc.color,
-            fontSize: '0.68rem', fontWeight: 700,
-            padding: '0.22rem 0.65rem', borderRadius: '6px',
-          }}>
-            {doc.exp}
-          </span>
-          <span style={{
-            background: '#f8fafc', color: '#64748b',
-            border: '1px solid #e2e8f0',
-            fontSize: '0.68rem', fontWeight: 600,
-            padding: '0.22rem 0.65rem', borderRadius: '6px',
-          }}>
-            {doc.days}
-          </span>
-          <span style={{
-            background: '#f0fdf4', color: '#047857',
-            border: '1px solid #bbf7d0',
-            fontSize: '0.68rem', fontWeight: 600,
-            padding: '0.22rem 0.65rem', borderRadius: '6px',
-          }}>
-            Karan Nagar
-          </span>
-        </div>
-
-        {/* CTA */}
-        <button
-          onClick={goBook}
-          style={{
-            width: '100%',
-            padding: '0.72rem 1rem',
-            background: hov
-              ? doc.color
-              : '#fff',
-            color: hov ? '#fff' : doc.color,
-            border: `1.5px solid ${doc.color}`,
-            borderRadius: '12px',
-            fontWeight: 700, fontSize: '0.85rem',
-            cursor: 'pointer', fontFamily: 'inherit',
-            transition: 'all 0.22s ease',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-            marginTop: 'auto',
-          }}
-        >
-          <Calendar size={14} />
-          Book Consultation
-        </button>
-      </div>
-    </div>
-  );
-};
-
-const Doctors = ({ goBook }) => {
-  const [ref, vis] = useInView(0.06);
-  return (
-    <section id="doctors" style={{
-      background: '#fafbfc',
-      padding: '5.5rem 0',
-      borderTop: '1px solid #f0f4f8',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      {/* Subtle background accent */}
-      <div style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'radial-gradient(circle at 15% 50%, rgba(3,105,161,0.03) 0%, transparent 55%), radial-gradient(circle at 85% 20%, rgba(124,58,237,0.025) 0%, transparent 50%)',
-        pointerEvents: 'none',
-      }} />
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* Section heading */}
-        <div style={{
-          display: 'flex', justifyContent: 'space-between',
-          alignItems: 'flex-end', marginBottom: '3rem',
-          gap: '1rem', flexWrap: 'wrap',
-        }}>
-          <div style={{ maxWidth: 620 }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
-              background: '#e0f2fe', borderRadius: '999px',
-              padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Medical Team
-              </span>
-            </div>
-            <h2 style={{
-              color: '#0c1f3f', fontSize: 'clamp(1.7rem,3.8vw,2.4rem)',
-              fontWeight: 800, lineHeight: 1.18, margin: '0 0 0.75rem',
-            }}>
-              Experienced Doctors,{' '}
-              <span style={{
-                background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>
-                Personalized Care
-              </span>
-            </h2>
-            <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: 1.7, margin: 0, maxWidth: 530 }}>
-              Our team of qualified specialists is committed to delivering compassionate, evidence-based care across every stage of treatment — with clinical precision and a patient-first approach.
-            </p>
-          </div>
-
-          <Link
-            to="/doctors"
-            onClick={() => window.scrollTo(0,0)}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              padding: '0.6rem 1.2rem', border: '1.5px solid #0369a1',
-              borderRadius: '9999px', color: '#0369a1', fontWeight: 700,
-              fontSize: '0.82rem', textDecoration: 'none',
-              flexShrink: 0, background: 'transparent',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background='#0369a1'; e.currentTarget.style.color='#fff'; }}
-            onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#0369a1'; }}
-          >
-            Meet All Doctors <ArrowRight size={13} />
-          </Link>
-        </div>
-
-        {/* Doctor cards grid */}
-        <div
-          ref={ref}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(290px, 1fr))',
-            gap: '1.15rem',
-          }}
-        >
-          {DOCTORS.map((doc, i) => (
-            <DoctorCard key={i} doc={doc} vis={vis} delay={i * 0.07} goBook={goBook} />
-          ))}
-        </div>
-
-        {/* Bottom trust note */}
-        <div style={{
-          marginTop: '2.5rem',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          gap: '1.5rem', flexWrap: 'wrap',
-          padding: '1.25rem',
-          background: '#fff',
-          border: '1.5px solid #e2e8f0',
-          borderRadius: '16px',
-        }}>
-          {[
-            { icon: <CheckCircle size={15} color="#059669" />, text: 'Verified & Credentialed Specialists' },
-            { icon: <CheckCircle size={15} color="#059669" />, text: 'Patient-Centered Practice' },
-            { icon: <CheckCircle size={15} color="#059669" />, text: 'Consulting at Karan Nagar, Srinagar' },
-          ].map((item, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-              {item.icon}
-              <span style={{ color: '#475569', fontSize: '0.82rem', fontWeight: 600 }}>{item.text}</span>
-            </div>
-          ))}
-        </div>
-
-      </div>
-    </section>
-  );
-};
-
-
-/* ════════════════════════════════════════════
-   5. WHY CHOOSE US
-════════════════════════════════════════════ */
-const WHY_POINTS = [
-  {
-    id: 'experts',
-    accent: '#0369a1', accentLight: '#e0f2fe',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M23 21v-2a4 4 0 00-3-3.87"/>
-        <path d="M16 3.13a4 4 0 010 7.75"/>
-      </svg>
-    ),
-    title: 'Experienced Medical Professionals',
-    body: 'Our team brings together clinical expertise, thoughtful diagnosis, and patient-focused care across every stage of treatment.',
-  },
-  {
-    id: 'patient',
-    accent: '#059669', accentLight: '#d1fae5',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-      </svg>
-    ),
-    title: 'Patient-Centered Approach',
-    body: 'We prioritize comfort, clarity, and personal attention so every patient feels supported from consultation to recovery.',
-  },
-  {
-    id: 'diagnostics',
-    accent: '#7c3aed', accentLight: '#ede9fe',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
-    ),
-    title: 'Accurate Diagnostics & Quality Care',
-    body: 'We emphasize reliable evaluation, timely diagnosis, and structured treatment planning to support better health outcomes.',
-  },
-  {
-    id: 'facilities',
-    accent: '#0891b2', accentLight: '#e0f7fa',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="3"/>
-        <path d="M3 9h18"/>
-        <path d="M9 21V9"/>
-      </svg>
-    ),
-    title: 'Modern Facilities & Comfortable Environment',
-    body: 'Our clinical environment is designed to provide efficient care in a setting that feels reassuring, organized, and professional.',
-  },
-  {
-    id: 'planning',
-    accent: '#d97706', accentLight: '#fef3c7',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 11l3 3L22 4"/>
-        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-      </svg>
-    ),
-    title: 'Personalized Treatment Planning',
-    body: 'We understand that every patient is different, which is why our care approach is tailored to individual needs and health goals.',
-  },
-  {
-    id: 'multispe',
-    accent: '#047857', accentLight: '#d1fae5',
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
-      </svg>
-    ),
-    title: 'Multi-Specialty Support Under One Roof',
-    body: 'With access to essential specialties in one place, patients benefit from coordinated care, convenience, and continuity.',
-  },
-];
-
-const WHY_STATS = [
-  { value: '10+', label: 'Medical Specialties' },
-  { value: '6',   label: 'Expert Doctors' },
-  { value: '12+', label: 'Years of Service' },
-  { value: '∞',   label: 'Patient First, Always' },
-];
-
-const WhyChooseUs = ({ goBook }) => {
-  const navigate = useNavigate();
-  const [ref, vis] = useInView(0.05);
-  const [hovCard, setHovCard] = React.useState(null);
-  const status = getClinicStatus();
-
   return (
     <section style={{
       background: '#fff',
-      padding: '5.5rem 0',
-      borderTop: '1px solid #f0f4f8',
-      position: 'relative',
-      overflow: 'hidden',
+      borderBottom: '1px solid var(--border)',
+      padding: 'clamp(3.5rem,8vw,5.5rem) 0 clamp(3rem,6vw,5rem)',
     }}>
-      {/* Very subtle cross-hatch background */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle at 90% 10%, rgba(3,105,161,0.03) 0%, transparent 50%), radial-gradient(circle at 5% 90%, rgba(5,150,105,0.025) 0%, transparent 50%)',
-      }} />
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* ── Top: heading + subtitle ── */}
+      <div className="container">
         <div style={{
-          textAlign: 'center', maxWidth: 680, margin: '0 auto 3.5rem',
-          opacity: vis ? 1 : 0, transform: vis ? 'none' : 'translateY(18px)',
-          transition: 'opacity 0.55s ease, transform 0.55s ease',
+          display: 'grid',
+          gridTemplateColumns: '1fr 420px',
+          gap: '3.5rem',
+          alignItems: 'center',
         }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
-            background: '#e0f2fe', borderRadius: '999px',
-            padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              Why Apollo Clinic
-            </span>
-          </div>
-          <h2 style={{
-            color: '#0c1f3f', fontSize: 'clamp(1.7rem,3.8vw,2.4rem)',
-            fontWeight: 800, lineHeight: 1.18, margin: '0 0 0.9rem',
-          }}>
-            Trusted Care,{' '}
-            <span style={{
-              background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>
-              Centered Around You
-            </span>
-          </h2>
-          <p style={{ color: '#64748b', fontSize: '0.97rem', lineHeight: 1.72, margin: 0 }}>
-            We combine medical expertise, compassionate support, and a patient-first approach to deliver a healthcare experience built on trust, comfort, and clinical excellence.
-          </p>
-        </div>
-
-        {/* ── Middle: split layout ── */}
-        <div ref={ref} className="why-split">
-
-          {/* LEFT: trust-point cards in 2-col mini-grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px,1fr))', gap: '1rem' }}>
-            {WHY_POINTS.map((pt, i) => {
-              const isHov = hovCard === pt.id;
-              return (
-                <div
-                  key={pt.id}
-                  onMouseEnter={() => setHovCard(pt.id)}
-                  onMouseLeave={() => setHovCard(null)}
-                  style={{
-                    background: '#fff',
-                    borderRadius: '18px',
-                    padding: '1.5rem 1.4rem',
-                    border: `1.5px solid ${isHov ? pt.accent + '38' : '#edf2f7'}`,
-                    boxShadow: isHov
-                      ? `0 16px 40px rgba(0,0,0,0.07), 0 0 0 1px ${pt.accent}14`
-                      : '0 2px 12px rgba(14,31,63,0.04)',
-                    transform: isHov ? 'translateY(-4px)' : 'none',
-                    transition: 'all 0.25s cubic-bezier(0.34,1.4,0.64,1)',
-                    opacity: vis ? 1 : 0,
-                    transitionDelay: `${i * 0.06}s`,
-                    position: 'relative', overflow: 'hidden',
-                  }}
-                >
-                  {/* Thin top accent */}
-                  <div style={{
-                    position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-                    background: `linear-gradient(90deg,${pt.accent},${pt.accent}55)`,
-                    opacity: isHov ? 1 : 0.3,
-                    transition: 'opacity 0.25s',
-                  }} />
-
-                  {/* Icon */}
-                  <div style={{
-                    width: 46, height: 46, borderRadius: '13px',
-                    background: isHov ? pt.accent : pt.accentLight,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    color: isHov ? '#fff' : pt.accent,
-                    marginBottom: '1rem',
-                    transition: 'all 0.25s ease',
-                    boxShadow: isHov ? `0 6px 16px ${pt.accent}40` : 'none',
-                  }}>
-                    {pt.icon}
-                  </div>
-
-                  <h3 style={{
-                    color: '#0c1f3f', fontWeight: 800, fontSize: '0.93rem',
-                    lineHeight: 1.25, margin: '0 0 0.5rem',
-                  }}>
-                    {pt.title}
-                  </h3>
-                  <p style={{
-                    color: '#64748b', fontSize: '0.82rem',
-                    lineHeight: 1.68, margin: 0,
-                  }}>
-                    {pt.body}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* RIGHT: dark premium highlight panel */}
-          <div style={{
-            background: 'linear-gradient(160deg,#0c1f3f 0%,#0f3460 55%,#0369a1 100%)',
-            borderRadius: '22px',
-            padding: '2.2rem 1.75rem',
-            color: '#fff',
-            position: 'sticky', top: '5.5rem',
-            opacity: vis ? 1 : 0,
-            transform: vis ? 'none' : 'translateY(20px)',
-            transition: 'opacity 0.6s ease 0.3s, transform 0.6s ease 0.3s',
-            overflow: 'hidden',
-          }}>
-            {/* glow blob */}
-            <div style={{
-              position: 'absolute', top: '-60px', right: '-60px',
-              width: 220, height: 220, borderRadius: '50%',
-              background: 'radial-gradient(circle,rgba(14,165,233,0.25),transparent 70%)',
-              pointerEvents: 'none',
-            }} />
-
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-              background: 'rgba(255,255,255,0.12)', borderRadius: '999px',
-              padding: '0.25rem 0.75rem', marginBottom: '1.25rem',
-              border: '1px solid rgba(255,255,255,0.15)',
-            }}>
-              <div style={{
-                width: 7, height: 7, borderRadius: '50%',
-                background: status.open ? '#4ade80' : '#f87171',
-                boxShadow: status.open ? '0 0 6px #4ade80' : '0 0 6px #f87171',
-              }} />
-              <span style={{ fontSize: '0.68rem', fontWeight: 700, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.05em' }}>
-                {status.open ? 'Currently Open' : 'Clinic Closed'}
+          {/* Left — text */}
+          <div>
+            {/* Status badge */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+                background: status.open ? 'var(--green-light)' : 'var(--bg-alt)',
+                color: status.open ? 'var(--green)' : 'var(--muted)',
+                border: `1px solid ${status.open ? 'var(--green-border)' : 'var(--border)'}`,
+                borderRadius: 'var(--r-full)',
+                fontSize: '0.75rem', fontWeight: 700,
+                padding: '0.3rem 0.8rem',
+              }}>
+                <span style={{ width: 6, height: 6, borderRadius: '50%', background: status.open ? 'var(--green)' : 'var(--muted)', display: 'inline-block' }} />
+                {status.open ? `Open Now · ${status.hours}` : 'Currently Closed'}
+              </span>
+              <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500 }}>
+                Karan Nagar, Srinagar
               </span>
             </div>
 
-            <h3 style={{ fontWeight: 800, fontSize: '1.25rem', lineHeight: 1.25, margin: '0 0 0.6rem', color: '#fff' }}>
-              Apollo Clinic Srinagar
-            </h3>
-            <p style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.83rem', lineHeight: 1.65, margin: '0 0 1.5rem' }}>
-              A trusted multi-specialty clinic in Karan Nagar, committed to patient-centered care, expert consultation, and quality clinical outcomes.
+            <h1 style={{ marginBottom: '1.1rem', color: 'var(--heading)', lineHeight: 1.12 }}>
+              Clinical Excellence,{' '}
+              <span style={{ color: 'var(--blue)' }}>Rooted in<br />Srinagar</span>
+            </h1>
+
+            <p style={{ fontSize: '1.05rem', color: 'var(--body)', lineHeight: 1.72, maxWidth: 480, marginBottom: '2rem' }}>
+              Apollo Clinic Srinagar brings together qualified specialists, in-house diagnostics, and a patient-first approach — all under one roof at Karan Nagar.
             </p>
 
-            {/* Stat pairs */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.85rem', marginBottom: '1.75rem' }}>
-              {WHY_STATS.map((s, i) => (
-                <div key={i} style={{
-                  background: 'rgba(255,255,255,0.07)',
-                  border: '1px solid rgba(255,255,255,0.12)',
-                  borderRadius: '14px', padding: '0.9rem 0.85rem',
-                  textAlign: 'center',
+            {/* Specialties scroll */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '2rem' }}>
+              {HERO_SPECIALTIES.map(s => (
+                <span key={s} style={{
+                  background: 'var(--bg)', border: '1px solid var(--border)',
+                  borderRadius: 'var(--r-full)', color: 'var(--body)',
+                  fontSize: '0.78rem', fontWeight: 500,
+                  padding: '0.28rem 0.75rem',
                 }}>
-                  <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: '0.25rem' }}>
-                    {s.value}
-                  </div>
-                  <div style={{ fontSize: '0.67rem', color: 'rgba(255,255,255,0.55)', fontWeight: 600, letterSpacing: '0.04em', lineHeight: 1.3 }}>
-                    {s.label}
-                  </div>
-                </div>
+                  {s}
+                </span>
               ))}
             </div>
 
-            {/* Divider */}
-            <div style={{ height: '1px', background: 'rgba(255,255,255,0.1)', margin: '0 0 1.5rem' }} />
-
-            {/* Timing */}
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.67rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-                Consultation Hours
-              </div>
-              <div style={{ color: '#fff', fontSize: '0.82rem', fontWeight: 600, marginBottom: '0.2rem' }}>Mon – Sat &nbsp; 12:00 PM – 7:00 PM</div>
-              <div style={{ color: '#fff', fontSize: '0.82rem', fontWeight: 600 }}>Sunday &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10:00 AM – 1:30 PM</div>
+            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+              <button className="btn btn-primary btn-lg" onClick={goBook}>
+                <Calendar size={17} /> Book Appointment
+              </button>
+              <a href={PHONE_HREF} className="btn btn-ghost btn-lg">
+                <Phone size={17} /> {PHONE}
+              </a>
             </div>
 
-            {/* CTA */}
-            <button
-              onClick={goBook}
-              style={{
-                width: '100%', padding: '0.85rem',
-                background: '#0ea5e9', color: '#fff',
-                border: 'none', borderRadius: '13px',
-                fontWeight: 800, fontSize: '0.9rem',
-                cursor: 'pointer', fontFamily: 'inherit',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.45rem',
-                transition: 'all 0.22s',
-                boxShadow: '0 4px 18px rgba(14,165,233,0.35)',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background='#0284c7'; e.currentTarget.style.transform='scale(1.02)'; }}
-              onMouseLeave={e => { e.currentTarget.style.background='#0ea5e9'; e.currentTarget.style.transform='scale(1)'; }}
-            >
-              <Calendar size={15} /> Book a Consultation
-            </button>
+            {/* Trust row */}
+            <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+              {[
+                { num: '10+', label: 'Specialties' },
+                { num: '6',   label: 'Doctors' },
+                { num: '24/7', label: 'Reports Online' },
+              ].map(s => (
+                <div key={s.label}>
+                  <div style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--navy)', lineHeight: 1, letterSpacing: '-0.03em' }}>{s.num}</div>
+                  <div style={{ fontSize: '0.78rem', color: 'var(--muted)', fontWeight: 500, marginTop: '0.2rem' }}>{s.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Right — clinic card */}
+          <div style={{
+            background: 'var(--bg)',
+            border: '1px solid var(--border)',
+            borderRadius: '20px',
+            overflow: 'hidden',
+          }}>
+            {/* Map/photo placeholder — clinic building visual */}
+            <div style={{
+              background: 'linear-gradient(135deg, #e8f4fd 0%, #dbeafe 100%)',
+              height: 240,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              position: 'relative', overflow: 'hidden',
+            }}>
+              {/* Simple clinic illustration */}
+              <svg width="180" height="160" viewBox="0 0 180 160" fill="none" opacity="0.55">
+                <rect x="20" y="60" width="140" height="90" rx="4" fill="#1e3a8a" fillOpacity="0.15"/>
+                <rect x="40" y="30" width="100" height="35" rx="4" fill="#1e3a8a" fillOpacity="0.2"/>
+                <rect x="65" y="8" width="50" height="26" rx="3" fill="#2563eb" fillOpacity="0.3"/>
+                <rect x="75" y="90" width="30" height="60" rx="2" fill="#1e3a8a" fillOpacity="0.25"/>
+                <rect x="25" y="80" width="40" height="30" rx="2" fill="#2563eb" fillOpacity="0.15"/>
+                <rect x="115" y="80" width="40" height="30" rx="2" fill="#2563eb" fillOpacity="0.15"/>
+                {/* Cross */}
+                <rect x="85" y="14" width="10" height="14" rx="1" fill="#1e3a8a" fillOpacity="0.6"/>
+                <rect x="81" y="18" width="18" height="6" rx="1" fill="#1e3a8a" fillOpacity="0.6"/>
+                {/* Windows */}
+                <rect x="28" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
+                <rect x="48" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
+                <rect x="118" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
+                <rect x="138" y="84" width="14" height="10" rx="1" fill="#2563eb" fillOpacity="0.35"/>
+              </svg>
+            </div>
+
+            {/* Info block */}
+            <div style={{ padding: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.85rem' }}>
+                <div>
+                  <div style={{ fontWeight: 800, fontSize: '0.97rem', color: 'var(--heading)', marginBottom: '0.2rem' }}>
+                    Apollo Clinic Srinagar
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem', color: 'var(--muted)', fontSize: '0.8rem' }}>
+                    <MapPin size={12} /> Near National School, Arham Towers, Karan Nagar
+                  </div>
+                </div>
+                <span style={{
+                  background: status.open ? 'var(--green-light)' : 'var(--bg-alt)',
+                  color: status.open ? 'var(--green)' : 'var(--muted)',
+                  border: `1px solid ${status.open ? 'var(--green-border)' : 'var(--border)'}`,
+                  borderRadius: 'var(--r-sm)', fontSize: '0.68rem', fontWeight: 700,
+                  padding: '0.2rem 0.5rem', flexShrink: 0,
+                  textTransform: 'uppercase', letterSpacing: '0.04em',
+                }}>
+                  {status.open ? 'Open' : 'Closed'}
+                </span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
+                {[
+                  { icon: <Clock size={13} />, label: 'Mon–Sat', val: '12–7 PM' },
+                  { icon: <Clock size={13} />, label: 'Sunday',  val: '10–1:30 PM' },
+                  { icon: <Phone size={13} />, label: 'Call',    val: PHONE },
+                ].map((r, i) => (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: '0.45rem',
+                    background: 'var(--bg)', borderRadius: 'var(--r-md)',
+                    padding: '0.5rem 0.65rem', gridColumn: i === 2 ? '1/-1' : undefined,
+                  }}>
+                    <span style={{ color: 'var(--blue)', flexShrink: 0 }}>{r.icon}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500 }}>{r.label}</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--heading)', fontWeight: 700, marginLeft: 'auto' }}>{r.val}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href={MAPS_LINK} target="_blank" rel="noreferrer"
+                className="btn btn-outline w-full"
+                style={{ justifyContent: 'center', fontSize: '0.85rem' }}
+              >
+                <Navigation size={14} /> Get Directions
+              </a>
+            </div>
           </div>
         </div>
+      </div>
 
+      {/* Mobile hero responsive */}
+      <style>{`
+        @media (max-width: 860px) {
+          section .container > div[style*="grid-template-columns: 1fr 420px"] {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </section>
+  );
+};
+
+/* ════════════════════════════════════
+   2. TRUST STRIP
+════════════════════════════════════ */
+const TRUST_ITEMS = [
+  { icon: <Shield size={15} />, label: 'In-House Diagnostics'   },
+  { icon: <Activity size={15} />, label: '10+ Medical Specialties' },
+  { icon: <CheckCircle size={15} />, label: 'Verified Specialists' },
+  { icon: <Clock size={15} />, label: 'Same-Day Lab Results'    },
+  { icon: <Heart size={15} />, label: 'Patient-First Care'      },
+];
+const TrustStrip = () => (
+  <div className="trust-strip" style={{ overflowX: 'auto' }}>
+    {TRUST_ITEMS.map((t, i) => (
+      <div key={i} className="trust-item">
+        <div className="trust-icon">{t.icon}</div>
+        {t.label}
+      </div>
+    ))}
+  </div>
+);
+
+/* ════════════════════════════════════
+   3. SERVICES — Comprehensive Clinical Services
+════════════════════════════════════ */
+const HOME_SERVICES = [
+  {
+    id: 'gp', slug: 'general-physician',
+    name: 'General Physician',
+    desc: 'Primary care, chronic disease management, fever, infections and wellness consultations.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+  },
+  {
+    id: 'cardio', slug: 'cardiology',
+    name: 'Cardiology',
+    desc: 'ECG, ECHO, cardiac risk assessment and cardiovascular management.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+  },
+  {
+    id: 'paed', slug: 'pediatrics',
+    name: 'Pediatrics',
+    desc: 'Comprehensive child healthcare — vaccinations, growth monitoring and illness management.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5"/><path d="M6 21v-1a6 6 0 0112 0v1"/></svg>,
+  },
+  {
+    id: 'gyn', slug: 'gynecology',
+    name: 'Gynecology',
+    desc: "Women's health, antenatal care, reproductive wellness and hormonal disorders.",
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22V8M12 8C12 8 9 5 6 5c-2 0-3 1.5-3 3 0 4 3 6 3 9h12c0-3 3-5 3-9 0-1.5-1-3-3-3-3 0-6 3-6 3z"/></svg>,
+  },
+  {
+    id: 'derm', slug: 'dermatology',
+    name: 'Dermatology',
+    desc: 'Skin, hair and nail care — acne, eczema, hair loss and cosmetic dermatology.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>,
+  },
+  {
+    id: 'ortho', slug: 'orthopedics',
+    name: 'Orthopedics',
+    desc: 'Bone, joint and spine care — injuries, chronic pain and rehabilitation.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>,
+  },
+  {
+    id: 'psych', slug: 'psychology',
+    name: 'Clinical Psychology',
+    desc: 'Anxiety, depression, counselling and cognitive behavioural therapy.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>,
+  },
+  {
+    id: 'diag', slug: 'diagnostics',
+    name: 'Diagnostics & Lab',
+    desc: 'In-house ECG, ECHO, PFT, blood panels, diabetes screening and health packages.',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round"><path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8l-5-5H9z"/><polyline points="9 3 9 8 19 8"/><line x1="7" y1="13" x2="17" y2="13"/><line x1="7" y1="17" x2="13" y2="17"/></svg>,
+  },
+];
+
+const ServicesSection = ({ goBook, goTo }) => {
+  const [ref, vis] = useInView(0.05);
+  return (
+    <section id="services" style={{ background: 'var(--bg)', padding: '5rem 0' }}>
+      <div className="container">
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+          <div>
+            <div className="section-label">Our Services</div>
+            <h2 style={{ marginBottom: '0.65rem' }}>Comprehensive Clinical Services</h2>
+            <p style={{ margin: 0, maxWidth: 500, color: 'var(--body)' }}>
+              Multi-speciality care delivered by experienced, verified doctors — all under one roof at Karan Nagar, Srinagar.
+            </p>
+          </div>
+          <button
+            className="btn btn-outline-blue btn-sm"
+            onClick={() => goTo('/services')}
+            style={{ flexShrink: 0, borderRadius: 'var(--r-full)' }}
+          >
+            View All Services <ArrowRight size={14} />
+          </button>
+        </div>
+
+        <div ref={ref} style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+          gap: '1rem',
+        }}>
+          {HOME_SERVICES.map((svc, i) => (
+            <div
+              key={svc.id}
+              className="spec-card"
+              onClick={() => goTo('/services')}
+              style={{
+                opacity: vis ? 1 : 0,
+                transform: vis ? 'none' : 'translateY(16px)',
+                transition: `opacity 0.45s ease ${i * 0.05}s, transform 0.4s ease ${i * 0.05}s, border-color 0.2s, box-shadow 0.2s`,
+              }}
+            >
+              <div className="spec-card-icon">{svc.icon}</div>
+              <h3 className="spec-card h3" style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0.4rem 0 0.25rem', color: 'var(--heading)' }}>
+                {svc.name}
+              </h3>
+              <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--body)', lineHeight: 1.6 }}>{svc.desc}</p>
+              <div className="spec-card-link" style={{ marginTop: '0.75rem' }}>
+                Book Now <ArrowRight size={12} />
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
 };
 
-/* ═══════════════════════════════════
-   6. DIAGNOSTICS
-═══════════════════════════════════ */
-const DIAG_ITEMS = [
-  {
-    id: 'ecg', accent: '#db2777', accentLight: '#fce7f3',
-    tag: 'Cardiac',
-    name: 'ECG (12-Lead)',
-    why: 'Heart rhythm & electrical activity assessment. Done in-clinic with results available the same day.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'echo', accent: '#0891b2', accentLight: '#e0f7fa',
-    tag: 'Cardiac',
-    name: 'ECHO (Echocardiogram)',
-    why: 'Ultrasound imaging of heart structure, valves, and pump function for precise cardiac evaluation.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'pft', accent: '#7c3aed', accentLight: '#ede9fe',
-    tag: 'Respiratory',
-    name: 'Pulmonary Function (PFT)',
-    why: 'Lung capacity and airflow testing for asthma, COPD, and breathlessness — reliable respiratory diagnosis.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22V8M12 8C12 8 9 5 6 5c-2 0-3 1.5-3 3 0 4 3 6 3 9h12c0-3 3-5 3-9 0-1.5-1-3-3-3-3 0-6 3-6 3z"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'lab', accent: '#0369a1', accentLight: '#e0f2fe',
-    tag: 'Laboratory',
-    name: 'Blood Tests & Lab',
-    why: 'CBC, LFT, KFT, lipid profile, thyroid, HbA1c — comprehensive in-house lab with fast turnaround.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8l-5-5H9z"/>
-        <polyline points="9 3 9 8 19 8"/>
-        <line x1="7" y1="13" x2="17" y2="13"/>
-        <line x1="7" y1="17" x2="13" y2="17"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'diabetes', accent: '#d97706', accentLight: '#fef3c7',
-    tag: 'Metabolic',
-    name: 'Diabetes Panel',
-    why: 'Fasting glucose, post-meal sugar, and HbA1c for early detection and ongoing diabetes monitoring.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-        <path d="M8 12h8M12 8v8"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'checkup', accent: '#047857', accentLight: '#d1fae5',
-    tag: 'Preventive',
-    name: 'Health Checkup Packages',
-    why: 'Annual wellness packages covering essential markers for early detection and long-term health management.',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 11l3 3L22 4"/>
-        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-      </svg>
-    ),
-  },
+/* ════════════════════════════════════
+   4. DOCTORS — Find a Doctor (preview)
+════════════════════════════════════ */
+const HOME_DOCTORS = [
+  { initials: 'SA', name: 'Dr. Shabir Ahmad Mir', specialty: 'General Physician', qual: 'MBBS, MD', exp: '12+ yrs', avail: 'Mon–Sat', id: 'dr-shabir-ahmad-mir' },
+  { initials: 'NR', name: 'Dr. Nazia Rashid',     specialty: 'Dermatology',       qual: 'MBBS, MD', exp: '9+ yrs',  avail: 'Mon–Sat', id: 'dr-nazia-rashid'     },
+  { initials: 'AH', name: 'Dr. Aijaz Hussain',    specialty: 'Pediatrics',        qual: 'MBBS, DCH, MD', exp: '10+ yrs', avail: 'Mon–Fri', id: 'dr-aijaz-hussain' },
+  { initials: 'SB', name: 'Dr. Saima Bano',       specialty: 'Gynecology',        qual: 'MBBS, MS', exp: '11+ yrs', avail: 'Mon–Sat', id: 'dr-saima-bano'       },
 ];
 
-/* ── Diag mini-card ── */
-const DiagCard = ({ d, vis, delay }) => {
-  const [hov, setHov] = React.useState(false);
+const DoctorsSection = ({ goBook, goTo }) => {
+  const [ref, vis] = useInView(0.05);
   return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: '#fff',
-        borderRadius: '16px',
-        padding: '1.4rem 1.3rem',
-        border: `1.5px solid ${hov ? d.accent + '38' : '#edf2f7'}`,
-        boxShadow: hov ? `0 14px 36px rgba(0,0,0,0.07), 0 0 0 1px ${d.accent}12` : '0 2px 10px rgba(14,31,63,0.045)',
-        transform: hov ? 'translateY(-4px)' : 'translateY(0)',
-        transition: 'all 0.26s cubic-bezier(0.34,1.4,0.64,1)',
-        opacity: vis ? 1 : 0,
-        transitionDelay: `${delay}s`,
-        position: 'relative',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <div style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: '3px',
-        background: `linear-gradient(90deg,${d.accent},${d.accent}55)`,
-        opacity: hov ? 1 : 0.3,
-        transition: 'opacity 0.25s',
-      }} />
-
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.9rem' }}>
-        <div style={{
-          width: 44, height: 44, borderRadius: '12px',
-          background: hov ? d.accent : d.accentLight,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          color: hov ? '#fff' : d.accent,
-          transition: 'all 0.25s ease',
-          boxShadow: hov ? `0 5px 14px ${d.accent}40` : 'none',
-        }}>
-          {d.icon}
+    <section id="doctors" style={{ background: '#fff', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
+      <div className="container">
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+          <div>
+            <div className="section-label">Meet Our Team</div>
+            <h2 style={{ marginBottom: '0.65rem' }}>Experienced Specialists</h2>
+            <p style={{ margin: 0, maxWidth: 500, color: 'var(--body)' }}>
+              Our verified team of multi-specialty doctors is committed to compassionate, evidence-based care for every patient.
+            </p>
+          </div>
+          <button
+            className="btn btn-outline-blue btn-sm"
+            onClick={() => goTo('/doctors')}
+            style={{ flexShrink: 0, borderRadius: 'var(--r-full)' }}
+          >
+            Find a Doctor <ArrowRight size={14} />
+          </button>
         </div>
-        <span style={{
-          background: d.accentLight, color: d.accent,
-          fontSize: '0.6rem', fontWeight: 700,
-          textTransform: 'uppercase', letterSpacing: '0.08em',
-          padding: '0.18rem 0.55rem', borderRadius: '999px',
-        }}>
-          {d.tag}
-        </span>
-      </div>
 
-      <h4 style={{ color: '#0c1f3f', fontWeight: 800, fontSize: '0.88rem', margin: '0 0 0.4rem', lineHeight: 1.25 }}>
-        {d.name}
-      </h4>
-      <p style={{ color: '#64748b', fontSize: '0.78rem', lineHeight: 1.65, margin: 0, flex: 1 }}>
-        {d.why}
-      </p>
-    </div>
+        <div ref={ref} style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+          gap: '1rem',
+        }}>
+          {HOME_DOCTORS.map((doc, i) => (
+            <div
+              key={doc.id}
+              className="doc-card"
+              onClick={() => goTo(`/doctors/${doc.id}`)}
+              style={{
+                cursor: 'pointer',
+                opacity: vis ? 1 : 0,
+                transform: vis ? 'none' : 'translateY(16px)',
+                transition: `opacity 0.45s ease ${i * 0.06}s, transform 0.4s ease ${i * 0.06}s, border-color 0.2s, box-shadow 0.2s`,
+              }}
+            >
+              <div className="doc-card-avatar">
+                {doc.initials}
+              </div>
+              <div className="doc-card-body">
+                <div style={{ fontSize: '0.68rem', fontWeight: 700, color: 'var(--blue)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+                  {doc.specialty}
+                </div>
+                <div style={{ fontWeight: 800, fontSize: '0.97rem', color: 'var(--heading)', lineHeight: 1.2 }}>{doc.name}</div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--body)' }}>{doc.qual}</div>
+                <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginTop: '0.35rem' }}>
+                  <span style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', fontSize: '0.68rem', fontWeight: 600, color: 'var(--body)', padding: '0.18rem 0.55rem' }}>
+                    {doc.exp}
+                  </span>
+                  <span style={{ background: 'var(--green-light)', border: '1px solid var(--green-border)', borderRadius: 'var(--r-sm)', fontSize: '0.68rem', fontWeight: 600, color: 'var(--green)', padding: '0.18rem 0.55rem' }}>
+                    Available
+                  </span>
+                </div>
+              </div>
+              <div className="doc-card-actions">
+                <button
+                  className="btn btn-outline btn-sm"
+                  onClick={e => { e.stopPropagation(); goTo(`/doctors/${doc.id}`); }}
+                  style={{ borderRadius: 'var(--r-md)' }}
+                >
+                  Learn More
+                </button>
+                <button
+                  className="btn btn-primary btn-sm"
+                  onClick={e => { e.stopPropagation(); goBook(); }}
+                  style={{ borderRadius: 'var(--r-md)' }}
+                >
+                  Book
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
-const Diagnostics = ({ goBook }) => {
+/* ════════════════════════════════════
+   5. DIAGNOSTICS — Precision Diagnostics
+════════════════════════════════════ */
+const DIAG_LIST = [
+  { name: 'ECG (12-Lead)',           tag: 'Cardiac',      desc: 'Heart rhythm & electrical activity — results same day.' },
+  { name: 'ECHO (Echocardiogram)',   tag: 'Cardiac',      desc: 'Ultrasound imaging of heart structure and valves.' },
+  { name: 'Pulmonary Function Test', tag: 'Respiratory',  desc: 'Lung capacity testing for asthma and COPD.' },
+  { name: 'Blood Tests & Lab',       tag: 'Laboratory',   desc: 'CBC, LFT, KFT, lipid, thyroid, HbA1c — in-house.' },
+  { name: 'Diabetes Panel',          tag: 'Metabolic',    desc: 'Fasting glucose, post-meal sugar and HbA1c.' },
+  { name: 'Health Checkup Packages', tag: 'Preventive',   desc: 'Annual wellness packages for early detection.' },
+];
+
+const DiagnosticsSection = ({ goTo }) => {
   const [ref, vis] = useInView(0.06);
-  const navigate   = useNavigate();
-
   return (
-    <section id="diagnostics" style={{
-      background: '#fafbfc',
-      padding: '5.5rem 0',
-      borderTop: '1px solid #f0f4f8',
-      position: 'relative',
-      overflow: 'hidden',
-    }}>
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: 'radial-gradient(circle at 90% 20%,rgba(219,39,119,0.025) 0%,transparent 50%), radial-gradient(circle at 5% 75%,rgba(3,105,161,0.025) 0%,transparent 50%)',
-      }} />
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-
-        {/* ── Split: left text / right grid ── */}
+    <section id="diagnostics" style={{ background: 'var(--bg)', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
+      <div className="container">
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'minmax(0,420px) minmax(0,1fr)',
-          gap: '3.5rem',
-          alignItems: 'start',
-          marginBottom: '2.5rem',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '4rem',
+          alignItems: 'center',
         }}>
-          {/* Left — heading + bullets */}
+          {/* Left — text */}
           <div>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
-              background: '#e0f2fe', borderRadius: '999px',
-              padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Lab & Diagnostics
-              </span>
-            </div>
-            <h2 style={{
-              color: '#0c1f3f',
-              fontSize: 'clamp(1.6rem,3.5vw,2.3rem)',
-              fontWeight: 800, lineHeight: 1.18,
-              margin: '0 0 0.8rem',
-            }}>
-              In-House Diagnostics &{' '}
-              <span style={{
-                background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>
-                Health Checkups
-              </span>
+            <div className="section-label">Lab & Diagnostics</div>
+            <h2 style={{ marginBottom: '0.75rem' }}>
+              Precision Diagnostics<br />
+              <span style={{ color: 'var(--blue)' }}>you can rely on</span>
             </h2>
-            <p style={{ color: '#64748b', lineHeight: 1.72, marginBottom: '1.4rem', fontSize: '0.92rem' }}>
-              No external lab visits. Tests done on-site, results available quickly — reviewed by your doctor at Apollo Clinic, Karan Nagar.
+            <p style={{ marginBottom: '1.25rem', color: 'var(--body)' }}>
+              Accurate, timely, and comprehensive health testing. Our in-house laboratory ensures your results are delivered swiftly, reviewed by your doctor at the same visit.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem', marginBottom: '1.75rem' }}>
-              {[
-                'Same-day results for routine tests',
-                'Quality-controlled, certified equipment',
-                'Results reviewed by your consulting doctor',
-                'Walk in and test — no referral needed',
-              ].map((pt, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.55rem', fontSize: '0.86rem', color: '#334155' }}>
-                  <CheckCircle size={14} color="#059669" style={{ flexShrink: 0, marginTop: '2px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', marginBottom: '1.75rem' }}>
+              {['Same-day results for most tests', 'No external lab visits needed', 'Results reviewed by your doctor', 'Walk-in friendly — no referral required'].map((pt, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.87rem', color: 'var(--body)' }}>
+                  <CheckCircle size={14} color="var(--green)" style={{ flexShrink: 0 }} />
                   {pt}
                 </div>
               ))}
             </div>
 
             <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
-              <button
-                onClick={() => { navigate('/book-checkup'); window.scrollTo(0,0); }}
-                style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                  padding: '0.72rem 1.35rem',
-                  background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-                  color: '#fff', border: 'none', borderRadius: '12px',
-                  fontWeight: 800, fontSize: '0.87rem',
-                  cursor: 'pointer', fontFamily: 'inherit',
-                  boxShadow: '0 4px 16px rgba(3,105,161,0.3)',
-                  transition: 'all 0.2s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
-                onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
-              >
-                <Calendar size={14} /> Book a Checkup
+              <button className="btn btn-primary" onClick={() => goTo('/book-checkup')} style={{ borderRadius: 'var(--r-full)' }}>
+                <Calendar size={15} /> Book a Checkup
               </button>
-              <Link to="/diagnostics" onClick={() => window.scrollTo(0,0)} style={{
-                display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                padding: '0.72rem 1.1rem',
-                border: '1.5px solid #0369a1',
-                borderRadius: '12px', color: '#0369a1',
-                fontWeight: 700, fontSize: '0.85rem',
-                textDecoration: 'none', transition: 'all 0.2s',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background='#0369a1'; e.currentTarget.style.color='#fff'; }}
-                onMouseLeave={e => { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#0369a1'; }}
-              >
-                View Packages <ArrowRight size={13} />
-              </Link>
+              <button className="btn btn-outline-blue" onClick={() => goTo('/diagnostics')} style={{ borderRadius: 'var(--r-full)' }}>
+                View Packages <ArrowRight size={14} />
+              </button>
             </div>
           </div>
 
-          {/* Right — 2x3 diagnostic cards */}
-          <div ref={ref} style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))',
-            gap: '0.9rem',
-          }}>
-            {DIAG_ITEMS.map((d, i) => (
-              <DiagCard key={d.id} d={d} vis={vis} delay={i * 0.06} />
+          {/* Right — list */}
+          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+            {DIAG_LIST.map((d, i) => (
+              <div key={i} style={{
+                background: '#fff',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--r-lg)',
+                padding: '1rem',
+                opacity: vis ? 1 : 0,
+                transform: vis ? 'none' : 'translateY(12px)',
+                transition: `opacity 0.4s ease ${i * 0.05}s, transform 0.4s ease ${i * 0.05}s`,
+              }}>
+                <div style={{
+                  background: 'var(--blue-light)', color: 'var(--blue)',
+                  borderRadius: 'var(--r-sm)', fontSize: '0.62rem',
+                  fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.07em',
+                  display: 'inline-block', padding: '0.15rem 0.5rem', marginBottom: '0.5rem',
+                }}>
+                  {d.tag}
+                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.84rem', color: 'var(--heading)', lineHeight: 1.25, marginBottom: '0.3rem' }}>{d.name}</div>
+                <div style={{ fontSize: '0.75rem', color: 'var(--body)', lineHeight: 1.55 }}>{d.desc}</div>
+              </div>
             ))}
           </div>
         </div>
-
       </div>
+
+      <style>{`
+        @media (max-width: 780px) {
+          #diagnostics .container > div { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </section>
   );
 };
 
-/* ═══════════════════════════════════
-   6. PATIENT SERVICES HUB — NEW
-═══════════════════════════════════ */
-const PATIENT_ACTIONS = [
-  { icon: <Calendar size={22} />, label: 'Book Appointment', desc: 'Schedule a doctor consultation online', color: '#0369a1', action: 'book' },
-  { icon: <Phone size={22} />, label: 'Call Clinic', desc: 'Speak to our front desk directly', color: '#0891b2', action: 'call' },
-  { icon: <WAIcon size={22} />, label: 'WhatsApp Us', desc: 'Message us for quick assistance', color: '#25D366', action: 'wa' },
-  { icon: <FileText size={22} />, label: 'View Test Reports', desc: 'Access your reports securely online', color: '#6d28d9', action: 'reports' },
-  { icon: <Navigation size={22} />, label: 'Get Directions', desc: 'Navigate to our Karan Nagar clinic', color: '#047857', action: 'map' },
-  { icon: <span style={{ fontSize: '1.3rem' }}>🔬</span>, label: 'Book Health Checkup', desc: 'Preventive health screening packages', color: '#b45309', action: 'checkup' },
+/* ════════════════════════════════════
+   6. GUIDING PRINCIPLES / WHY US
+════════════════════════════════════ */
+const PRINCIPLES = [
+  {
+    icon: <Heart size={20} />,
+    title: 'Patient-First Care',
+    desc: 'Every clinical decision is guided by what is best for the patient — not metrics or templates.',
+  },
+  {
+    icon: <Activity size={20} />,
+    title: 'Advanced Technology',
+    desc: 'We utilise quality-controlled, certified diagnostic equipment to ensure accurate and reliable results.',
+  },
+  {
+    icon: <Shield size={20} />,
+    title: 'Verified Specialists',
+    desc: 'All our doctors are verified, credentialed specialists with substantial clinical experience.',
+  },
+  {
+    icon: <CheckCircle size={20} />,
+    title: 'Transparent Practice',
+    desc: 'Clear communication of diagnosis, treatment plans, and costs — no hidden surprises.',
+  },
 ];
 
-const PatientServices = ({ goBook }) => {
-  const navigate = useNavigate();
+const GuidingPrinciples = ({ goBook, goTo }) => {
   const [ref, vis] = useInView(0.06);
-
-  const handleAction = (action) => {
-    switch (action) {
-      case 'book': goBook(); break;
-      case 'call': window.location.href = PHONE_HREF; break;
-      case 'wa': window.open(WA_LINK, '_blank'); break;
-      case 'reports': navigate('/reports'); window.scrollTo(0, 0); break;
-      case 'map': window.open(MAPS_LINK, '_blank'); break;
-      case 'checkup': navigate('/book-checkup'); window.scrollTo(0, 0); break;
-      default: break;
-    }
-  };
-
   return (
-    <section id="patient-services" style={{ background: '#f8fafc', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
+    <section style={{ background: '#fff', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
       <div className="container">
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-            Patient Services
-          </div>
-          <h2 style={{ color: '#0c4a6e', margin: 0, fontSize: 'clamp(1.5rem,4vw,2.3rem)' }}>How Can We Help You?</h2>
-          <p style={{ color: '#64748b', marginTop: '0.4rem', fontSize: '0.95rem', maxWidth: 480, margin: '0.4rem 0 0' }}>
-            Quick access to everything you need — book, call, message, or view your reports.
-          </p>
-        </div>
-
-        <div ref={ref} className="patient-svc-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '1rem' }}>
-          {PATIENT_ACTIONS.map((act, i) => (
-            <button key={i} onClick={() => handleAction(act.action)} style={{
-              background: '#fff', border: '1.5px solid #e2e8f0', borderRadius: '14px',
-              padding: '1.5rem 1.3rem', cursor: 'pointer', textAlign: 'left',
-              fontFamily: 'inherit', transition: 'all 0.25s',
-              opacity: vis ? 1 : 0,
-              transform: vis ? 'none' : 'translateY(14px)',
-              transitionDelay: `${i * 0.06}s`,
-              transitionProperty: 'opacity, transform, box-shadow, border-color',
-              transitionDuration: '0.4s',
-              display: 'flex', alignItems: 'flex-start', gap: '1rem',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 8px 28px rgba(14,165,233,0.12)'; e.currentTarget.style.borderColor = '#bae6fd'; e.currentTarget.style.transform = 'translateY(-3px)'; }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.transform = 'none'; }}
-            >
-              <div style={{
-                width: 48, height: 48, borderRadius: '12px', flexShrink: 0,
-                background: `${act.color}12`, color: act.color,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                {act.icon}
-              </div>
-              <div>
-                <div style={{ fontWeight: 800, fontSize: '0.92rem', color: '#0c4a6e', marginBottom: '0.2rem' }}>{act.label}</div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b', lineHeight: 1.5 }}>{act.desc}</div>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-/* ═══════════════════════════════════
-   7. TESTIMONIALS
-═══════════════════════════════════ */
-const TESTIMONIALS = [
-  {
-    initials: 'A', color: '#0369a1',
-    name: 'Arjuman', location: 'Srinagar', rating: 5,
-    text: 'I had an excellent experience at Apollo Clinic. The clinic was clean, hygienic, and very well maintained. The facilities were impressive, the waiting time was short, and the staff made the entire visit comfortable and smooth.',
-  },
-  {
-    initials: 'AM', color: '#047857',
-    name: 'Arsheen Mehrajudin', location: 'Srinagar', rating: 5,
-    text: 'My visit to Apollo Clinic was very smooth and comfortable. The clinic is clean, well maintained, and the staff is friendly and helpful. Booking was simple, and the overall experience felt professional and reassuring.',
-  },
-  {
-    initials: 'MP', color: '#6d28d9',
-    name: 'Mrs Pakiza', location: 'Karan Nagar, Srinagar', rating: 5,
-    text: 'Apollo Clinic offers a caring and supportive environment. The staff is attentive, and the facilities feel modern and well equipped. The overall experience was seamless and professional.',
-  },
-  {
-    initials: 'G', color: '#b45309',
-    name: 'Gagan', location: 'Srinagar', rating: 5,
-    text: 'The treatment experience at Apollo Clinic was excellent. The staff was caring, the facilities were very good, and the overall service felt professional. It gave me a lot of confidence in the care provided.',
-  },
-  {
-    initials: 'T', color: '#0891b2',
-    name: 'Tabassum', location: 'Srinagar', rating: 5,
-    text: 'I was impressed by the quick support and professional care at Apollo Clinic. The staff was responsive, the environment felt safe and hygienic, and the treatment process was handled very efficiently.',
-  },
-];
-
-/* ════════════════════════════════════════════
-   CARE GUIDE — Premium information cards
-════════════════════════════════════════════ */
-const CARE_CARDS = [
-  {
-    id: 'appointments',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="4" width="18" height="18" rx="3"/>
-        <line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/>
-        <line x1="3" y1="10" x2="21" y2="10"/>
-        <circle cx="12" cy="15" r="1.5" fill="currentColor" stroke="none"/>
-      </svg>
-    ),
-    accent: '#0369a1',
-    accentLight: '#e0f2fe',
-    tag: 'Appointments',
-    title: 'Consultations & Bookings',
-    body: 'Learn how to schedule a consultation, what to expect during your visit, follow-up procedures, clinic timings, and how our doctors review your case.',
-    cta: 'Explore More',
-    href: '/book',
-  },
-  {
-    id: 'treatments',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 2C9 2 6 5 6 8c0 4 6 10 6 10s6-6 6-10c0-3-3-6-6-6z"/>
-        <circle cx="12" cy="8" r="2"/>
-        <line x1="12" y1="18" x2="12" y2="22"/>
-        <line x1="8" y1="22" x2="16" y2="22"/>
-      </svg>
-    ),
-    accent: '#059669',
-    accentLight: '#d1fae5',
-    tag: 'Treatments',
-    title: 'Treatments & Specialties',
-    body: 'Discover the full range of clinical specialties, treatment protocols, and procedures available at Apollo Clinic — from general medicine to specialist consultations.',
-    cta: 'Explore More',
-    href: '/services',
-  },
-  {
-    id: 'diagnostics',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M9 3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V8l-5-5H9z"/>
-        <polyline points="9 3 9 8 19 8"/>
-        <line x1="7" y1="13" x2="17" y2="13"/>
-        <line x1="7" y1="17" x2="13" y2="17"/>
-      </svg>
-    ),
-    accent: '#7c3aed',
-    accentLight: '#ede9fe',
-    tag: 'Diagnostics',
-    title: 'Diagnostics & Patient Care',
-    body: 'Understand our in-house lab tests, ECG, blood workups, and the clinic\'s commitment to accurate, timely, and safe diagnostic support for every patient.',
-    cta: 'Explore More',
-    href: '/diagnostics',
-  },
-  {
-    id: 'faq',
-    icon: (
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10"/>
-        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
-        <circle cx="12" cy="17" r=".5" fill="currentColor" stroke="none"/>
-      </svg>
-    ),
-    accent: '#b45309',
-    accentLight: '#fef3c7',
-    tag: 'Patient FAQ',
-    title: 'Patient Guidance & FAQ',
-    body: 'Get clear answers to common questions about appointments, prescriptions, report collection, consultation follow-ups, and how to prepare for your visit.',
-    cta: 'Explore More',
-    href: '/faq',
-  },
-];
-
-const CareGuide = () => {
-  const navigate = useNavigate();
-  const [ref, vis] = useInView(0.07);
-  const [hovered, setHovered] = React.useState(null);
-
-  return (
-    <section ref={ref} style={{
-      background: '#fafbfc',
-      padding: '5.5rem 0',
-      position: 'relative',
-      overflow: 'hidden',
-      borderTop: '1px solid #f0f4f8',
-    }}>
-      {/* Decorative background cross — medical, low opacity */}
-      <div style={{
-        position: 'absolute', top: '-60px', right: '-60px',
-        width: '340px', height: '340px', opacity: 0.03,
-        pointerEvents: 'none',
-      }}>
-        <svg viewBox="0 0 200 200" fill="#0369a1">
-          <rect x="75" y="0" width="50" height="200" rx="8"/>
-          <rect x="0" y="75" width="200" height="50" rx="8"/>
-        </svg>
-      </div>
-      <div style={{
-        position: 'absolute', bottom: '-40px', left: '-40px',
-        width: '260px', height: '260px', opacity: 0.025,
-        pointerEvents: 'none',
-      }}>
-        <svg viewBox="0 0 200 200" fill="#059669">
-          <rect x="75" y="0" width="50" height="200" rx="8"/>
-          <rect x="0" y="75" width="200" height="50" rx="8"/>
-        </svg>
-      </div>
-
-      <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-        {/* Header */}
-        <div style={{
-          maxWidth: 620, marginBottom: '3.5rem',
-          opacity: vis ? 1 : 0, transform: vis ? 'none' : 'translateY(18px)',
-          transition: 'opacity 0.55s ease, transform 0.55s ease',
-        }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
-            background: '#e0f2fe', borderRadius: '999px',
-            padding: '0.3rem 0.9rem', marginBottom: '1rem',
-          }}>
-            <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-            <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-              Your Complete Guide
-            </span>
-          </div>
-          <h2 style={{ color: '#0c1f3f', fontSize: 'clamp(1.7rem,4vw,2.4rem)', fontWeight: 800, lineHeight: 1.2, margin: '0 0 1rem' }}>
-            Have Questions?{' '}
-            <span style={{
-              background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-              WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-            }}>
-              Our Care Team
-            </span>
-            {' '}Is Here to Guide You.
-          </h2>
-          <p style={{ color: '#64748b', fontSize: '1rem', lineHeight: 1.7, margin: 0 }}>
-            Everything you need to know about your care at Apollo Clinic — consultations, treatments, diagnostics, and more — clearly explained.
-          </p>
-        </div>
-
-        {/* Card grid */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-          gap: '1.25rem',
+          gridTemplateColumns: '420px 1fr',
+          gap: '4rem',
+          alignItems: 'center',
         }}>
-          {CARE_CARDS.map((card, i) => {
-            const isHov = hovered === card.id;
-            return (
-              <div
-                key={card.id}
-                onClick={() => { navigate(card.href); window.scrollTo(0, 0); }}
-                onMouseEnter={() => setHovered(card.id)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  background: '#fff',
-                  borderRadius: '20px',
-                  padding: '2rem 1.75rem 1.75rem',
-                  border: `1.5px solid ${isHov ? card.accent + '40' : '#eef2f7'}`,
-                  boxShadow: isHov
-                    ? `0 20px 48px rgba(0,0,0,0.08), 0 0 0 1px ${card.accent}18`
-                    : '0 2px 16px rgba(14,31,63,0.05)',
-                  cursor: 'pointer',
-                  transform: isHov ? 'translateY(-6px)' : 'translateY(0)',
-                  transition: 'all 0.28s cubic-bezier(0.34,1.56,0.64,1)',
-                  opacity: vis ? 1 : 0,
-                  transitionDelay: vis ? `${i * 0.08}s` : '0s',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}
-              >
-                {/* Top accent line */}
-                <div style={{
-                  position: 'absolute', top: 0, left: '1.75rem', right: '1.75rem', height: '3px',
-                  background: `linear-gradient(90deg,${card.accent},${card.accent}66)`,
-                  borderRadius: '0 0 4px 4px',
-                  opacity: isHov ? 1 : 0.4,
-                  transition: 'opacity 0.28s ease',
-                }} />
+          {/* Left */}
+          <div>
+            <div className="section-label">Why Choose Us</div>
+            <h2 style={{ marginBottom: '0.75rem' }}>Our Guiding<br />Principles</h2>
+            <p style={{ color: 'var(--body)', marginBottom: '1.75rem' }}>
+              Apollo Clinic Srinagar is built on a foundation of clinical integrity,
+              patient dignity, and medical excellence — every day, for every patient.
+            </p>
+            <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
+              {[{ n: '6', l: 'Doctors' }, { n: '10+', l: 'Specialties' }, { n: '∞', l: 'Compassion' }].map(s => (
+                <div key={s.l}>
+                  <div style={{ fontSize: '1.6rem', fontWeight: 900, color: 'var(--navy)', letterSpacing: '-0.03em', lineHeight: 1 }}>{s.n}</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 500, marginTop: '0.2rem' }}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+              <button className="btn btn-primary" onClick={goBook} style={{ borderRadius: 'var(--r-full)' }}>
+                <Calendar size={15} /> Book Appointment
+              </button>
+              <button className="btn btn-ghost" onClick={() => goTo('/about')} style={{ borderRadius: 'var(--r-full)' }}>
+                About Us <ArrowRight size={14} />
+              </button>
+            </div>
+          </div>
 
-                {/* Icon */}
+          {/* Right — 2x2 principle cards */}
+          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+            {PRINCIPLES.map((p, i) => (
+              <div key={i} style={{
+                background: 'var(--bg)',
+                border: '1px solid var(--border)',
+                borderRadius: 'var(--r-xl)',
+                padding: '1.5rem',
+                opacity: vis ? 1 : 0,
+                transform: vis ? 'none' : 'translateY(14px)',
+                transition: `opacity 0.45s ease ${i * 0.08}s, transform 0.4s ease ${i * 0.08}s`,
+              }}>
                 <div style={{
-                  width: 56, height: 56, borderRadius: '16px',
-                  background: isHov ? card.accent : card.accentLight,
+                  width: 40, height: 40, borderRadius: 'var(--r-md)',
+                  background: 'var(--blue-light)', color: 'var(--blue)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  marginBottom: '1.25rem',
-                  color: isHov ? '#fff' : card.accent,
-                  transition: 'all 0.28s ease',
-                  boxShadow: isHov ? `0 8px 20px ${card.accent}40` : 'none',
+                  marginBottom: '0.85rem',
                 }}>
-                  {card.icon}
+                  {p.icon}
                 </div>
-
-                {/* Tag */}
-                <div style={{
-                  fontSize: '0.68rem', fontWeight: 700, textTransform: 'uppercase',
-                  letterSpacing: '0.1em', color: card.accent,
-                  marginBottom: '0.4rem',
-                }}>
-                  {card.tag}
-                </div>
-
-                {/* Title */}
-                <h3 style={{
-                  color: '#0c1f3f', fontWeight: 800, fontSize: '1.05rem',
-                  lineHeight: 1.25, margin: '0 0 0.75rem',
-                }}>
-                  {card.title}
-                </h3>
-
-                {/* Body */}
-                <p style={{
-                  color: '#64748b', fontSize: '0.875rem', lineHeight: 1.7,
-                  margin: '0 0 1.5rem',
-                }}>
-                  {card.body}
-                </p>
-
-                {/* CTA */}
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-                  color: card.accent, fontWeight: 700, fontSize: '0.85rem',
-                  transform: isHov ? 'translateX(4px)' : 'none',
-                  transition: 'transform 0.25s ease',
-                }}>
-                  {card.cta}
-                  <ArrowRight size={14} />
-                </div>
+                <div style={{ fontWeight: 700, fontSize: '0.93rem', color: 'var(--heading)', marginBottom: '0.35rem' }}>{p.title}</div>
+                <div style={{ fontSize: '0.8rem', color: 'var(--body)', lineHeight: 1.62 }}>{p.desc}</div>
               </div>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 860px) {
+          section:has(h2 ~ [style*="grid-template-columns: 420px"]) .container > div {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </section>
   );
 };
 
+/* ════════════════════════════════════
+   7. QUICK ACTIONS
+════════════════════════════════════ */
+const QuickActions = ({ goBook, goTo }) => (
+  <section style={{ background: 'var(--bg)', padding: '3.5rem 0', borderTop: '1px solid var(--border)' }}>
+    <div className="container">
+      <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
+        <div className="section-label">Patient Services</div>
+        <h2 style={{ marginBottom: '0.5rem', fontSize: 'clamp(1.3rem,3vw,1.9rem)' }}>Everything You Need, In One Place</h2>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: '0.85rem' }}>
+        {[
+          { icon: <Calendar size={20} />, label: 'Book Appointment', sub: 'Online scheduling',       action: goBook },
+          { icon: <Phone size={20} />,    label: 'Call Clinic',      sub: 'Speak to our team',       action: () => { window.location.href = PHONE_HREF; } },
+          { icon: <WAIcon size={20} />,   label: 'WhatsApp Us',      sub: 'Quick assistance',        action: () => window.open(WA_LINK,'_blank') },
+          { icon: <FileText size={20} />, label: 'View Reports',     sub: 'Access test reports',     action: () => goTo('/reports') },
+          { icon: <Navigation size={20}/>,label: 'Get Directions',   sub: 'Navigate to clinic',      action: () => window.open(MAPS_LINK,'_blank') },
+          { icon: <Activity size={20} />, label: 'Health Checkup',   sub: 'Preventive packages',     action: () => goTo('/book-checkup') },
+        ].map((a, i) => (
+          <button
+            key={i}
+            onClick={a.action}
+            style={{
+              background: '#fff',
+              border: '1px solid var(--border)',
+              borderRadius: 'var(--r-xl)',
+              padding: '1.25rem 1rem',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+              cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit',
+              textAlign: 'center',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--blue-border)'; e.currentTarget.style.boxShadow = 'var(--shadow-sm)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = 'none'; }}
+          >
+            <div style={{ width: 44, height: 44, borderRadius: 'var(--r-lg)', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              {a.icon}
+            </div>
+            <div style={{ fontWeight: 700, fontSize: '0.84rem', color: 'var(--heading)' }}>{a.label}</div>
+            <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{a.sub}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  </section>
+);
+
+/* ════════════════════════════════════
+   8. TESTIMONIALS
+════════════════════════════════════ */
+const TESTIMONIALS = [
+  { name: 'Aisha K.',   rating: 5, specialty: 'Dermatology', text: 'Excellent clinic. Dr. Nazia was thorough, attentive and explained everything clearly. The facility is clean and professional.' },
+  { name: 'Farooq A.',  rating: 5, specialty: 'Cardiology',  text: 'ECG and ECHO done in-house — quick results and the doctor reviewed them immediately. Very convenient and trustworthy.' },
+  { name: 'Sobia M.',   rating: 5, specialty: 'Pediatrics',  text: 'Dr. Aijaz is wonderful with children. My son was comfortable throughout the consultation. Highly recommend the clinic.' },
+  { name: 'Irfan G.',   rating: 5, specialty: 'Orthopedics', text: 'Dr. Mushtaq gave a very thorough assessment. The follow-up care was exceptional and my recovery has been smooth.' },
+];
+
 const Testimonials = () => {
-  const [ref, vis] = useInView(0.07);
+  const [ref, vis] = useInView(0.05);
   return (
-    <section id="testimonials" style={{ background: '#fff', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
+    <section style={{ background: '#fff', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
       <div className="container">
-        <div style={{ marginBottom: '2rem' }}>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-            Patient Reviews
-          </div>
-          <h2 style={{ color: '#0c4a6e', margin: 0 }}>What Patients Say</h2>
-          <p style={{ color: '#64748b', marginTop: '0.4rem', fontSize: '0.95rem', maxWidth: 480 }}>
-            Real feedback from patients who visited Apollo Clinic Srinagar.
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div className="section-label">Patient Feedback</div>
+          <h2>What Our Patients Say</h2>
+          <p style={{ maxWidth: 480, margin: '0.5rem auto 0', color: 'var(--body)' }}>
+            Trusted by patients across Srinagar for quality, attentive, and compassionate healthcare.
           </p>
         </div>
-
-        <div ref={ref} className="testi-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(270px,1fr))', gap: '1.15rem' }}>
+        <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
           {TESTIMONIALS.map((t, i) => (
-            <div key={i} style={{
-              background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '14px',
-              padding: '1.4rem', transition: 'all 0.25s',
+            <div key={i} className="testimonial-card" style={{
               opacity: vis ? 1 : 0,
-              transform: vis ? 'none' : 'translateY(16px)',
-              transitionDelay: `${i * 0.08}s`,
-              transitionProperty: 'opacity, transform, box-shadow',
-              transitionDuration: '0.45s',
-            }}
-              onMouseEnter={e => { e.currentTarget.style.boxShadow = '0 6px 24px rgba(14,165,233,0.1)'; e.currentTarget.style.borderColor = '#bae6fd'; }}
-              onMouseLeave={e => { e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = '#e2e8f0'; }}
-            >
-              <div style={{ display: 'flex', gap: '2px', marginBottom: '0.75rem' }}>
-                {[...Array(t.rating)].map((_, s) => <span key={s} style={{ color: '#f59e0b', fontSize: '0.95rem' }}>★</span>)}
+              transform: vis ? 'none' : 'translateY(14px)',
+              transition: `opacity 0.45s ease ${i * 0.07}s, transform 0.4s ease ${i * 0.07}s`,
+            }}>
+              <div style={{ display: 'flex', gap: '0.15rem', marginBottom: '0.75rem' }}>
+                {[...Array(t.rating)].map((_, s) => (
+                  <Star key={s} size={13} fill="var(--blue)" stroke="var(--blue)" />
+                ))}
               </div>
-              <p style={{ color: '#334155', fontSize: '0.85rem', lineHeight: 1.65, margin: '0 0 1.1rem', fontStyle: 'italic' }}>"{t.text}"</p>
+              <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', lineHeight: 1.68, color: 'var(--body)' }}>
+                "{t.text}"
+              </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                <div style={{ width: 34, height: 34, borderRadius: '50%', background: t.color, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontWeight: 800, fontSize: '0.8rem', flexShrink: 0 }}>
-                  {t.initials}
+                <div style={{
+                  width: 36, height: 36, borderRadius: '50%',
+                  background: 'var(--blue-light)', color: 'var(--blue)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 800, fontSize: '0.85rem',
+                }}>
+                  {t.name[0]}
                 </div>
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1e293b' }}>{t.name}</div>
-                  <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{t.location}</div>
+                  <div style={{ fontWeight: 700, fontSize: '0.84rem', color: 'var(--heading)' }}>{t.name}</div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--muted)' }}>{t.specialty} patient</div>
                 </div>
               </div>
             </div>
@@ -2079,224 +745,235 @@ const Testimonials = () => {
   );
 };
 
-/* ═══════════════════════════════════
-   8. CONTACT + TIMINGS + MAP
-═══════════════════════════════════ */
-const ContactSection = () => (
-  <section id="contact" style={{ background: '#f8fafc', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
+/* ════════════════════════════════════
+   9. CONTACT / MAP SECTION
+════════════════════════════════════ */
+const ContactSection = ({ goTo }) => (
+  <section style={{ background: 'var(--bg)', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
     <div className="container">
-      <div style={{ marginBottom: '2rem' }}>
-        <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-          Visit Us
-        </div>
-        <h2 style={{ color: '#0c4a6e', margin: 0 }}>Location, Timings & Contact</h2>
-        <p style={{ color: '#64748b', marginTop: '0.4rem', fontSize: '0.95rem', maxWidth: 520 }}>
-          We're in Karan Nagar, Srinagar — open 7 days a week. Walk-ins welcome. Appointments recommended for specialists.
-        </p>
-      </div>
-
-      <div className="contact-split" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-        {/* Map */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2.5rem', alignItems: 'start' }}>
         <div>
-          <div style={{ borderRadius: '12px', overflow: 'hidden', border: '1px solid #e2e8f0', marginBottom: '0.85rem' }}>
-            <div style={{ background: '#0c4a6e', padding: '0.75rem 1rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
-              <MapPin size={12} color="#fff" />
-              <span style={{ color: '#fff', fontWeight: 700, fontSize: '0.8rem' }}>Arham Towers, Near National School, Karan Nagar, Srinagar</span>
-            </div>
-            <iframe
-              width="100%" height="230"
-              style={{ border: 0, display: 'block' }}
-              allowFullScreen="" loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              src={MAPS_EMBED}
-              title="Apollo Clinic Srinagar - Karan Nagar Location"
-            />
-          </div>
-          <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-            color: '#0369a1', fontWeight: 700, fontSize: '0.85rem', textDecoration: 'none',
-          }}>
-            <ExternalLink size={12} /> Open in Google Maps →
-          </a>
-        </div>
-
-        {/* Info */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.15rem' }}>
-          {/* Timings */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem' }}>
-            <h4 style={{ color: '#0c4a6e', fontWeight: 800, fontSize: '0.88rem', margin: '0 0 0.85rem' }}>🕐 Clinic Timings</h4>
+          <div className="section-label">Find Us</div>
+          <h2 style={{ marginBottom: '0.75rem' }}>Visit Apollo Clinic<br /><span style={{ color: 'var(--blue)' }}>Karan Nagar, Srinagar</span></h2>
+          <p style={{ color: 'var(--body)', marginBottom: '1.5rem' }}>
+            Near National School, Arham Towers, Karan Nagar, Srinagar, Jammu & Kashmir.
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginBottom: '1.75rem' }}>
             {[
-              { day: 'Monday – Saturday', time: '12:00 PM – 7:00 PM' },
-              { day: 'Sunday',            time: '10:00 AM – 1:30 PM' },
-            ].map((t, i) => (
-              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.55rem 0', borderBottom: i === 0 ? '1px solid #e2e8f0' : 'none' }}>
-                <span style={{ color: '#64748b', fontSize: '0.86rem' }}>{t.day}</span>
-                <span style={{ color: '#059669', fontWeight: 700, fontSize: '0.86rem' }}>{t.time}</span>
+              { icon: <Phone size={15} />, label: 'Phone', val: PHONE, href: PHONE_HREF },
+              { icon: <MapPin size={15} />, label: 'Address', val: 'Near National School, Arham Towers, Karan Nagar', href: null },
+              { icon: <Clock size={15} />, label: 'Mon–Sat', val: '12:00 PM – 7:00 PM', href: null },
+              { icon: <Clock size={15} />, label: 'Sunday',  val: '10:00 AM – 1:30 PM', href: null },
+            ].map((row, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.85rem 1rem', background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--r-lg)' }}>
+                <div style={{ width: 32, height: 32, borderRadius: 'var(--r-md)', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  {row.icon}
+                </div>
+                <div>
+                  <div style={{ fontSize: '0.72rem', color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.06em' }}>{row.label}</div>
+                  {row.href
+                    ? <a href={row.href} style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--navy)' }}>{row.val}</a>
+                    : <div style={{ fontSize: '0.88rem', fontWeight: 600, color: 'var(--heading)' }}>{row.val}</div>
+                  }
+                </div>
               </div>
             ))}
-            <div style={{ marginTop: '0.75rem', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '8px', padding: '0.55rem 0.8rem' }}>
-              <p style={{ color: '#047857', fontWeight: 600, fontSize: '0.76rem', margin: 0 }}>Walk-ins welcome. Appointments recommended for specialist consultations.</p>
-            </div>
           </div>
+          <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+            <a href={MAPS_LINK} target="_blank" rel="noreferrer" className="btn btn-primary" style={{ borderRadius: 'var(--r-full)' }}>
+              <Navigation size={15} /> Get Directions
+            </a>
+            <button className="btn btn-ghost" onClick={() => goTo('/contact')} style={{ borderRadius: 'var(--r-full)' }}>
+              Contact Us <ArrowRight size={14} />
+            </button>
+          </div>
+        </div>
 
-          {/* Contact */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.25rem' }}>
-            <h4 style={{ color: '#0c4a6e', fontWeight: 800, fontSize: '0.88rem', margin: '0 0 0.85rem' }}>📞 Get In Touch</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-              <a href={PHONE_HREF} style={{
-                display: 'flex', alignItems: 'center', gap: '0.55rem',
-                padding: '0.75rem 0.9rem', background: '#0369a1', borderRadius: '10px',
-                color: '#fff', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none',
-              }}>
-                <Phone size={15} /> Call: {PHONE}
-              </a>
-              <a href={WA_LINK} target="_blank" rel="noreferrer" style={{
-                display: 'flex', alignItems: 'center', gap: '0.55rem',
-                padding: '0.75rem 0.9rem', background: '#25D366', borderRadius: '10px',
-                color: '#fff', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none',
-              }}>
-                <WAIcon size={15} /> WhatsApp Us
-              </a>
-              <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{
-                display: 'flex', alignItems: 'center', gap: '0.55rem',
-                padding: '0.75rem 0.9rem', background: '#f0f9ff', border: '1.5px solid #bae6fd', borderRadius: '10px',
-                color: '#0369a1', fontWeight: 700, fontSize: '0.88rem', textDecoration: 'none',
-              }}>
-                <MapPin size={15} /> Get Directions
-              </a>
-            </div>
-          </div>
+        {/* Map */}
+        <div style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', border: '1px solid var(--border)', height: 380 }}>
+          <iframe
+            title="Apollo Clinic Srinagar Location"
+            src={MAPS_EMBED}
+            width="100%" height="100%"
+            style={{ border: 0, display: 'block' }}
+            allowFullScreen loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
       </div>
     </div>
+    <style>{`@media(max-width:768px){#contact-section-grid{grid-template-columns:1fr!important}}`}</style>
   </section>
 );
 
-/* ═══════════════════════════════════
-   9. FAQ
-═══════════════════════════════════ */
+/* ════════════════════════════════════
+   10. FAQ
+════════════════════════════════════ */
 const FAQS = [
-  { q: 'How do I book an appointment at Apollo Clinic?', a: 'Use the Book Appointment form on this website, call us directly, or send a WhatsApp message. We confirm your slot within a few hours.' },
-  { q: 'What are the clinic timings?', a: 'Monday to Saturday: 12:00 PM – 7:00 PM. Sunday: 10:00 AM – 1:30 PM. Walk-ins are welcome during these hours.' },
-  { q: 'Which specialities are available?', a: 'General Medicine, Cardiology (ECG/ECHO), Dermatology, Paediatrics, Gynaecology, Orthopaedics, Pulmonology (PFT), Psychology, Physiotherapy, and Preventive Health Checkups.' },
-  { q: 'Are diagnostic tests done in-house?', a: 'Yes. ECG, ECHO, PFT, blood work, urine analysis, and more — all done in-house at the clinic. No separate lab visit needed.' },
-  { q: 'Where exactly is Apollo Clinic Srinagar?', a: 'Arham Towers, Near National School, Karan Nagar, Srinagar, J&K. Use the Directions button to open Google Maps directly.' },
-  { q: 'How do I access my test reports online?', a: 'After your tests are processed, the clinic will send you a secure link via WhatsApp. Open the link, verify your identity, and view or download your report.' },
-  { q: 'Do you offer preventive health checkup packages?', a: 'Yes. We offer structured annual health packages for individuals, families, and professionals. These include blood work, ECG, and key screenings. Book through our website or call the clinic.' },
+  { q: 'What are Apollo Clinic\'s consultation hours?',         a: 'Monday to Saturday: 12:00 PM to 7:00 PM. Sunday: 10:00 AM to 1:30 PM.' },
+  { q: 'Do I need an appointment to visit?',                    a: 'Walk-ins are welcome, but booking an appointment is recommended to reduce waiting time — especially for specialist consultations.' },
+  { q: 'What diagnostic tests are available in-house?',         a: 'ECG (12-Lead), Echocardiogram (ECHO), Pulmonary Function Test (PFT), blood tests (CBC, LFT, KFT, lipid, thyroid, HbA1c), urine and stool analysis, and diabetes screening panels.' },
+  { q: 'How can I access my test reports online?',              a: 'Visit the Reports section of our website and enter your Patient ID or registered mobile number along with your date of birth to securely access and download your reports.' },
+  { q: 'Can I consult a specialist without a GP referral?',     a: 'Yes. Apollo Clinic Srinagar is a multi-specialty clinic — you can directly book an appointment with any of our specialists without a referral.' },
 ];
 
-const FAQItem = ({ item }) => {
-  const [open, setOpen] = React.useState(false);
+const FAQSection = ({ goTo }) => {
+  const [open, setOpen] = React.useState(null);
   return (
-    <div style={{
-      border: `1px solid ${open ? '#bae6fd' : '#e2e8f0'}`,
-      borderRadius: '10px', background: '#fff', overflow: 'hidden',
-      transition: 'border-color 0.2s',
-      boxShadow: open ? '0 2px 12px rgba(14,165,233,0.08)' : 'none',
-    }}>
-      <button onClick={() => setOpen(!open)} style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem',
-        padding: '0.95rem 1.15rem', background: 'none', border: 'none', width: '100%',
-        textAlign: 'left', cursor: 'pointer', fontFamily: 'inherit',
-        fontWeight: 700, fontSize: '0.88rem', color: open ? '#0369a1' : '#1e293b',
-        transition: 'color 0.2s',
-      }}>
-        <span>{item.q}</span>
-        <ChevronDown size={15} color={open ? '#0369a1' : '#94a3b8'} style={{ transition: 'transform 0.2s', transform: open ? 'rotate(180deg)' : 'none', flexShrink: 0 }} />
-      </button>
-      {open && (
-        <div style={{ padding: '0 1.15rem 0.95rem', color: '#475569', fontSize: '0.86rem', lineHeight: 1.7 }}>
-          {item.a}
+    <section style={{ background: '#fff', padding: '5rem 0', borderTop: '1px solid var(--border)' }}>
+      <div className="container" style={{ maxWidth: 780 }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+          <div className="section-label">FAQs</div>
+          <h2>Frequently Asked Questions</h2>
         </div>
-      )}
-    </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+          {FAQS.map((f, i) => (
+            <div
+              key={i}
+              className={`faq-item${open === i ? ' open' : ''}`}
+              onClick={() => setOpen(open === i ? null : i)}
+            >
+              <button className="faq-question">
+                {f.q}
+                <ChevronDown size={16} className="faq-chevron" />
+              </button>
+              <div className="faq-answer"><p style={{ margin: 0 }}>{f.a}</p></div>
+            </div>
+          ))}
+        </div>
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+          <button className="btn btn-outline-blue" onClick={() => goTo('/faq')} style={{ borderRadius: 'var(--r-full)' }}>
+            View All FAQs <ArrowRight size={14} />
+          </button>
+        </div>
+      </div>
+    </section>
   );
 };
 
-const FAQSection = ({ goBook }) => (
-  <section id="faq" style={{ background: '#fff', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
-    <div className="container">
-      <div className="faq-split" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: '3rem', alignItems: 'start' }}>
-        <div>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>FAQ</div>
-          <h2 style={{ color: '#0c4a6e', marginBottom: '0.75rem', fontSize: 'clamp(1.4rem,4vw,2.1rem)' }}>Common Questions</h2>
-          <p style={{ color: '#64748b', lineHeight: 1.7, marginBottom: '1.5rem', fontSize: '0.92rem' }}>
-            Quick answers about our clinic, timings, services, and how to book.
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-            <button onClick={goBook} className="btn btn-primary" style={{ fontSize: '0.88rem', padding: '0.7rem 1.3rem' }}>Book Appointment</button>
-            <Link to="/faq" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: '#0369a1', fontWeight: 700, fontSize: '0.83rem', textDecoration: 'none' }}>
-              All FAQs <ArrowRight size={13} />
-            </Link>
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
-          {FAQS.map((item, i) => <FAQItem key={i} item={item} />)}
-        </div>
-      </div>
-    </div>
-  </section>
-);
-
-/* ═══════════════════════════════════
-   10. FINAL CTA + BOOKING
-═══════════════════════════════════ */
+/* ════════════════════════════════════
+   11. FINAL CTA
+════════════════════════════════════ */
 const FinalCTA = ({ goBook }) => (
-  <section id="booking" style={{ background: '#f8fafc', padding: '4.5rem 0', borderTop: '1px solid #e2e8f0' }}>
-    <div className="container">
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '3.5rem', alignItems: 'start' }}>
-
-        {/* Left */}
-        <div>
-          <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-            Book Now
-          </div>
-          <h2 style={{ color: '#0c4a6e', marginBottom: '0.75rem', fontSize: 'clamp(1.5rem,4vw,2.2rem)' }}>
-            Schedule Your Consultation
-          </h2>
-          <p style={{ color: '#64748b', lineHeight: 1.7, marginBottom: '1.75rem', fontSize: '0.95rem' }}>
-            Fill in the form and we'll confirm your appointment within a few hours. Or call us directly for immediate help.
-          </p>
-
-          {/* Clinic card */}
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '14px', overflow: 'hidden' }}>
-            <div style={{ background: 'linear-gradient(135deg,#0c4a6e,#0369a1)', padding: '1rem 1.25rem' }}>
-              <div style={{ color: '#fff', fontWeight: 800, fontSize: '0.92rem', marginBottom: '0.1rem' }}>Apollo Clinic Srinagar</div>
-              <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.76rem' }}>Multi-Speciality · Karan Nagar, Srinagar</div>
-            </div>
-            <div style={{ padding: '1rem 1.25rem', display: 'flex', flexDirection: 'column', gap: '0.55rem' }}>
-              {[
-                { icon: <MapPin size={13} />, text: 'Arham Towers, Near National School, Karan Nagar' },
-                { icon: <span style={{ fontSize: '0.82rem' }}>🕐</span>, text: 'Mon–Sat: 12 PM – 7 PM · Sun: 10 AM – 1:30 PM' },
-                { icon: <Phone size={13} />, text: PHONE },
-              ].map((item, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', fontSize: '0.83rem', color: '#334155' }}>
-                  <span style={{ color: '#0369a1', flexShrink: 0, marginTop: '1px' }}>{item.icon}</span>
-                  {item.text}
-                </div>
-              ))}
-              <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.25rem' }}>
-                <a href={PHONE_HREF} style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', padding: '0.6rem', background: '#0369a1', borderRadius: '8px', color: '#fff', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none' }}>
-                  <Phone size={12} /> Call
-                </a>
-                <a href={WA_LINK} target="_blank" rel="noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', padding: '0.6rem', background: '#25D366', borderRadius: '8px', color: '#fff', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none' }}>
-                  <WAIcon size={12} /> WhatsApp
-                </a>
-                <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.35rem', padding: '0.6rem', background: '#f0f9ff', border: '1.5px solid #bae6fd', borderRadius: '8px', color: '#0369a1', fontWeight: 700, fontSize: '0.8rem', textDecoration: 'none' }}>
-                  <MapPin size={12} /> Map
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Right: Booking form */}
-        <div>
-          <BookingForm />
-        </div>
+  <section style={{ background: 'var(--navy)', padding: '4rem 0' }}>
+    <div className="container" style={{ textAlign: 'center' }}>
+      <div style={{
+        display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
+        background: 'rgba(255,255,255,0.1)',
+        border: '1px solid rgba(255,255,255,0.2)',
+        borderRadius: 'var(--r-full)',
+        padding: '0.28rem 0.85rem', marginBottom: '1.25rem',
+        fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.8)',
+        textTransform: 'uppercase', letterSpacing: '0.08em',
+      }}>
+        Apollo Clinic Srinagar
+      </div>
+      <h2 style={{ color: '#fff', marginBottom: '0.75rem', fontSize: 'clamp(1.4rem,4vw,2.1rem)' }}>
+        Ready to book your appointment?
+      </h2>
+      <p style={{ color: 'rgba(255,255,255,0.65)', maxWidth: 480, margin: '0 auto 2rem', fontSize: '0.97rem' }}>
+        Walk in or schedule ahead — our team is here to provide trusted, personalised care at Karan Nagar, Srinagar.
+      </p>
+      <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+        <button
+          className="btn btn-lg"
+          onClick={goBook}
+          style={{ background: '#fff', color: 'var(--navy)', border: 'none', borderRadius: 'var(--r-full)' }}
+          onMouseEnter={e => e.currentTarget.style.background='var(--bg)'}
+          onMouseLeave={e => e.currentTarget.style.background='#fff'}
+        >
+          <Calendar size={17} /> Book Appointment
+        </button>
+        <a
+          href={WA_LINK} target="_blank" rel="noreferrer"
+          className="btn btn-lg"
+          style={{ background: '#25D366', color: '#fff', border: 'none', borderRadius: 'var(--r-full)' }}
+        >
+          <WAIcon size={17} /> WhatsApp Us
+        </a>
+        <a
+          href={PHONE_HREF}
+          className="btn btn-lg"
+          style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: 'var(--r-full)' }}
+        >
+          <Phone size={17} /> {PHONE}
+        </a>
       </div>
     </div>
   </section>
 );
+
+/* ════════════════════════════════════
+   HOME PAGE ROOT
+════════════════════════════════════ */
+const Home = () => {
+  const navigate = useNavigate();
+  const goBook   = () => { navigate('/book');  window.scrollTo(0, 0); };
+  const goTo     = (path) => { navigate(path); window.scrollTo(0, 0); };
+
+  return (
+    <div>
+      <Hero        goBook={goBook} goTo={goTo} />
+      <TrustStrip />
+      <ServicesSection goBook={goBook} goTo={goTo} />
+      <DoctorsSection  goBook={goBook} goTo={goTo} />
+      <DiagnosticsSection goTo={goTo} />
+      <GuidingPrinciples goBook={goBook} goTo={goTo} />
+      <QuickActions      goBook={goBook} goTo={goTo} />
+      <Testimonials />
+      <ContactSection    goTo={goTo} />
+      <FAQSection        goTo={goTo} />
+      <FinalCTA          goBook={goBook} />
+
+      {/* Floating WhatsApp */}
+      <a
+        href={WA_LINK} target="_blank" rel="noreferrer"
+        aria-label="Chat on WhatsApp"
+        style={{
+          position: 'fixed', bottom: '84px', right: '14px', zIndex: 999,
+          width: 50, height: 50, borderRadius: '50%',
+          background: '#25D366', color: '#fff',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 16px rgba(37,211,102,0.45)',
+          textDecoration: 'none', transition: 'transform 0.2s',
+        }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.1)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        <WAIcon size={22} />
+      </a>
+
+      {/* Mobile sticky bar */}
+      <style>{`
+        @media (max-width: 640px) {
+          #mobile-sticky-bar { display: flex !important; }
+        }
+      `}</style>
+      <div id="mobile-sticky-bar" style={{
+        display: 'none', position: 'fixed', bottom: 0, left: 0, right: 0,
+        zIndex: 998, background: '#fff', borderTop: '1px solid var(--border)',
+        boxShadow: '0 -2px 16px rgba(0,0,0,0.07)',
+        gridTemplateColumns: '1fr 1fr 1fr 1fr',
+      }}>
+        {[
+          { label: 'Call', href: PHONE_HREF, icon: <Phone size={17} /> },
+          { label: 'WhatsApp', href: WA_LINK, icon: <WAIcon size={17} />, ext: true },
+          { label: 'Book', action: goBook, icon: <Calendar size={17} /> },
+          { label: 'Reports', action: () => goTo('/reports'), icon: <FileText size={17} /> },
+        ].map((b, i) => (
+          b.href
+            ? <a key={i} href={b.href} target={b.ext ? '_blank' : undefined} rel="noreferrer"
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0.5rem', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, textDecoration: 'none', borderRight: '1px solid var(--border)' }}>
+                {b.icon}{b.label}
+              </a>
+            : <button key={i} onClick={b.action}
+                style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.2rem', padding: '0.7rem 0.5rem', color: 'var(--body)', fontSize: '0.68rem', fontWeight: 600, background: 'none', border: 'none', borderRight: '1px solid var(--border)', cursor: 'pointer', fontFamily: 'inherit' }}>
+                {b.icon}{b.label}
+              </button>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 export default Home;

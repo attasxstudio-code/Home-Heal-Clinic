@@ -1,577 +1,331 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Phone, Calendar, CheckCircle, Clock, MapPin, ArrowRight } from 'lucide-react';
+import { Search, Calendar, Phone, ArrowRight } from 'lucide-react';
 
-/* ── Constants ── */
-const PHONE      = '+91 9000000000';
-const PHONE_HREF = 'tel:+919000000000';
-const WA_LINK    = `https://wa.me/919000000000?text=${encodeURIComponent('Hello! I would like to book a consultation at Apollo Clinic Srinagar.')}`;
+const PHONE      = '+91 9149425496';
+const PHONE_HREF = 'tel:+919149425496';
 
-/* ── Scroll-reveal hook ── */
-function useInView(threshold = 0.05) {
-  const ref = React.useRef(null);
-  const [vis, setVis] = React.useState(false);
-  React.useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, [threshold]);
-  return [ref, vis];
-}
-
-/* ── Doctor data — mirrors homepage DoctorCard with extended bios ── */
-const DOCTORS = [
+export const ALL_DOCTORS = [
   {
-    initials: 'SA', color: '#0369a1', accentLight: '#e0f2fe',
+    id: 'dr-shabir-ahmad-mir',
+    initials: 'SA',
     name: 'Dr. Shabir Ahmad Mir',
-    dept: 'General Physician',
-    specialty: 'General Medicine & Internal Care',
-    qual: 'MBBS, MD — Internal Medicine',
-    exp: '12+ Years',
-    days: 'Mon – Sat',
-    bio: 'A highly experienced and patient-focused general physician committed to delivering attentive, evidence-based primary care with professionalism and compassion.',
-    detail: 'Dr. Shabir Ahmad Mir leads primary care at Apollo Clinic with over a decade of clinical experience. His approach combines thorough diagnosis with a warm, patient-centered style — ensuring every patient feels heard, fully examined, and clearly guided toward their best health outcomes.',
-    focus: ['Chronic Disease Management', 'Preventive Screenings', 'Wellness Checkups', 'Fever & Infection Care'],
+    specialty: 'General Physician',
+    dept: 'Primary Care',
+    qual: 'MBBS, MD (Internal Medicine)',
+    exp: '12+ years',
+    avail: 'Mon – Sat',
+    languages: ['English', 'Kashmiri', 'Urdu', 'Hindi'],
+    bio: `Dr. Shabir Ahmad Mir is a highly experienced General Physician and Internal Medicine specialist with over 12 years of clinical practice in Kashmir. He manages a wide range of conditions including fever, infections, chronic diseases, and metabolic disorders.
+
+He trained at premier medical institutions and brings a patient-centred approach to every consultation — taking time to listen, explain, and formulate personalised treatment plans. He is the lead physician at Apollo Clinic Srinagar and oversees the day-to-day clinical standards of the facility.
+
+His practice is grounded in evidence-based medicine, with a strong emphasis on preventive healthcare and early detection to reduce the burden of chronic illness in the community.`,
+    specializedCare: [
+      { name: 'Chronic Disease Management', desc: 'Diabetes, hypertension, and long-term condition management with regular monitoring.' },
+      { name: 'Fever & Infectious Disease',  desc: 'Diagnosis and treatment of viral, bacterial, and other systemic infections.' },
+      { name: 'Preventive Health Screening', desc: 'Annual health checkups, risk assessment, and early detection protocols.' },
+      { name: 'Metabolic Disorders',         desc: 'Thyroid dysfunction, obesity, lipid disorders, and diabetes care.' },
+    ],
+    hours: [
+      { day: 'Monday – Saturday', time: '12:00 PM – 7:00 PM' },
+      { day: 'Sunday',            time: 'Closed'              },
+    ],
   },
   {
-    initials: 'NR', color: '#db2777', accentLight: '#fce7f3',
+    id: 'dr-nazia-rashid',
+    initials: 'NR',
     name: 'Dr. Nazia Rashid',
-    dept: 'Dermatology',
-    specialty: 'Skin, Hair & Nail Care',
-    qual: 'MBBS, MD — Dermatology',
-    exp: '9+ Years',
-    days: 'Mon – Sat',
-    bio: 'A specialist in clinical and cosmetic dermatology, offering personalized treatment protocols for skin, hair, and nail conditions with a gentle and thorough approach.',
-    detail: 'Dr. Nazia Rashid brings specialized expertise in both clinical and aesthetic dermatology. She offers personalized care for a wide range of skin concerns — from acne, eczema, and psoriasis to hair loss and cosmetic interventions — with careful attention to each patient\'s unique skin profile.',
-    focus: ['Acne & Eczema Treatment', 'Hair Loss Management', 'Cosmetic Dermatology', 'Skin Allergy Care'],
+    specialty: 'Dermatology',
+    dept: 'Skin & Hair',
+    qual: 'MBBS, MD (Dermatology)',
+    exp: '9+ years',
+    avail: 'Mon – Sat',
+    languages: ['English', 'Kashmiri', 'Urdu'],
+    bio: `Dr. Nazia Rashid is a board-certified Dermatologist with nearly a decade of experience in clinical and cosmetic dermatology. She provides expert care for a comprehensive range of skin, hair, and nail conditions.
+
+She completed her MD in Dermatology from a reputed institution and has special expertise in acne management, hair restoration, and treatment-resistant eczema. She is known for her thorough consultations and holistic, patient-specific treatment plans.
+
+Dr. Nazia believes that healthy skin is central to overall wellbeing and confidence. She approaches each patient with clinical precision and genuine compassion, ensuring comfort throughout every consultation.`,
+    specializedCare: [
+      { name: 'Acne & Eczema',        desc: 'Advanced medical management of acne vulgaris, atopic dermatitis, and chronic eczema.' },
+      { name: 'Hair Loss (Alopecia)', desc: 'Diagnosis and treatment of androgenetic alopecia, telogen effluvium, and alopecia areata.' },
+      { name: 'Cosmetic Dermatology', desc: 'Skin brightening, anti-ageing consultations, pigmentation treatment, and peel therapy.' },
+      { name: 'Allergy & Urticaria',  desc: 'Patch testing, food-related skin reactions, chronic urticaria management.' },
+    ],
+    hours: [
+      { day: 'Monday – Saturday', time: '12:00 PM – 6:00 PM' },
+      { day: 'Sunday',            time: 'Closed'              },
+    ],
   },
   {
-    initials: 'AH', color: '#0891b2', accentLight: '#e0f7fa',
+    id: 'dr-aijaz-hussain',
+    initials: 'AH',
     name: 'Dr. Aijaz Hussain',
-    dept: 'Pediatrics',
-    specialty: 'Child Health & Development',
-    qual: 'MBBS, DCH, MD — Paediatrics',
-    exp: '10+ Years',
-    days: 'Mon – Fri',
-    bio: 'Dedicated to providing expert child healthcare from infancy through adolescence, with a warm and reassuring approach to diagnosis, immunization, and wellness.',
-    detail: 'Dr. Aijaz Hussain is committed to supporting the health and development of children at every stage. His practice combines expert clinical diagnosis with a nurturing approach that puts young patients and their families at ease — from routine vaccinations to complex childhood illness management.',
-    focus: ['Vaccinations & Immunization', 'Growth & Development Monitoring', 'Child Nutrition Guidance', 'Pediatric Illness Care'],
+    specialty: 'Pediatrics',
+    dept: 'Child Health',
+    qual: 'MBBS, DCH, MD (Pediatrics)',
+    exp: '10+ years',
+    avail: 'Mon – Fri',
+    languages: ['English', 'Kashmiri', 'Urdu'],
+    bio: `Dr. Aijaz Hussain is a dedicated Pediatrician and Child Health specialist with over 10 years of experience caring for infants, children, and adolescents. He is known for his calm, child-friendly bedside manner that puts even the most anxious young patients at ease.
+
+He holds an MBBS, a Diploma in Child Health (DCH), and a postgraduate MD in Pediatrics. He has extensive experience managing neonatal conditions, growth disorders, vaccines, and acute pediatric illnesses.
+
+Dr. Aijaz strongly advocates for immunisation and preventive child health, and provides parents with practical, evidence-based guidance on nutrition, development milestones, and early intervention.`,
+    specializedCare: [
+      { name: 'Immunisation & Vaccines', desc: 'Complete national immunisation schedules and travel vaccines for children.' },
+      { name: 'Growth & Development',    desc: 'Developmental milestone assessment and nutritional guidance for healthy growth.' },
+      { name: 'Newborn & Neonatal Care', desc: 'Expert guidance for new parents on newborn health, feeding, and early assessments.' },
+      { name: 'Pediatric Illness',       desc: 'Fever, respiratory infections, diarrhoea, and acute childhood conditions.' },
+    ],
+    hours: [
+      { day: 'Monday – Friday',  time: '1:00 PM – 6:00 PM'  },
+      { day: 'Saturday–Sunday',  time: 'Closed'              },
+    ],
   },
   {
-    initials: 'SB', color: '#7c3aed', accentLight: '#ede9fe',
+    id: 'dr-saima-bano',
+    initials: 'SB',
     name: 'Dr. Saima Bano',
-    dept: 'Obstetrics & Gynecology',
-    specialty: "Women's Health & Reproductive Care",
-    qual: 'MBBS, DGO, MS — Obs & Gynaecology',
-    exp: '11+ Years',
-    days: 'Mon – Sat',
-    bio: "Committed to delivering comprehensive, sensitive, and evidence-based care across all stages of women's health — from reproductive wellness to antenatal and postnatal support.",
-    detail: "Dr. Saima Bano provides thoughtful, private, and comprehensive women's healthcare. Her clinical practice spans antenatal care, gynecological evaluation, menstrual health management, and hormonal disorders — always delivered with sensitivity, clarity, and evidence-based clinical judgment.",
-    focus: ['Antenatal & Prenatal Care', 'Menstrual Health Management', 'Reproductive Wellness', 'Hormonal Disorder Care'],
+    specialty: 'Gynecology',
+    dept: "Women's Health",
+    qual: 'MBBS, MS (Obstetrics & Gynecology)',
+    exp: '11+ years',
+    avail: 'Mon – Sat',
+    languages: ['English', 'Kashmiri', 'Urdu'],
+    bio: `Dr. Saima Bano is a senior Obstetrician and Gynaecologist with over 11 years of dedicated service to women's healthcare in Srinagar. She provides compassionate, comprehensive care across all stages of a woman's life — from adolescence through menopause.
+
+She holds an MBBS and a postgraduate MS in Obstetrics and Gynecology, and is skilled in managing high-risk pregnancies, hormonal disorders, infertility evaluation, and routine gynecological examinations.
+
+Dr. Saima creates a safe, respectful environment where women can comfortably discuss sensitive health concerns. She is particularly passionate about maternal wellbeing and reproductive health education.`,
+    specializedCare: [
+      { name: 'Antenatal Care',           desc: 'Comprehensive pregnancy monitoring, risk assessment, and nutritional guidance.' },
+      { name: 'Menstrual Health',         desc: 'PCOS, irregular cycles, dysmenorrhoea, and menopause management.' },
+      { name: 'Reproductive Wellness',    desc: 'Family planning, cervical screening, and reproductive health consultations.' },
+      { name: 'Hormonal Disorders',       desc: 'Hormonal imbalances, thyroid in pregnancy, and endocrine condition management.' },
+    ],
+    hours: [
+      { day: 'Monday – Saturday', time: '12:00 PM – 5:00 PM' },
+      { day: 'Sunday',            time: 'Closed'              },
+    ],
   },
   {
-    initials: 'MA', color: '#047857', accentLight: '#d1fae5',
+    id: 'dr-mushtaq-ahmed',
+    initials: 'MA',
     name: 'Dr. Mushtaq Ahmed',
-    dept: 'Orthopedics',
-    specialty: 'Bone, Joint & Spine Health',
-    qual: 'MBBS, MS — Orthopaedics',
-    exp: '14+ Years',
-    days: 'Tue, Thu & Sat',
-    bio: 'An experienced orthopedic specialist focused on restoring movement and quality of life through precise diagnosis, conservative management, and surgical excellence.',
-    detail: 'With 14+ years of orthopedic practice, Dr. Mushtaq Ahmed is a trusted specialist for bone, joint, and spine conditions. He brings precision to every diagnosis and tailors treatment — whether conservative management or post-surgical rehabilitation — with a strong focus on restoring full function and quality of life.',
-    focus: ['Joint & Bone Pain', 'Back & Spine Conditions', 'Sports Injury Management', 'Post-Surgical Rehabilitation'],
+    specialty: 'Orthopedics',
+    dept: 'Bone & Joint',
+    qual: 'MBBS, MS (Orthopedics)',
+    exp: '14+ years',
+    avail: 'Mon, Wed, Fri',
+    languages: ['English', 'Kashmiri', 'Urdu'],
+    bio: `Dr. Mushtaq Ahmed is a highly experienced Orthopaedic Surgeon with 14+ years of practice specialising in bone, joint, and spine conditions. He provides expert evaluation and management for a wide range of musculoskeletal and sports-related injuries.
+
+He completed his MS in Orthopaedics from a premier institution and has a proven track record in conservative and surgical management of orthopaedic conditions. He believes in exhausting non-surgical options before recommending procedures, making him a trusted advisor for patients seeking quality orthopaedic care.`,
+    specializedCare: [
+      { name: 'Joint & Bone Pain',     desc: 'Knee, hip, shoulder, and foot pain — diagnosis, injection therapy, and rehabilitation.' },
+      { name: 'Spine Care',            desc: 'Disc herniation, sciatica, back pain, and spondylosis management.' },
+      { name: 'Sports Injury',         desc: 'Acute injury management, ligament sprains, fractures, and return-to-sport protocols.' },
+      { name: 'Arthritis Management',  desc: 'Osteoarthritis and rheumatoid arthritis evaluation and conservative treatment.' },
+    ],
+    hours: [
+      { day: 'Mon, Wed, Fri', time: '3:00 PM – 6:00 PM'  },
+      { day: 'Other days',    time: 'Not available'       },
+    ],
   },
   {
-    initials: 'AY', color: '#b45309', accentLight: '#fef3c7',
+    id: 'dr-asma-yousuf',
+    initials: 'AY',
     name: 'Dr. Asma Yousuf',
-    dept: 'Clinical Psychology',
-    specialty: 'Mental Health & Wellness',
-    qual: 'M.Phil — Clinical Psychology',
-    exp: '8+ Years',
-    days: 'Mon, Wed & Fri',
-    bio: "A compassionate mental health professional providing structured psychological support, counselling, and therapeutic interventions tailored to each patient's unique needs.",
-    detail: "Dr. Asma Yousuf offers structured, evidence-based psychological care in a confidential and supportive environment. Her sessions are tailored to individual needs — addressing anxiety, depression, emotional difficulties, and life stress — with therapeutic interventions that foster lasting mental resilience.",
-    focus: ['Anxiety & Depression Support', 'Individual Counselling', 'Cognitive Behavioural Therapy', 'Stress & Burnout Management'],
+    specialty: 'Clinical Psychology',
+    dept: 'Mental Health',
+    qual: 'M.Phil (Clinical Psychology)',
+    exp: '8+ years',
+    avail: 'Mon – Thu',
+    languages: ['English', 'Kashmiri', 'Urdu'],
+    bio: `Dr. Asma Yousuf is a licensed Clinical Psychologist with 8+ years of experience providing evidence-based psychological care. She works with individuals experiencing anxiety, depression, trauma, grief, and a range of relationship and workplace stressors.
+
+She holds an M.Phil in Clinical Psychology and is trained in Cognitive Behavioural Therapy (CBT), Acceptance and Commitment Therapy (ACT), and mindfulness-based interventions. All sessions are conducted in a confidential, non-judgemental setting.
+
+Dr. Asma is particularly passionate about mental health awareness in Kashmir and takes a culturally sensitive approach to therapy, ensuring every client feels understood and respected.`,
+    specializedCare: [
+      { name: 'Anxiety & Panic',        desc: 'CBT-based therapy for generalised anxiety, panic disorder, and phobias.' },
+      { name: 'Depression Counselling', desc: 'Evidence-based psychotherapy for mild-to-moderate depression and low mood.' },
+      { name: 'Trauma & PTSD',          desc: 'Trauma-focused therapy delivered sensitively with structured interventions.' },
+      { name: 'Stress & Burnout',       desc: 'Mindfulness and ACT-based support for work stress, burnout, and fatigue.' },
+    ],
+    hours: [
+      { day: 'Monday – Thursday', time: '2:00 PM – 6:00 PM'  },
+      { day: 'Fri–Sun',           time: 'Not available'       },
+    ],
   },
 ];
 
-/* ── Doctor card ── */
-const DoctorCard = ({ doc, vis, delay, onBook }) => {
-  const [hov, setHov] = React.useState(false);
+const SPECIALTIES_FILTER = ['All', 'Primary Care', 'Skin & Hair', 'Child Health', "Women's Health", 'Bone & Joint', 'Mental Health'];
 
+/* ── Doctor card (Find a Doctor page) ── */
+const DoctorCard = ({ doc, onProfile, onBook }) => {
+  const [hov, setHov] = React.useState(false);
   return (
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
         background: '#fff',
-        borderRadius: '22px',
-        border: `1.5px solid ${hov ? doc.color + '38' : '#edf2f7'}`,
-        boxShadow: hov
-          ? `0 22px 52px rgba(0,0,0,0.09), 0 0 0 1px ${doc.color}12`
-          : '0 2px 16px rgba(14,31,63,0.05)',
-        transform: hov ? 'translateY(-6px)' : 'translateY(0)',
-        transition: 'all 0.28s cubic-bezier(0.34,1.4,0.64,1)',
-        opacity: vis ? 1 : 0,
-        transitionDelay: `${delay}s`,
-        position: 'relative',
+        border: `1px solid ${hov ? 'var(--blue-border)' : 'var(--border)'}`,
+        borderRadius: 'var(--r-xl)',
         overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
+        transition: 'all 0.2s',
+        boxShadow: hov ? 'var(--shadow-md)' : 'var(--shadow-xs)',
+        display: 'flex', flexDirection: 'column',
       }}
     >
-      {/* Top accent strip */}
-      <div style={{
-        height: '3px',
-        background: `linear-gradient(90deg,${doc.color},${doc.color}55)`,
-        opacity: hov ? 1 : 0.35,
-        transition: 'opacity 0.26s ease',
-        flexShrink: 0,
-      }} />
-
-      {/* Card body */}
-      <div style={{ padding: '1.85rem 1.7rem', display: 'flex', flexDirection: 'column', flex: 1 }}>
-
-        {/* Avatar + name block */}
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', marginBottom: '1.25rem' }}>
-          {/* Avatar */}
-          <div style={{
-            width: 66, height: 66, borderRadius: '18px',
-            background: hov ? doc.color : doc.accentLight,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            color: hov ? '#fff' : doc.color,
-            fontWeight: 900, fontSize: '1.3rem', letterSpacing: '-0.02em',
-            flexShrink: 0,
-            transition: 'all 0.26s ease',
-            boxShadow: hov ? `0 8px 24px ${doc.color}42` : 'none',
-          }}>
-            {doc.initials}
-          </div>
-
-          <div style={{ flex: 1, minWidth: 0 }}>
-            {/* Dept badge */}
-            <div style={{
-              display: 'inline-block',
-              background: doc.accentLight,
-              color: doc.color,
-              fontSize: '0.62rem', fontWeight: 700,
-              textTransform: 'uppercase', letterSpacing: '0.09em',
-              padding: '0.2rem 0.65rem', borderRadius: '999px',
-              marginBottom: '0.4rem',
-            }}>
-              {doc.dept}
-            </div>
-            <h3 style={{
-              color: '#0c1f3f', fontWeight: 800,
-              fontSize: '1.02rem', lineHeight: 1.2,
-              margin: '0 0 0.2rem',
-            }}>
-              {doc.name}
-            </h3>
-            <p style={{
-              color: doc.color, fontWeight: 600,
-              fontSize: '0.78rem', margin: 0, lineHeight: 1.3,
-            }}>
-              {doc.specialty}
-            </p>
-          </div>
+      {/* Avatar area */}
+      <div style={{ background: 'var(--blue-light)', height: 120, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        <div style={{ fontSize: '2.2rem', fontWeight: 900, color: 'var(--navy)', letterSpacing: '-0.03em' }}>
+          {doc.initials}
         </div>
-
-        {/* Divider */}
-        <div style={{ height: '1px', background: '#f0f4f8', marginBottom: '1rem' }} />
-
-        {/* Short bio */}
-        <p style={{ color: '#64748b', fontSize: '0.84rem', lineHeight: 1.7, margin: '0 0 0.75rem' }}>
-          {doc.bio}
-        </p>
-
-        {/* Expanded detail */}
-        <p style={{ color: '#475569', fontSize: '0.79rem', lineHeight: 1.72, margin: '0 0 1rem', flex: 1 }}>
-          {doc.detail}
-        </p>
-
-        {/* Qual line */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '0.9rem' }}>
-          <CheckCircle size={13} color={doc.color} style={{ flexShrink: 0 }} />
-          <span style={{ color: '#475569', fontSize: '0.78rem', fontWeight: 600 }}>
-            {doc.qual}
+        <div style={{ position: 'absolute', top: 10, right: 10 }}>
+          <span style={{ background: 'var(--green-light)', border: '1px solid var(--green-border)', borderRadius: 'var(--r-sm)', fontSize: '0.62rem', fontWeight: 700, color: 'var(--green)', padding: '0.18rem 0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            {doc.avail}
           </span>
         </div>
+      </div>
 
-        {/* Focus areas */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1rem' }}>
-          {doc.focus.map((f, i) => (
-            <span key={i} style={{
-              background: doc.accentLight, color: doc.color,
-              fontSize: '0.67rem', fontWeight: 700,
-              padding: '0.2rem 0.6rem', borderRadius: '6px',
-            }}>
-              {f}
-            </span>
-          ))}
+      {/* Body */}
+      <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0.3rem' }}>
+        <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--blue)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+          {doc.specialty}
         </div>
-
-        {/* Availability tags */}
-        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1.25rem' }}>
-          <span style={{
-            display: 'flex', alignItems: 'center', gap: '0.3rem',
-            background: '#f8fafc', color: '#64748b',
-            border: '1px solid #e2e8f0',
-            fontSize: '0.68rem', fontWeight: 600,
-            padding: '0.22rem 0.65rem', borderRadius: '6px',
-          }}>
-            <Clock size={10} /> {doc.days}
-          </span>
-          <span style={{
-            background: '#f0fdf4', color: '#047857',
-            border: '1px solid #bbf7d0',
-            fontSize: '0.68rem', fontWeight: 600,
-            padding: '0.22rem 0.65rem', borderRadius: '6px',
-          }}>
-            Karan Nagar
-          </span>
+        <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--heading)', lineHeight: 1.2 }}>{doc.name}</div>
+        <div style={{ fontSize: '0.8rem', color: 'var(--body)', marginBottom: '0.5rem' }}>{doc.qual}</div>
+        <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+          <span style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', fontSize: '0.67rem', fontWeight: 600, color: 'var(--body)', padding: '0.18rem 0.5rem' }}>{doc.exp}</span>
+          <span style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', fontSize: '0.67rem', fontWeight: 600, color: 'var(--body)', padding: '0.18rem 0.5rem' }}>{doc.languages[0]}</span>
         </div>
+      </div>
 
-        {/* CTA */}
+      {/* Actions */}
+      <div style={{ padding: '0 1.25rem 1.25rem', display: 'flex', gap: '0.5rem' }}>
+        <button
+          onClick={onProfile}
+          style={{ flex: 1, padding: '0.55rem 0.75rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--navy)', background: '#fff', border: '1.5px solid var(--navy)', borderRadius: 'var(--r-md)', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'var(--bg)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#fff'; }}
+        >
+          Learn More
+        </button>
         <button
           onClick={onBook}
-          style={{
-            width: '100%',
-            padding: '0.75rem 1rem',
-            background: hov ? doc.color : '#fff',
-            color: hov ? '#fff' : doc.color,
-            border: `1.5px solid ${doc.color}`,
-            borderRadius: '13px',
-            fontWeight: 700, fontSize: '0.87rem',
-            cursor: 'pointer', fontFamily: 'inherit',
-            transition: 'all 0.22s ease',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-            marginTop: 'auto',
-          }}
+          style={{ flex: 1, padding: '0.55rem 0.75rem', fontSize: '0.8rem', fontWeight: 700, color: '#fff', background: 'var(--navy)', border: '1.5px solid var(--navy)', borderRadius: 'var(--r-md)', cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s' }}
+          onMouseEnter={e => e.currentTarget.style.background = 'var(--navy-hover)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'var(--navy)'}
         >
-          <Calendar size={14} />
-          Book Consultation
+          Book
         </button>
       </div>
     </div>
   );
 };
 
-/* ── Main page ── */
 const OurDoctors = () => {
-  const navigate    = useNavigate();
-  const [gridRef, vis]  = useInView(0.04);
-  const [infoRef, infoVis] = useInView(0.1);
+  const navigate = useNavigate();
+  const [search,  setSearch]  = React.useState('');
+  const [filter,  setFilter]  = React.useState('All');
 
-  const goBook = () => { navigate('/book'); window.scrollTo(0, 0); };
+  const goBook    = () => { navigate('/book');         window.scrollTo(0, 0); };
+  const goProfile = (id) => { navigate(`/doctors/${id}`); window.scrollTo(0, 0); };
+
+  const filtered = ALL_DOCTORS.filter(d => {
+    const matchDept   = filter === 'All' || d.dept === filter;
+    const matchSearch = search === '' || d.name.toLowerCase().includes(search.toLowerCase()) || d.specialty.toLowerCase().includes(search.toLowerCase());
+    return matchDept && matchSearch;
+  });
 
   return (
     <div style={{ background: '#fff' }}>
 
-      {/* ══════════════════════════════════════
-          HERO
-      ══════════════════════════════════════ */}
-      <section style={{
-        background: 'linear-gradient(135deg,#0c1f3f 0%,#0f3460 50%,#0369a1 100%)',
-        padding: 'clamp(5rem,10vw,7rem) 0 clamp(4rem,8vw,6rem)',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        {/* Glow decorations */}
-        <div style={{ position:'absolute',top:'-80px',right:'-80px',width:360,height:360,borderRadius:'50%',background:'radial-gradient(circle,rgba(14,165,233,0.18),transparent 65%)',pointerEvents:'none' }} />
-        <div style={{ position:'absolute',bottom:'-60px',left:'-60px',width:260,height:260,borderRadius:'50%',background:'radial-gradient(circle,rgba(124,58,237,0.12),transparent 70%)',pointerEvents:'none' }} />
-        {/* Cross decoration */}
-        <div style={{ position:'absolute',top:'15%',right:'7%',width:200,height:200,opacity:0.04,pointerEvents:'none' }}>
-          <svg viewBox="0 0 200 200" fill="white">
-            <rect x="75" y="0" width="50" height="200" rx="8"/>
-            <rect x="0" y="75" width="200" height="50" rx="8"/>
-          </svg>
-        </div>
-
-        <div className="container" style={{ position:'relative',zIndex:1,textAlign:'center' }}>
-          <div style={{
-            display:'inline-flex',alignItems:'center',gap:'0.45rem',
-            background:'rgba(255,255,255,0.12)',
-            border:'1px solid rgba(255,255,255,0.2)',
-            borderRadius:'999px',padding:'0.3rem 0.9rem',marginBottom:'1.25rem',
-          }}>
-            <div style={{ width:6,height:6,borderRadius:'50%',background:'#4ade80',boxShadow:'0 0 6px #4ade80' }} />
-            <span style={{ fontSize:'0.7rem',fontWeight:700,color:'rgba(255,255,255,0.9)',textTransform:'uppercase',letterSpacing:'0.08em' }}>
-              Medical Team
-            </span>
-          </div>
-
-          <h1 style={{
-            color:'#fff',
-            fontSize:'clamp(2rem,5vw,3.2rem)',
-            fontWeight:900,lineHeight:1.12,
-            margin:'0 0 1.1rem',
-            letterSpacing:'-0.02em',
-          }}>
-            Experienced Doctors,{' '}
-            <span style={{ color:'#67e8f9' }}>Personalized Care</span>
+      {/* ── Hero ── */}
+      <section style={{ background: '#fff', borderBottom: '1px solid var(--border)', padding: '4.5rem 0 3rem' }}>
+        <div className="container">
+          <div className="section-label">Our Specialists</div>
+          <h1 style={{ marginBottom: '0.85rem' }}>
+            Find a <span style={{ color: 'var(--blue)' }}>Doctor</span>
           </h1>
-
-          <p style={{
-            color:'rgba(255,255,255,0.75)',
-            fontSize:'clamp(0.95rem,2vw,1.1rem)',
-            lineHeight:1.75,maxWidth:600,
-            margin:'0 auto 2.5rem',
-          }}>
-            Apollo Clinic Srinagar brings together qualified, credentialed specialists across multiple disciplines — so you receive the right care, from the right expert, all under one roof at Karan Nagar.
+          <p style={{ fontSize: '1rem', color: 'var(--body)', maxWidth: 520, marginBottom: '2rem', lineHeight: 1.72 }}>
+            Browse our team of qualified, patient-centred specialists — each committed to delivering personalised, evidence-based care.
           </p>
 
-          <div style={{ display:'flex',gap:'0.75rem',justifyContent:'center',flexWrap:'wrap' }}>
-            <button onClick={goBook} style={{
-              display:'inline-flex',alignItems:'center',gap:'0.4rem',
-              padding:'0.8rem 1.5rem',
-              background:'#fff',color:'#0369a1',
-              border:'none',borderRadius:'12px',
-              fontWeight:800,fontSize:'0.9rem',
-              cursor:'pointer',fontFamily:'inherit',
-              boxShadow:'0 4px 20px rgba(0,0,0,0.2)',
-              transition:'all 0.2s',
-            }}
-              onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
-              onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
-            >
-              <Calendar size={16} /> Book Appointment
-            </button>
-            <a href={PHONE_HREF} style={{
-              display:'inline-flex',alignItems:'center',gap:'0.4rem',
-              padding:'0.8rem 1.4rem',
-              background:'rgba(255,255,255,0.12)',
-              border:'1.5px solid rgba(255,255,255,0.3)',
-              borderRadius:'12px',color:'#fff',
-              fontWeight:700,fontSize:'0.9rem',
-              textDecoration:'none',transition:'all 0.2s',
-            }}
-              onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.12)'}
-            >
-              <Phone size={16} /> {PHONE}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          TRUST INTRO STRIP
-      ══════════════════════════════════════ */}
-      <section ref={infoRef} style={{
-        background: '#fafbfc',
-        borderBottom: '1px solid #f0f4f8',
-        padding: '2.75rem 0',
-      }}>
-        <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))',
-            gap: '1rem',
-            opacity: infoVis ? 1 : 0,
-            transform: infoVis ? 'none' : 'translateY(14px)',
-            transition: 'opacity 0.55s ease,transform 0.55s ease',
-          }}>
-            {[
-              { icon: <CheckCircle size={18} color="#059669" />, title: '6 Experienced Specialists', body: 'Verified, credentialed doctors across essential clinical disciplines.' },
-              { icon: <CheckCircle size={18} color="#059669" />, title: 'Multi-Specialty Coverage', body: 'From primary care to orthopedics, gynecology, dermatology, and more.' },
-              { icon: <CheckCircle size={18} color="#059669" />, title: 'Patient-First Practice', body: 'Every consultation, follow-up, and treatment plan is centered on you.' },
-              { icon: <CheckCircle size={18} color="#059669" />, title: 'All at Karan Nagar', body: 'Coordinated expert care, conveniently available in one location.' },
-            ].map((item, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'flex-start', gap: '0.75rem',
-                padding: '1.1rem 1.25rem',
-                background: '#fff',
-                border: '1.5px solid #edf2f7',
-                borderRadius: '16px',
-              }}>
-                <div style={{ marginTop: '0.08rem', flexShrink: 0 }}>{item.icon}</div>
-                <div>
-                  <div style={{ color: '#0c1f3f', fontWeight: 800, fontSize: '0.88rem', marginBottom: '0.25rem' }}>{item.title}</div>
-                  <div style={{ color: '#64748b', fontSize: '0.78rem', lineHeight: 1.6 }}>{item.body}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          DOCTORS GRID
-      ══════════════════════════════════════ */}
-      <section style={{
-        background: '#fafbfc',
-        padding: '5.5rem 0',
-        position: 'relative', overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute', inset: 0, pointerEvents: 'none',
-          backgroundImage: 'radial-gradient(circle at 15% 50%,rgba(3,105,161,0.03) 0%,transparent 55%), radial-gradient(circle at 85% 20%,rgba(124,58,237,0.025) 0%,transparent 50%)',
-        }} />
-
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          {/* Section heading */}
-          <div style={{ maxWidth: 620, marginBottom: '3rem' }}>
-            <div style={{
-              display: 'inline-flex', alignItems: 'center', gap: '0.45rem',
-              background: '#e0f2fe', borderRadius: '999px',
-              padding: '0.28rem 0.85rem', marginBottom: '0.9rem',
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#0369a1' }} />
-              <span style={{ fontSize: '0.7rem', fontWeight: 700, color: '#0369a1', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                Our Specialists
-              </span>
+          {/* Search + Filter row */}
+          <div style={{ display: 'flex', gap: '0.85rem', flexWrap: 'wrap', alignItems: 'flex-start' }}>
+            {/* Search */}
+            <div style={{ position: 'relative', width: 320 }}>
+              <Search size={15} style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)', pointerEvents: 'none' }} />
+              <input
+                className="search-input"
+                placeholder="Search a doctor, specialty…"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
             </div>
-            <h2 style={{
-              color: '#0c1f3f',
-              fontSize: 'clamp(1.7rem,3.8vw,2.4rem)',
-              fontWeight: 800, lineHeight: 1.18,
-              margin: '0 0 0.75rem',
-            }}>
-              Meet Our{' '}
-              <span style={{
-                background: 'linear-gradient(135deg,#0369a1,#0ea5e9)',
-                WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent',
-              }}>
-                Expert Doctors
-              </span>
-            </h2>
-            <p style={{ color: '#64748b', fontSize: '0.95rem', lineHeight: 1.7, margin: 0 }}>
-              Our team of qualified specialists is committed to delivering compassionate, evidence-based care across every stage of treatment — with clinical precision and a patient-first approach.
-            </p>
+            {/* Filter pills */}
+            <div className="filter-pills">
+              {SPECIALTIES_FILTER.map(f => (
+                <button
+                  key={f}
+                  className={`filter-pill${filter === f ? ' active' : ''}`}
+                  onClick={() => setFilter(f)}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
           </div>
+        </div>
+      </section>
 
-          {/* Doctor grid */}
-          <div ref={gridRef} style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill,minmax(310px,1fr))',
-            gap: '1.15rem',
-          }}>
-            {DOCTORS.map((doc, i) => (
-              <DoctorCard key={i} doc={doc} vis={vis} delay={i * 0.07} onBook={goBook} />
-            ))}
-          </div>
+      {/* ── Doctors grid ── */}
+      <section style={{ background: 'var(--bg)', padding: '3.5rem 0' }}>
+        <div className="container">
+          {filtered.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--muted)' }}>
+              <div style={{ fontSize: '0.95rem' }}>No doctors matched <strong>"{search}"</strong></div>
+              <button className="btn btn-outline-blue btn-sm" onClick={() => { setSearch(''); setFilter('All'); }} style={{ marginTop: '1rem', borderRadius: 'var(--r-full)' }}>
+                Clear filters
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))', gap: '1rem' }}>
+              {filtered.map(doc => (
+                <DoctorCard key={doc.id} doc={doc} onProfile={() => goProfile(doc.id)} onBook={goBook} />
+              ))}
+            </div>
+          )}
 
-          {/* Trust footer strip */}
+          {/* Book CTA */}
           <div style={{
             marginTop: '2.5rem',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            gap: '1.5rem', flexWrap: 'wrap',
-            padding: '1.25rem',
             background: '#fff',
-            border: '1.5px solid #e2e8f0',
-            borderRadius: '16px',
+            border: '1px solid var(--border)',
+            borderRadius: 'var(--r-xl)',
+            padding: '2rem',
+            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1.5rem', flexWrap: 'wrap',
           }}>
-            {[
-              { icon: <CheckCircle size={15} color="#059669" />, text: 'Verified & Credentialed Specialists' },
-              { icon: <CheckCircle size={15} color="#059669" />, text: 'Patient-Centered Practice' },
-              { icon: <CheckCircle size={15} color="#059669" />, text: 'Consulting at Karan Nagar, Srinagar' },
-            ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                {item.icon}
-                <span style={{ color: '#475569', fontSize: '0.82rem', fontWeight: 600 }}>{item.text}</span>
+            <div>
+              <div style={{ fontWeight: 800, fontSize: '1rem', color: 'var(--heading)', marginBottom: '0.35rem' }}>
+                Not sure which doctor to consult?
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          INFO STRIP
-      ══════════════════════════════════════ */}
-      <section style={{ background: '#fff', borderTop: '1px solid #f0f4f8', padding: '3.5rem 0' }}>
-        <div className="container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))',
-            gap: '1.1rem',
-          }}>
-            {[
-              { icon: <Clock size={20} color="#0369a1" />, label: 'Consultation Hours', lines: ['Mon – Sat: 12:00 PM – 7:00 PM', 'Sunday: 10:00 AM – 1:30 PM'] },
-              { icon: <MapPin size={20} color="#059669" />, label: 'Our Location', lines: ['Near National School, Arham Towers', 'Karan Nagar, Srinagar, J&K'] },
-              { icon: <Phone size={20} color="#7c3aed" />, label: 'Contact Us', lines: [PHONE, 'Call or WhatsApp for queries'] },
-            ].map((item, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'flex-start', gap: '0.85rem',
-                padding: '1.4rem 1.35rem',
-                background: '#fafbfc',
-                border: '1.5px solid #edf2f7',
-                borderRadius: '18px',
-                boxShadow: '0 2px 10px rgba(14,31,63,0.04)',
-              }}>
-                <div style={{
-                  width: 44, height: 44, borderRadius: '13px',
-                  background: '#fff', border: '1px solid #edf2f7',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  flexShrink: 0,
-                }}>
-                  {item.icon}
-                </div>
-                <div>
-                  <div style={{ color: '#0c1f3f', fontWeight: 800, fontSize: '0.88rem', marginBottom: '0.35rem' }}>{item.label}</div>
-                  {item.lines.map((l, li) => (
-                    <div key={li} style={{ color: '#64748b', fontSize: '0.82rem', lineHeight: 1.6 }}>{l}</div>
-                  ))}
-                </div>
+              <div style={{ fontSize: '0.87rem', color: 'var(--body)' }}>
+                Call our front desk — we'll guide you to the right specialist.
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══════════════════════════════════════
-          BOTTOM CTA
-      ══════════════════════════════════════ */}
-      <section style={{ background: '#fafbfc', padding: '4rem 0' }}>
-        <div className="container">
-          <div style={{
-            background: 'linear-gradient(135deg,#0c1f3f 0%,#0369a1 60%,#0ea5e9 100%)',
-            borderRadius: '22px',
-            padding: 'clamp(2rem,4vw,2.75rem) clamp(1.5rem,4vw,3rem)',
-            position: 'relative', overflow: 'hidden',
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-            gap: '1.5rem', flexWrap: 'wrap',
-          }}>
-            <div style={{ position:'absolute',top:'-60px',right:'-60px',width:240,height:240,borderRadius:'50%',background:'radial-gradient(circle,rgba(255,255,255,0.08),transparent 65%)',pointerEvents:'none' }} />
-            <div style={{ zIndex: 1 }}>
-              <div style={{ color:'#bae6fd',fontSize:'0.72rem',fontWeight:700,textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:'0.4rem' }}>
-                Apollo Clinic Srinagar
-              </div>
-              <h2 style={{ color:'#fff',fontWeight:800,fontSize:'clamp(1.1rem,3vw,1.6rem)',lineHeight:1.2,margin:'0 0 0.5rem' }}>
-                Ready to see one of our specialists?
-              </h2>
-              <p style={{ color:'rgba(255,255,255,0.7)',fontSize:'0.9rem',margin:0,lineHeight:1.65 }}>
-                Book a consultation today. Walk in or schedule ahead — Mon–Sat at Karan Nagar, Srinagar.
-              </p>
             </div>
-            <div style={{ display:'flex',gap:'0.75rem',flexWrap:'wrap',zIndex:1 }}>
-              <button onClick={goBook} style={{
-                display:'inline-flex',alignItems:'center',gap:'0.4rem',
-                padding:'0.8rem 1.5rem',
-                background:'#fff',color:'#0369a1',
-                border:'none',borderRadius:'12px',
-                fontWeight:800,fontSize:'0.9rem',
-                cursor:'pointer',fontFamily:'inherit',
-                boxShadow:'0 4px 18px rgba(0,0,0,0.15)',transition:'all 0.2s',
-              }}
-                onMouseEnter={e => e.currentTarget.style.transform='scale(1.04)'}
-                onMouseLeave={e => e.currentTarget.style.transform='scale(1)'}
-              >
+            <div style={{ display: 'flex', gap: '0.65rem', flexWrap: 'wrap' }}>
+              <button className="btn btn-primary" onClick={goBook} style={{ borderRadius: 'var(--r-full)' }}>
                 <Calendar size={15} /> Book Appointment
               </button>
-              <a href={PHONE_HREF} style={{
-                display:'inline-flex',alignItems:'center',gap:'0.4rem',
-                padding:'0.8rem 1.3rem',
-                background:'rgba(255,255,255,0.12)',
-                border:'1.5px solid rgba(255,255,255,0.3)',
-                borderRadius:'12px',color:'#fff',
-                fontWeight:700,fontSize:'0.88rem',
-                textDecoration:'none',transition:'all 0.2s',
-              }}
-                onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.2)'}
-                onMouseLeave={e => e.currentTarget.style.background='rgba(255,255,255,0.12)'}
-              >
-                <Phone size={14} /> {PHONE}
+              <a href={PHONE_HREF} className="btn btn-ghost" style={{ borderRadius: 'var(--r-full)' }}>
+                <Phone size={15} /> {PHONE}
               </a>
             </div>
           </div>

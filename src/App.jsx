@@ -7,6 +7,7 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import About from './pages/About';
 import OurDoctors from './pages/OurDoctors';
+import DoctorProfile from './pages/DoctorProfile';
 import Services from './pages/Services';
 import Diagnostics from './pages/Diagnostics';
 import Contact from './pages/Contact';
@@ -58,6 +59,7 @@ function App() {
                     <Route path="/"            element={<Home />} />
                     <Route path="/about"       element={<About />} />
                     <Route path="/doctors"     element={<OurDoctors />} />
+                    <Route path="/doctors/:id" element={<DoctorProfile />} />
                     <Route path="/services"    element={<Services />} />
                     <Route path="/diagnostics" element={<Diagnostics />} />
                     <Route path="/contact"     element={<Contact />} />
