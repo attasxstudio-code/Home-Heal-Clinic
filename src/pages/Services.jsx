@@ -230,7 +230,7 @@ const Services = () => {
             <ArrowRight size={12} />
             <span>Clinical Specialties</span>
           </nav>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 440px', gap: '3rem', alignItems: 'center' }}>
+          <div className="services-hero-grid">
             <div>
               <div className="section-label">Our Services</div>
               <h1 style={{ marginBottom: '0.85rem' }}>
@@ -250,20 +250,15 @@ const Services = () => {
             </div>
 
             {/* Image with Floating Stats Overlay */}
-            <div style={{ position: 'relative', marginTop: '1rem' }}>
+            <div className="services-hero-image-wrapper">
               {/* Collage Image */}
               <div style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
                 <img src="/services-collage.jpg" alt="Apollo Clinic Services" style={{ width: '100%', display: 'block', objectFit: 'cover' }} />
               </div>
 
               {/* Smaller Stats panel floating overlay */}
-              <div style={{
-                position: 'absolute', bottom: '-1.5rem', left: '-2.5rem',
-                background: '#fff', border: '1px solid var(--border)', borderRadius: 'var(--r-xl)',
-                padding: '1.2rem', boxShadow: '0 10px 30px rgba(15,23,42,0.08)',
-                maxWidth: '280px',
-              }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem' }}>
+              <div className="services-hero-stats-overlay">
+                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '0.8rem' }}>
                   {[
                     { n: '10+', l: 'Specialties' },
                     { n: '6',   l: 'Doctors' },
@@ -280,11 +275,21 @@ const Services = () => {
             </div>
           </div>
         </div>
-        <style>{`@media(max-width:860px){
-          section > .container > div[style*="grid-template-columns: 1fr 440px"]{grid-template-columns:1fr!important; gap: 2rem !important; padding-bottom: 1.5rem;}
-          section > .container > div[style*="grid-template-columns"] > div:last-child { margin-top: 2rem !important; }
-          section > .container > div[style*="grid-template-columns"] > div:last-child > div:last-child { left: 50% !important; transform: translateX(-50%); bottom: -2rem !important; width: 90%; max-width: none; }
-        }`}</style>
+        <style>{`
+          .services-hero-grid { display: grid; grid-template-columns: 1fr 440px; gap: 3rem; align-items: center; }
+          .services-hero-image-wrapper { position: relative; margin-top: 1rem; }
+          .services-hero-stats-overlay {
+            position: absolute; bottom: -1.5rem; left: -2.5rem;
+            background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl);
+            padding: 1.2rem; box-shadow: 0 10px 30px rgba(15,23,42,0.08);
+            max-width: 280px; width: auto;
+          }
+          @media(max-width:860px){
+            .services-hero-grid { grid-template-columns: 1fr; gap: 2rem; padding-bottom: 1.5rem; }
+            .services-hero-image-wrapper { margin-top: 2rem; }
+            .services-hero-stats-overlay { left: 50%; transform: translateX(-50%); bottom: -2rem; width: 90%; max-width: none; }
+          }
+        `}</style>
       </section>
 
       {/* ── Trust strip ── */}
@@ -320,7 +325,7 @@ const Services = () => {
             </p>
           </div>
 
-          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '1rem' }}>
+          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '1rem' }}>
             {SPECIALTIES.map((svc, i) => (
               <ServiceCard key={svc.id} svc={svc} vis={vis} delay={i * 0.04} onBook={goBook} onDoctor={() => goDoctor(svc.doctorId)} />
             ))}
