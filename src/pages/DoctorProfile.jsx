@@ -14,7 +14,6 @@ const DoctorProfile = () => {
   const [form, setForm] = React.useState({
     name: '', phone: '',
     date: new Date().toISOString().split('T')[0],
-    session: 'Morning',
   });
   const [submitted, setSubmitted] = React.useState(false);
 
@@ -24,6 +23,23 @@ const DoctorProfile = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!form.name || !form.phone) return;
+
+    // Save to admin dashboard with doctor name
+    const existing = JSON.parse(localStorage.getItem('clinic_leads') || '[]');
+    const newLead = {
+      id:        Date.now(),
+      name:      form.name,
+      phone:     form.phone,
+      date:      form.date,
+      notes:     `Appointment requested with ${doc.name} (${doc.specialty})`,
+      doctor:    doc.name,
+      specialty: doc.specialty,
+      status:    'Pending',
+      createdAt: new Date().toISOString(),
+      source:    `Doctor Profile — ${doc.name}`,
+    };
+    localStorage.setItem('clinic_leads', JSON.stringify([newLead, ...existing]));
+
     setSubmitted(true);
   };
 
@@ -210,28 +226,14 @@ const DoctorProfile = () => {
                       />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-                      <div className="form-group">
-                        <label className="form-label">Preferred Date</label>
-                        <input
-                          type="date" className="form-input"
-                          value={form.date}
-                          min={new Date().toISOString().split('T')[0]}
-                          onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
-                        />
-                      </div>
-                      <div className="form-group">
-                        <label className="form-label">Session</label>
-                        <select
-                          className="form-select"
-                          value={form.session}
-                          onChange={e => setForm(p => ({ ...p, session: e.target.value }))}
-                        >
-                          <option>Morning</option>
-                          <option>Afternoon</option>
-                          <option>Evening</option>
-                        </select>
-                      </div>
+                    <div className="form-group">
+                      <label className="form-label">Preferred Date</label>
+                      <input
+                        type="date" className="form-input"
+                        value={form.date}
+                        min={new Date().toISOString().split('T')[0]}
+                        onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
+                      />
                     </div>
 
                     <button

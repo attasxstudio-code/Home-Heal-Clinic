@@ -72,6 +72,15 @@ const LeadCard = ({ lead, onAdvance, onDelete, isCheckup }) => {
         </button>
       </div>
 
+      {/* Doctor info if booked from Doctor Profile */}
+      {lead.doctor && (
+        <div style={{ marginTop:'0.55rem', display:'flex', alignItems:'center', gap:5, color:'#0369a1', fontSize:'0.76rem', fontWeight:700,
+          background:'#eff9ff', border:'1px solid #bae6fd', borderRadius:'8px', padding:'3px 8px', width:'fit-content' }}>
+          <Stethoscope size={11}/> {lead.doctor}
+          {lead.specialty && <span style={{ color:'#64748b', fontWeight:500 }}>· {lead.specialty}</span>}
+        </div>
+      )}
+
       {/* Checkup-specific: type */}
       {isCheckup && lead.checkupType && (
         <div style={{ marginTop:'0.6rem', display:'flex', alignItems:'center', gap:5, color:'#059669', fontSize:'0.76rem', fontWeight:600 }}>

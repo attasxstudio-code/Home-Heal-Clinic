@@ -233,8 +233,8 @@ const BookingForm = () => {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-whatsapp"
-          style={{ width: '100%', padding: '1rem', marginTop: '0.5rem', fontSize: '1rem', fontWeight: 800, borderRadius: '14px' }}>
+        <button type="submit" className="btn btn-primary"
+          style={{ width: '100%', padding: '1rem', marginTop: '0.5rem', fontSize: '1rem', fontWeight: 800, borderRadius: '14px', background: 'var(--navy)' }}>
           <MessageSquare size={20} />
           {submitted ? 'Booked! Open WhatsApp Again ↗' : 'Book Now'}
         </button>

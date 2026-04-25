@@ -47,52 +47,31 @@ const CheckupBookingForm = () => {
     e.preventDefault();
     setError('');
 
-    // Honeypot check
     const hp = document.getElementById('checkup_hp')?.value;
-    if (isBot(hp)) {
-      logSuspicious('checkup_honeypot_triggered');
-      return;
-    }
+    if (isBot(hp)) { logSuspicious('checkup_honeypot_triggered'); return; }
+    if (isTooFast(mountTime.current, 2000)) { logSuspicious('checkup_too_fast'); return setError('Please take a moment to fill the form properly.'); }
+    if (isDuplicateSubmission('checkup', 3000)) return setError('Please wait a few seconds before submitting again.');
 
-    // Fill time check
-    if (isTooFast(mountTime.current, 2000)) {
-      logSuspicious('checkup_too_fast');
-      return setError('Please take a moment to fill the form properly.');
-    }
-
-    // Duplicate submission guard
-    if (isDuplicateSubmission('checkup', 3000)) {
-      return setError('Please wait a few seconds before submitting again.');
-    }
-
-    // Rate limit
     const rl = checkRateLimit(RATE_KEY, 3, 10 * 60 * 1000);
-    if (!rl.allowed) {
-      logSuspicious('checkup_rate_limited');
-      return setError(`Too many submissions. Please wait ${Math.ceil(rl.resetIn / 60)} minute(s).`);
-    }
+    if (!rl.allowed) { logSuspicious('checkup_rate_limited'); return setError(`Too many submissions. Please wait ${Math.ceil(rl.resetIn / 60)} minute(s).`); }
 
-    const name       = sanitizeInput(document.getElementById('cu-name').value, 100);
-    const rawPhone   = sanitizeInput(document.getElementById('cu-phone').value, 15);
-    const phone      = '+91 ' + rawPhone;
-    const checkupType= sanitizeInput(document.getElementById('cu-type').value, 100);
-    const date       = sanitizeInput(document.getElementById('cu-date').value, 10);
-    const notes      = sanitizeInput(document.getElementById('cu-notes').value, 1000);
+    const name        = sanitizeInput(document.getElementById('cu-name').value, 100);
+    const rawPhone    = sanitizeInput(document.getElementById('cu-phone').value, 15);
+    const phone       = '+91 ' + rawPhone;
+    const checkupType = sanitizeInput(document.getElementById('cu-type').value, 100);
+    const date        = sanitizeInput(document.getElementById('cu-date').value, 10);
+    const notes       = sanitizeInput(document.getElementById('cu-notes').value, 1000);
 
-    // Validate
-    if (!isValidName(name)) return setError('Please enter a valid name (letters only, 2–100 characters).');
-    if (!isValidPhone(rawPhone)) return setError('Please enter a valid 10-digit Indian phone number.');
-    if (!checkupType) return setError('Please select a checkup or test type.');
+    if (!isValidName(name))             return setError('Please enter a valid name (letters only, 2–100 characters).');
+    if (!isValidPhone(rawPhone))        return setError('Please enter a valid 10-digit Indian phone number.');
+    if (!checkupType)                   return setError('Please select a checkup or test type.');
     if (!CHECKUP_TYPES.includes(checkupType)) return setError('Please select a valid checkup type from the list.');
-    if (!isValidDate(date)) return setError('Please select a valid date (today or future).');
-    if (!isValidMessage(notes, 1000)) return setError('Notes are too long (max 1000 characters).');
+    if (!isValidDate(date))             return setError('Please select a valid date (today or future).');
+    if (!isValidMessage(notes, 1000))   return setError('Notes are too long (max 1000 characters).');
 
     recordAttempt(RATE_KEY);
-
-    // 1️⃣ Save to admin
     saveCheckupToAdmin({ name, phone, checkupType, date, notes });
 
-    // 2️⃣ Open WhatsApp with pre-written message
     const text = [
       `Health Checkup Request — Apollo Clinic Srinagar`,
       `Name: ${name}`,
@@ -102,9 +81,8 @@ const CheckupBookingForm = () => {
       notes ? `Additional Notes: ${notes}` : null,
     ].filter(Boolean).join('\n');
 
-    window.open(`https://wa.me/919000000000?text=${encodeURIComponent(text)}`, '_blank');
+    window.open(`https://wa.me/919149425496?text=${encodeURIComponent(text)}`, '_blank');
 
-    // 3️⃣ Show success + reset
     setSubmitted(true);
     e.target.reset();
     setTimeout(() => setSubmitted(false), 4500);
@@ -113,45 +91,40 @@ const CheckupBookingForm = () => {
   const fieldStyle = (id) => ({
     width: '100%',
     padding: '0.85rem 1rem 0.85rem 2.8rem',
-    border: `1.5px solid ${focused === id ? '#059669' : '#bbf7d0'}`,
+    border: `1.5px solid ${focused === id ? '#0ea5e9' : '#cce5f6'}`,
     borderRadius: '12px',
-    background: focused === id ? '#fff' : '#f0fdf4',
+    background: focused === id ? '#fff' : '#f0f9ff',
     fontSize: '0.92rem',
     fontFamily: 'inherit',
     color: '#0f172a',
     transition: 'all 0.25s ease',
-    boxShadow: focused === id ? '0 0 0 3px rgba(5,150,105,0.13)' : 'none',
+    boxShadow: focused === id ? '0 0 0 3px rgba(14,165,233,0.14)' : 'none',
     outline: 'none',
   });
 
-  const iconColor = (id) => focused === id ? '#059669' : '#94a3b8';
+  const iconColor = (id) => focused === id ? '#0ea5e9' : '#94a3b8';
 
   return (
     <div style={{
       background: '#fff',
       borderRadius: '20px',
       padding: '2.25rem',
-      boxShadow: '0 12px 40px rgba(5,150,105,0.13)',
-      border: '1.5px solid #bbf7d0',
+      boxShadow: '0 12px 40px rgba(14,165,233,0.14)',
+      border: '1.5px solid #cce5f6',
       maxWidth: '500px',
       margin: '0 auto',
       position: 'relative',
       overflow: 'hidden',
     }}>
-      {/* Top bar */}
+      {/* Top gradient bar */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: '4px',
-        background: 'linear-gradient(90deg,#059669,#10b981,#0ea5e9)',
+        background: 'linear-gradient(90deg,#0369a1,#0ea5e9,#10b981)',
       }} />
 
-      <div style={{ textAlign: 'center', marginBottom: '1.75rem' }}>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.35rem',
-          background: '#f0fdf4', color: '#059669', border: '1px solid #bbf7d0',
-          fontWeight: 700, fontSize: '0.78rem', padding: '0.3rem 0.9rem',
-          borderRadius: '9999px', marginBottom: '0.75rem',
-        }}>🔬 Health Checkup</span>
-        <h3 style={{ color: '#065f46', fontWeight: 800, fontSize: '1.3rem', marginBottom: '0.3rem' }}>
+      <div className="text-center" style={{ marginBottom: '1.75rem' }}>
+        <span className="pill" style={{ marginBottom: '0.75rem', display: 'inline-block' }}>🔬 Health Checkup</span>
+        <h3 style={{ color: '#0c4a6e', fontWeight: 800, fontSize: '1.3rem', marginBottom: '0.3rem' }}>
           Book a Checkup
         </h3>
         <p style={{ color: '#64748b', fontSize: '0.85rem', margin: 0 }}>
@@ -178,6 +151,7 @@ const CheckupBookingForm = () => {
           border: '1.5px solid #6ee7b7', borderRadius: '14px',
           padding: '1.25rem 1.5rem', marginBottom: '1.5rem',
           display: 'flex', alignItems: 'flex-start', gap: '0.85rem',
+          animation: 'fadeIn 0.4s ease',
         }}>
           <CheckCircle size={22} color="#10b981" style={{ flexShrink: 0, marginTop: '1px' }} />
           <div>
@@ -193,17 +167,14 @@ const CheckupBookingForm = () => {
       )}
 
       <form onSubmit={handleSubmit}>
-
-        {/* Honeypot — invisible to users */}
+        {/* Honeypot */}
         <div style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
           <input id="checkup_hp" name="company_name" type="text" tabIndex="-1" autoComplete="off" />
         </div>
 
         {/* Name */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', fontWeight: 700, fontSize: '0.82rem', color: '#374151', marginBottom: '0.4rem' }}>
-            Full Name *
-          </label>
+        <div className="form-group">
+          <label className="form-label">Full Name *</label>
           <div style={{ position: 'relative' }}>
             <User size={15} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: iconColor('cu-name'), transition: 'color 0.2s' }} />
             <input id="cu-name" type="text" required placeholder="e.g. Aisha Bhat"
@@ -215,17 +186,15 @@ const CheckupBookingForm = () => {
         </div>
 
         {/* Phone */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', fontWeight: 700, fontSize: '0.82rem', color: '#374151', marginBottom: '0.4rem' }}>
-            Phone Number *
-          </label>
+        <div className="form-group">
+          <label className="form-label">Phone Number *</label>
           <div style={{ position: 'relative', display: 'flex' }}>
             <span style={{
               padding: '0.85rem 0.9rem',
-              background: focused === 'cu-phone' ? '#dcfce7' : '#e0fdf4',
-              border: `1.5px solid ${focused === 'cu-phone' ? '#059669' : '#bbf7d0'}`,
+              background: focused === 'cu-phone' ? '#e0f2fe' : '#e8f4fd',
+              border: `1.5px solid ${focused === 'cu-phone' ? '#0ea5e9' : '#cce5f6'}`,
               borderRight: 'none', borderRadius: '12px 0 0 12px',
-              color: '#059669', fontWeight: 700, fontSize: '0.9rem',
+              color: '#0369a1', fontWeight: 700, fontSize: '0.9rem',
               transition: 'all 0.25s',
             }}>+91</span>
             <Phone size={14} style={{ position: 'absolute', left: '4.2rem', top: '50%', transform: 'translateY(-50%)', color: iconColor('cu-phone'), transition: 'color 0.2s' }} />
@@ -238,10 +207,8 @@ const CheckupBookingForm = () => {
         </div>
 
         {/* Checkup Type */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', fontWeight: 700, fontSize: '0.82rem', color: '#374151', marginBottom: '0.4rem' }}>
-            Checkup / Test Type *
-          </label>
+        <div className="form-group">
+          <label className="form-label">Checkup / Test Type *</label>
           <div style={{ position: 'relative' }}>
             <FlaskConical size={15} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: iconColor('cu-type'), pointerEvents: 'none', transition: 'color 0.2s' }} />
             <select id="cu-type" required
@@ -255,10 +222,8 @@ const CheckupBookingForm = () => {
         </div>
 
         {/* Date */}
-        <div style={{ marginBottom: '1rem' }}>
-          <label style={{ display: 'block', fontWeight: 700, fontSize: '0.82rem', color: '#374151', marginBottom: '0.4rem' }}>
-            Preferred Date
-          </label>
+        <div className="form-group">
+          <label className="form-label">Preferred Date</label>
           <div style={{ position: 'relative' }}>
             <Calendar size={15} style={{ position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', color: iconColor('cu-date'), pointerEvents: 'none', transition: 'color 0.2s' }} />
             <input id="cu-date" type="date"
@@ -269,10 +234,8 @@ const CheckupBookingForm = () => {
         </div>
 
         {/* Notes */}
-        <div style={{ marginBottom: '1.25rem' }}>
-          <label style={{ display: 'block', fontWeight: 700, fontSize: '0.82rem', color: '#374151', marginBottom: '0.4rem' }}>
-            Additional Notes (Optional)
-          </label>
+        <div className="form-group">
+          <label className="form-label">Additional Notes (Optional)</label>
           <div style={{ position: 'relative' }}>
             <FileText size={15} style={{ position: 'absolute', left: '0.9rem', top: '0.95rem', color: iconColor('cu-notes'), transition: 'color 0.2s' }} />
             <textarea id="cu-notes" rows="3"
@@ -284,20 +247,10 @@ const CheckupBookingForm = () => {
           </div>
         </div>
 
-        <button type="submit" style={{
-          width: '100%', padding: '1rem', marginTop: '0.25rem',
-          background: 'linear-gradient(135deg,#059669,#10b981)',
-          color: '#fff', border: 'none', borderRadius: '14px',
-          fontWeight: 800, fontSize: '1rem', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem',
-          fontFamily: 'inherit', boxShadow: '0 4px 16px rgba(5,150,105,0.3)',
-          transition: 'filter 0.2s',
-        }}
-          onMouseEnter={e => e.currentTarget.style.filter = 'brightness(1.1)'}
-          onMouseLeave={e => e.currentTarget.style.filter = 'none'}
-        >
+        <button type="submit" className="btn btn-primary"
+          style={{ width: '100%', padding: '1rem', marginTop: '0.5rem', fontSize: '1rem', fontWeight: 800, borderRadius: '14px', background: 'var(--navy)', justifyContent: 'center' }}>
           <MessageSquare size={20} />
-          {submitted ? 'Booked! Open WhatsApp Again ↗' : 'Book Checkup via WhatsApp'}
+          {submitted ? 'Booked! Open WhatsApp Again ↗' : 'Book Checkup'}
         </button>
 
         <p style={{ textAlign: 'center', fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.85rem', marginBottom: 0 }}>

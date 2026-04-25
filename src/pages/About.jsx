@@ -49,27 +49,17 @@ const About = () => {
     <div className="animate-fade-in" style={{ background: 'var(--color-bg)' }}>
 
       {/* ── Hero Banner ── */}
-      <section style={{
-        position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(135deg,#0c4a6e 0%,#0369a1 50%,#047857 100%)',
-        padding: '7rem 0 5rem',
-      }}>
-        {/* Blobs */}
-        <div style={{ position:'absolute', top:'-80px', right:'-80px', width:'380px', height:'380px', borderRadius:'50%',
-          background:'radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ position:'absolute', bottom:'-60px', left:'-60px', width:'320px', height:'320px', borderRadius:'50%',
-          background:'radial-gradient(circle,rgba(16,185,129,0.1) 0%,transparent 70%)', pointerEvents:'none' }} />
-
-        <div className="container text-center" style={{ position:'relative', zIndex:1 }}>
-          <span className="pill" style={{ marginBottom:'1.2rem', display:'inline-block',
-            background:'rgba(255,255,255,0.18)', color:'#fff', border:'1px solid rgba(255,255,255,0.3)',
-            backdropFilter:'blur(8px)' }}>
+      <section className="page-hero">
+        <div className="container text-center" style={{ position: 'relative', zIndex: 1 }}>
+          <span className="pill" style={{ marginBottom: '1.2rem', display: 'inline-block',
+            background: 'rgba(255,255,255,0.18)', color: '#fff', border: '1px solid rgba(255,255,255,0.3)',
+            backdropFilter: 'blur(8px)' }}>
             🏥 About Apollo Clinic
           </span>
-          <h1 style={{ color:'#fff', marginBottom:'1.25rem', fontSize:'clamp(2.2rem,5vw,3.5rem)' }}>
+          <h1 style={{ color: '#fff', marginBottom: '1.25rem', fontSize: 'clamp(2.2rem,5vw,3.5rem)' }}>
             Trusted Healthcare,<br/>Built for Srinagar
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.82)', fontSize:'1.15rem', maxWidth:'680px', margin:'0 auto', lineHeight:1.7 }}>
+          <p style={{ color: 'rgba(255,255,255,0.82)', fontSize: '1.15rem', maxWidth: '680px', margin: '0 auto', lineHeight: 1.7 }}>
             Apollo Clinic Srinagar is part of a trusted healthcare network focused on delivering high-quality, accessible medical care — combining expert doctors, modern diagnostics, and a patient-first approach.
           </p>
         </div>

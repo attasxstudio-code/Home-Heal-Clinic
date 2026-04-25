@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Phone, Clock, MapPin, CheckCircle, MessageCircle } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
 
-const WA_LINK = `https://wa.me/919000000000?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
+const WA_LINK = `https://wa.me/919149425496?text=${encodeURIComponent('Hello! I would like to book an appointment at Apollo Clinic Srinagar.')}`;
 
 const TRUST_POINTS = [
   { icon: '✅', text: 'Multi-speciality clinic — one visit, complete care' },
@@ -62,7 +62,7 @@ const BookAppointment = () => (
                 <p style={{ color: '#fff', fontWeight: 800, fontSize: '0.9rem', margin: 0 }}>📞 Prefer to call or message?</p>
               </div>
               <div style={{ background: '#fff', padding: '1.1rem 1.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <a href="tel:+919000000000" className="btn btn-call" style={{ flex: 1, minWidth: 130, fontSize: '0.88rem', padding: '0.65rem 1rem' }}>
+                <a href="tel:+919149425496" className="btn btn-call" style={{ flex: 1, minWidth: 130, fontSize: '0.88rem', padding: '0.65rem 1rem' }}>
                   <Phone size={15} /> Call Now
                 </a>
                 <a href={WA_LINK} target="_blank" rel="noreferrer" className="btn btn-whatsapp" style={{ flex: 1, minWidth: 130, fontSize: '0.88rem', padding: '0.65rem 1rem' }}>
