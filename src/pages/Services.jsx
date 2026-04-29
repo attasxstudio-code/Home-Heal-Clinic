@@ -110,7 +110,7 @@ const Services = () => {
       
       {/* ── Hero Section ── */}
       <section style={{ padding: '5rem 0' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div style={{ maxWidth: '600px' }}>
             <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
@@ -157,7 +157,7 @@ const Services = () => {
             </div>
             
             {/* Stats Card */}
-            <div style={{ 
+            <div className="m-static m-grid-2" style={{ 
               position: 'absolute', bottom: '-2rem', left: '-2rem', 
               background: '#fff', padding: '2rem', borderRadius: '20px', 
               boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
@@ -215,7 +215,7 @@ const Services = () => {
             We offer a wide range of medical services to address all your healthcare needs.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
             {SPECIALTIES.map((svc, i) => (
               <div key={i} style={{ 
                 background: '#fff', borderRadius: '16px', padding: '2rem 1.5rem', 
@@ -269,7 +269,7 @@ const Services = () => {
             Your Health, Our Priority
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { title: 'Experienced Doctors', desc: 'Qualified specialists with years of expertise and a patient-first mindset.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
               { title: 'Modern Diagnostics', desc: 'Advanced technology and in-house lab for accurate results.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg> },
@@ -308,7 +308,7 @@ const Services = () => {
       {/* ── CTA Strip ── */}
       <section style={{ padding: '2rem 0' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ 
+          <div className="m-stack m-p-sm m-center" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',
             border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
@@ -327,7 +327,7 @@ const Services = () => {
               </div>
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="m-wrap" style={{ display: 'flex', gap: '1rem' }}>
               <button className="btn btn-orange btn-lg" onClick={() => navigate('/book')} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
                 <Calendar size={18} /> Book Appointment
               </button>

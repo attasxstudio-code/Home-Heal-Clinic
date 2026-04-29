@@ -10,7 +10,7 @@ const BookCheckup = () => (
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '70%', background: '#fff', zIndex: 0 }}></div>
       
       <div className="container" style={{ maxWidth: '1400px', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '5rem', alignItems: 'flex-start' }}>
+        <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '5rem', alignItems: 'flex-start' }}>
 
           {/* Left Column */}
           <div style={{ paddingTop: '2rem' }}>
@@ -60,14 +60,14 @@ const BookCheckup = () => (
               </div>
             </div>
 
-            <div style={{ height: '320px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', marginLeft: '-2rem' }}>
+            <div className="m-h-auto m-ml-0" style={{ height: '320px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', marginLeft: '-2rem' }}>
               <img src="/clinic-reception.png" alt="Apollo Clinic Reception" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
 
           {/* Right Column: Form */}
           <div style={{ paddingTop: '1rem' }}>
-            <div style={{ 
+            <div className="m-p-sm" style={{ 
               background: '#fff', borderRadius: '24px', padding: '3rem 4rem', 
               boxShadow: '0 20px 60px rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.05)',
               maxWidth: '600px', margin: '0 auto'
@@ -83,7 +83,7 @@ const BookCheckup = () => (
     {/* ── Bottom Strip ── */}
     <section style={{ padding: '6rem 0 3rem' }}>
       <div className="container" style={{ maxWidth: '1400px' }}>
-        <div style={{ 
+        <div className="m-grid-1 m-p-sm" style={{ 
           background: '#fff', borderRadius: '16px', padding: '2rem 3rem',
           border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.03)',
           display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem'
@@ -134,7 +134,7 @@ const BookCheckup = () => (
           Simple steps to better health
         </h2>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', position: 'relative' }}>
+        <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', position: 'relative' }}>
           {/* Connecting line */}
           <div style={{ position: 'absolute', top: '40px', left: '12%', right: '12%', height: '2px', background: 'rgba(0,0,0,0.05)', zIndex: 0 }}></div>
           

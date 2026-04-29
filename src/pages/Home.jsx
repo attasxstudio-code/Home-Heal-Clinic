@@ -52,7 +52,7 @@ const Home = () => {
     <>
       {/* ─── HERO SECTION ─── */}
       <section style={{ padding: '6rem 0', background: 'linear-gradient(to bottom, #f8fafc, #fff)' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div style={{ maxWidth: '600px' }}>
             <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1.5rem' }}>
@@ -69,7 +69,7 @@ const Home = () => {
               Your health is our priority.
             </p>
 
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '4rem' }}>
+            <div className="m-wrap" style={{ display: 'flex', gap: '1rem', marginBottom: '4rem' }}>
               <button className="btn btn-blue btn-lg" onClick={goBook} style={{ padding: '1rem 2rem', fontSize: '1rem' }}>
                 Book Appointment <Calendar size={18} />
               </button>
@@ -78,7 +78,7 @@ const Home = () => {
               </button>
             </div>
 
-            <div style={{ display: 'flex', gap: '3rem', alignItems: 'center' }}>
+            <div className="m-stack m-gap-1" style={{ display: 'flex', gap: '3rem', alignItems: 'center' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <Users className="text-blue" size={24} />
                 <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--heading)' }}>Top<br/>Specialists</span>
@@ -136,10 +136,10 @@ const Home = () => {
           <style>{`.no-scrollbar::-webkit-scrollbar { display: none; }`}</style>
 
           {/* Scroll Arrows */}
-          <div onClick={() => scrollContainer(servicesRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(servicesRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronLeft size={24} color="var(--blue)" />
           </div>
-          <div onClick={() => scrollContainer(servicesRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(servicesRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronRight size={24} color="var(--blue)" />
           </div>
         </div>
@@ -148,7 +148,7 @@ const Home = () => {
       {/* ─── OUR DOCTORS ─── */}
       <section style={{ padding: '5rem 0', background: '#f8fafc' }}>
         <div className="container" style={{ maxWidth: '1400px', position: 'relative' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
+          <div className="m-stack m-gap-1" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
             <div>
               <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>
                 OUR DOCTORS
@@ -157,7 +157,7 @@ const Home = () => {
                 Highly experienced specialists dedicated to your health.
               </h2>
             </div>
-            <button onClick={() => goTo('/doctors')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <button onClick={() => goTo('/doctors')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>
               View All Doctors <ArrowRight size={18} />
             </button>
           </div>
@@ -181,10 +181,10 @@ const Home = () => {
           </div>
 
           {/* Scroll Arrows */}
-          <div onClick={() => scrollContainer(doctorsRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(doctorsRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronLeft size={24} color="var(--blue)" />
           </div>
-          <div onClick={() => scrollContainer(doctorsRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(doctorsRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronRight size={24} color="var(--blue)" />
           </div>
         </div>
@@ -192,7 +192,7 @@ const Home = () => {
 
       {/* ─── LAB & DIAGNOSTICS ─── */}
       <section style={{ padding: '5rem 0', background: '#fff' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div>
             <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>
@@ -205,7 +205,7 @@ const Home = () => {
               State-of-the-art laboratories and advanced diagnostic imaging for precise and timely results.
             </p>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3rem' }}>
+            <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '3rem' }}>
               {[
                 'Advanced pathology lab', 'Digital X-Ray, MRI, CT Scan',
                 'Fast & reliable reporting', 'Home sample collection'
@@ -231,14 +231,14 @@ const Home = () => {
       {/* ─── PATIENT FEEDBACK ─── */}
       <section style={{ padding: '5rem 0', background: '#f8fafc' }}>
         <div className="container" style={{ maxWidth: '1400px', position: 'relative' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem', position: 'relative' }}>
+          <div className="m-stack" style={{ textAlign: 'center', marginBottom: '3.5rem', position: 'relative' }}>
             <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>
               PATIENT FEEDBACK
             </div>
             <h2 style={{ fontSize: '2.5rem', color: 'var(--heading)', margin: 0 }}>
               Trusted by thousands of patients and families.
             </h2>
-            <button onClick={() => goTo('/about')} style={{ position: 'absolute', right: 0, bottom: '10px', color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <button className="m-static m-mt-1" onClick={() => goTo('/about')} style={{ position: 'absolute', right: 0, bottom: '10px', color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
               View All Reviews <ArrowRight size={18} />
             </button>
           </div>
@@ -263,10 +263,10 @@ const Home = () => {
           </div>
             
           {/* Arrows */}
-          <div onClick={() => scrollContainer(reviewsRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(reviewsRef, 'left')} style={{ position: 'absolute', left: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronLeft size={24} color="var(--blue)" />
           </div>
-          <div onClick={() => scrollContainer(reviewsRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+          <div className="scroll-arrow" onClick={() => scrollContainer(reviewsRef, 'right')} style={{ position: 'absolute', right: '-24px', top: '55%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
             <ChevronRight size={24} color="var(--blue)" />
           </div>
         </div>
@@ -274,7 +274,7 @@ const Home = () => {
 
       {/* ─── FIND US ─── */}
       <section style={{ padding: '5rem 0', background: '#fff' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 2fr', gap: '4rem', alignItems: 'center' }}>
           
           <div>
             <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '1rem' }}>
@@ -332,17 +332,17 @@ const Home = () => {
       {/* ─── FAQs ─── */}
       <section style={{ padding: '5rem 0', background: '#f8fafc' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
+          <div className="m-stack m-gap-1" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '3.5rem' }}>
             <div>
               <h2 style={{ fontSize: '2.5rem', color: 'var(--heading)', margin: 0, marginBottom: '0.5rem' }}>FAQs</h2>
               <p style={{ fontSize: '1rem', color: 'var(--body)', margin: 0 }}>Find answers to common questions.</p>
             </div>
-            <button onClick={() => goTo('/faq')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+            <button onClick={() => goTo('/faq')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap' }}>
               View All FAQs <ArrowRight size={18} />
             </button>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'start' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', alignItems: 'start' }}>
             {[
               { q: "How do I book an appointment?", a: "You can book an appointment by calling us directly, sending a WhatsApp message, or using the 'Book Appointment' button on our website." },
               { q: "How can I access my test reports?", a: "Test reports can be accessed online through our patient portal or collected in person at the clinic reception." },

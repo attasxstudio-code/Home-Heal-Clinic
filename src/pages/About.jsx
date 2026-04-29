@@ -20,7 +20,7 @@ const About = () => {
       {/* ── Hero Section ── */}
       <section style={{ padding: '4rem 0 6rem', background: '#fff', position: 'relative' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'center' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '4rem', alignItems: 'center' }}>
             {/* Left Content */}
             <div>
               <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
@@ -41,7 +41,7 @@ const About = () => {
                 Apollo Clinic is a multi-specialty healthcare destination committed to delivering high-quality, patient-centered care. With experienced doctors, advanced diagnostics, and personalized treatment, we put your health and well-being at the heart of everything we do.
               </p>
 
-              <div style={{ display: 'flex', gap: '1rem' }}>
+              <div className="m-wrap" style={{ display: 'flex', gap: '1rem' }}>
                 <button className="btn btn-primary btn-lg" onClick={goBook} style={{ borderRadius: '8px', padding: '0.8rem 1.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   Book Appointment <Calendar size={18} />
                 </button>
@@ -52,13 +52,13 @@ const About = () => {
             </div>
 
             {/* Right Image */}
-            <div style={{ position: 'relative', height: '500px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+            <div className="m-h-auto" style={{ position: 'relative', height: '500px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
               <img src="/APOLLO-outside.png" alt="Apollo Clinic Building" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
 
           {/* Floating Stats Bar */}
-          <div style={{ 
+          <div className="m-grid-2 m-static" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2rem', 
             boxShadow: '0 10px 40px rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.05)',
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem',
@@ -99,7 +99,7 @@ const About = () => {
       {/* ── Who We Are ── */}
       <section style={{ padding: '8rem 0 5rem' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '5rem', alignItems: 'center' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '5rem', alignItems: 'center' }}>
             <div>
               <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
                 <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
@@ -114,7 +114,7 @@ const About = () => {
                 Apollo Clinic is built on the trusted foundation of the Apollo brand—one of India's most respected names in healthcare. We bring hospital-grade expertise to your neighborhood with a focus on convenience, compassion, and clinical excellence.
               </p>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+              <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                 <div style={{ textAlign: 'center' }}>
                   <div style={{ color: 'var(--blue)', marginBottom: '0.5rem', display: 'flex', justifyContent: 'center' }}><UserCheck size={32} /></div>
                   <div style={{ fontSize: '0.9rem', fontWeight: 700, color: 'var(--navy)' }}>Experienced<br/>Doctors</div>
@@ -134,7 +134,7 @@ const About = () => {
               </div>
             </div>
             
-            <div style={{ height: '400px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+            <div className="m-h-auto" style={{ height: '400px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
               <img src="/clinic-reception.png" alt="Clinic Interior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
@@ -154,7 +154,7 @@ const About = () => {
             Our Mission, Vision & Values
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem' }}>
             <div style={{ 
               border: '1px solid rgba(0,0,0,0.05)', borderRadius: '16px', padding: '3rem 2rem', 
               boxShadow: '0 10px 30px rgba(0,0,0,0.02)', textAlign: 'left',
@@ -228,7 +228,7 @@ const About = () => {
             Trusted care. Backed by expertise.
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { title: 'Compassionate Care', desc: 'We listen, we care, and we treat every patient with dignity and empathy.', icon: <HeartPulse size={32} /> },
               { title: 'Coordinated Specialties', desc: 'Seamless collaboration across specialties for comprehensive and continuous care.', icon: <Users size={32} /> },
@@ -259,7 +259,7 @@ const About = () => {
       <section style={{ padding: '5rem 0', background: '#fff' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
           
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center', marginBottom: '6rem' }}>
+          <div className="m-grid-1" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center', marginBottom: '6rem' }}>
             <div>
               <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
                 <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
@@ -288,7 +288,7 @@ const About = () => {
                 </li>
               </ul>
             </div>
-            <div style={{ height: '350px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
+            <div className="m-h-auto" style={{ height: '350px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
               {/* Patient consulting image placeholder */}
               <img src="/patient-anjali.png" alt="Patient Consultation" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
@@ -303,7 +303,7 @@ const About = () => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { img: '/clinic-reception.png', title: 'Welcoming Reception', desc: 'Designed for comfort, convenience, and a smooth experience.' },
               { img: '/consultation-room.png', title: 'Modern Consultation Rooms', desc: 'Well-equipped rooms for private and comfortable consultations.' },
@@ -334,7 +334,7 @@ const About = () => {
       {/* ── CTA Banner ── */}
       <section style={{ padding: '5rem 0 2rem' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ 
+          <div className="m-stack m-p-sm m-center" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',
             border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
@@ -353,7 +353,7 @@ const About = () => {
               </div>
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="m-wrap" style={{ display: 'flex', gap: '1rem' }}>
               <button className="btn btn-orange btn-lg" onClick={goBook} style={{ padding: '0.75rem 2rem', fontSize: '0.95rem' }}>
                 <Calendar size={18} /> Book Appointment
               </button>

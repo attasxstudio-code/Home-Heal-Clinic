@@ -314,7 +314,7 @@ const OurDoctors = () => {
 
       {/* ── Hero ── */}
       <section style={{ padding: '5rem 0' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div>
             <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
@@ -370,7 +370,7 @@ const OurDoctors = () => {
             </div>
           </div>
 
-          <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+          <div className="m-hide" style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
              {/* Instead of a complex collage we use a placeholder or stylized images. 
                  Using existing patient/doctor images grouped beautifully */}
              <div style={{ position: 'relative', width: '100%', height: '450px', background: 'radial-gradient(circle, rgba(13,82,192,0.05) 0%, rgba(255,255,255,0) 70%)' }}>
@@ -408,7 +408,7 @@ const OurDoctors = () => {
               </button>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+            <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
               {filtered.map(doc => (
                 <DoctorCard key={doc.id} doc={doc} onProfile={() => goProfile(doc.id)} onBook={goBook} />
               ))}
@@ -427,7 +427,7 @@ const OurDoctors = () => {
             Why Choose Our Doctors
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { title: 'Experienced Specialists', desc: 'Our doctors bring years of clinical expertise and stay updated with the latest medical advancements.', icon: <UserCheck size={32} /> },
               { title: 'Patient-First Care', desc: 'We prioritize your health and comfort with compassionate, personalized care at every step.', icon: <HeartPulse size={32} /> },
@@ -464,7 +464,7 @@ const OurDoctors = () => {
       {/* ── CTA Banner ── */}
       <section style={{ padding: '2rem 0' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ 
+          <div className="m-stack m-p-sm m-center" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',
             border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
@@ -484,7 +484,7 @@ const OurDoctors = () => {
               </div>
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <div className="m-wrap" style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
               <button className="btn btn-orange btn-lg" onClick={goBook} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', borderRadius: '50px' }}>
                 <Calendar size={18} /> Book Appointment
               </button>

@@ -115,7 +115,7 @@ const Diagnostics = () => {
       
       {/* ── Hero Section ── */}
       <section style={{ padding: '5rem 0' }}>
-        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+        <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div style={{ maxWidth: '600px' }}>
             <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
@@ -161,7 +161,7 @@ const Diagnostics = () => {
             </div>
             
             {/* Stats Card */}
-            <div style={{ 
+            <div className="m-static m-grid-2" style={{ 
               position: 'absolute', bottom: '-2rem', right: '-2rem', 
               background: '#fff', padding: '2rem', borderRadius: '20px', 
               boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
@@ -211,7 +211,7 @@ const Diagnostics = () => {
             Advanced testing across specialties to help in early detection and better health.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
             {TESTS.map((test, i) => (
               <div key={i} style={{ 
                 background: '#fff', borderRadius: '16px', padding: '1.5rem', 
@@ -278,7 +278,7 @@ const Diagnostics = () => {
             Comprehensive packages for proactive health and peace of mind.
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem', textAlign: 'left' }}>
             {PACKAGES.map((pkg, i) => (
               <div key={i} style={{ 
                 background: pkg.featured ? 'var(--navy)' : '#fff', 
@@ -358,7 +358,7 @@ const Diagnostics = () => {
             Why Choose Our Diagnostics
           </h2>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { title: 'Certified Lab Standards', desc: 'NABL-accredited labs following strict quality control protocols.', icon: <Award size={32} /> },
               { title: 'Fast Turnaround', desc: 'Quick sample processing and on-time digital reports.', icon: <Clock size={32} /> },
@@ -397,7 +397,7 @@ const Diagnostics = () => {
       {/* ── CTA Strip ── */}
       <section style={{ padding: '2rem 0' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ 
+          <div className="m-stack m-p-sm m-center" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',
             border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
             display: 'flex', justifyContent: 'space-between', alignItems: 'center'
@@ -416,7 +416,7 @@ const Diagnostics = () => {
               </div>
             </div>
             
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div className="m-wrap" style={{ display: 'flex', gap: '1rem' }}>
               <button className="btn btn-orange btn-lg" onClick={() => navigate('/book-checkup')} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
                 <Calendar size={18} /> Book Checkup
               </button>

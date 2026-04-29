@@ -1059,3 +1059,66 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
   .quick-actions-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 
+/* ═══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — Full site optimisation
+═══════════════════════════════════════════════════════════════ */
+
+/* ── Tablet breakpoint (≤900px) ── */
+@media (max-width: 900px) {
+  .m-grid-1 { grid-template-columns: 1fr !important; }
+  .m-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
+  .m-hide    { display: none !important; }
+  .m-stack   { flex-direction: column !important; }
+  .m-center  { text-align: center !important; justify-content: center !important; }
+  .m-static  { position: static !important; transform: none !important; width: 100% !important; }
+  .m-full    { width: 100% !important; }
+  .m-wrap    { flex-wrap: wrap !important; }
+  .m-gap-1   { gap: 1rem !important; }
+  .m-p-sm    { padding: 1.5rem !important; }
+  .m-h-auto  { height: auto !important; max-height: 280px !important; }
+  .m-ml-0    { margin-left: 0 !important; }
+  .m-mt-1    { margin-top: 1rem !important; }
+  .m-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+}
+
+/* ── Mobile breakpoint (≤768px) ── */
+@media (max-width: 768px) {
+  /* Typography */
+  h1 { font-size: clamp(1.6rem, 7vw, 2.2rem) !important; line-height: 1.2 !important; }
+  h2 { font-size: clamp(1.3rem, 5.5vw, 1.75rem) !important; }
+
+  /* Container */
+  .container { padding: 0 1rem; max-width: 100% !important; }
+
+  /* Section spacing */
+  section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+
+  /* Carousel cards on mobile → swipeable, single-card view */
+  .no-scrollbar > .card { flex: 0 0 85% !important; min-width: 0 !important; }
+
+  /* Scroll arrows hide — swipe is natural on touch */
+  .scroll-arrow { display: none !important; }
+
+  /* FAQ smaller text */
+  .faq-item button { font-size: 0.9rem !important; padding: 1rem !important; }
+
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+
+  /* Doctor profile */
+  .doctor-profile-layout { grid-template-columns: 1fr !important; }
+  .doctor-profile-header { flex-direction: column !important; text-align: center; }
+
+  /* Trust strip */
+  .trust-strip { flex-direction: column; gap: 0.5rem; }
+  .trust-item { border-right: none !important; padding: 0.25rem 0.5rem; }
+}
+
+/* ── Extra small (≤480px) ── */
+@media (max-width: 480px) {
+  h1 { font-size: clamp(1.4rem, 6vw, 1.8rem) !important; }
+  .btn-lg { font-size: 0.85rem !important; padding: 0.65rem 1.25rem !important; }
+  .no-scrollbar > .card { flex: 0 0 92% !important; }
+}
+
