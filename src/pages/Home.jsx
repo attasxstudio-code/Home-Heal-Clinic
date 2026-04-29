@@ -120,7 +120,7 @@ const Home = () => {
             className="no-scrollbar"
           >
             {SPECIALTIES.map((s, i) => (
-              <div key={i} className="card" onClick={() => goTo('/services')} style={{ minWidth: '280px', flexShrink: 0, padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', scrollSnapAlign: 'start' }}>
+              <div key={i} className="card" onClick={() => goTo('/services')} style={{ flex: '0 0 calc((100% - 7.5rem) / 6)', padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', scrollSnapAlign: 'start' }}>
                 <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                   {s.icon}
                 </div>
