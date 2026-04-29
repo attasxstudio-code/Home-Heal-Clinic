@@ -484,12 +484,12 @@ const OurDoctors = () => {
               </div>
             </div>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'flex-end' }}>
-              <button className="btn btn-orange btn-lg" onClick={goBook} style={{ padding: '0.75rem 2rem', fontSize: '0.95rem', width: '100%' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <button className="btn btn-orange btn-lg" onClick={goBook} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', borderRadius: '50px' }}>
                 <Calendar size={18} /> Book Appointment
               </button>
-              <a href={PHONE_HREF} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--blue)', fontWeight: 700, textDecoration: 'none' }}>
-                <Phone size={16} /> {PHONE}
+              <a href={PHONE_HREF} className="btn btn-outline-blue btn-lg" style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', textDecoration: 'none', borderRadius: '50px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Phone size={18} /> Talk to Clinic
               </a>
             </div>
           </div>
