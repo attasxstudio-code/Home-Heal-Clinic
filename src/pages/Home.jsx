@@ -1,60 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Phone, MapPin, ArrowRight, Calendar, CheckCircle,
-  Clock, Star, ChevronDown, Shield, Heart, Activity,
-  FileText, Navigation, Stethoscope, ShieldCheck, 
+  Clock, Star, ChevronDown, Heart,
+  Stethoscope, ShieldCheck, 
   Baby, HeartPulse, Syringe, Users, ChevronRight,
-  ChevronLeft, Briefcase, Lock, Mail, Check,
-  Facebook, Instagram, Youtube, Linkedin, Menu, X, UserCircle
+  ChevronLeft, Mail,
 } from 'lucide-react';
 
 /* ─── Constants ─── */
-const PHONE      = '+91 80 1234 5678';
+const PHONE      = '+91 9149425496';
+const PHONE_HREF = 'tel:+919149425496';
 const EMAIL      = 'contact@apolloclinic.com';
-const TIMINGS    = 'Mon - Sun: 8:00 AM - 8:00 PM';
 const MAPS_EMBED = 'https://maps.google.com/maps?q=34.0806043,74.7988594&hl=en&z=17&output=embed&iwloc=near';
 
 const Home = () => {
   const navigate = useNavigate();
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const goBook = () => navigate('/book');
-  const goTo = (path) => {
-    setMobileMenuOpen(false);
-    navigate(path);
-  };
+  const goTo = (path) => navigate(path);
 
   return (
-    <div className="home-page" style={{ background: '#fff', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      
-      {/* ─── NAVBAR ─── */}
-      <nav className="navbar" style={{ padding: '0 1.5rem', background: '#fff', borderBottom: '1px solid var(--border)', position: 'sticky', top: 0, zIndex: 50 }}>
-        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '80px', maxWidth: '1400px' }}>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }} onClick={() => goTo('/')}>
-            <img src="/logo.jpg" alt="Apollo Clinic" style={{ height: '40px' }} />
-          </div>
-
-          <div className="navbar-links" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
-            {['Home', 'Services', 'Doctors', 'Diagnostics', 'About Us', 'Reports'].map(link => (
-              <button key={link} className="navbar-link" style={{ fontWeight: 600, color: link === 'Home' ? 'var(--blue)' : 'var(--body)', fontSize: '0.95rem' }} onClick={() => goTo(`/${link.toLowerCase().replace(' ', '-')}`)}>
-                {link}
-              </button>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button className="btn btn-outline-blue" onClick={() => goTo('/admin-login')} style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-              <Lock size={16} /> Admin Login
-            </button>
-            <button className="btn btn-orange" onClick={goBook} style={{ fontSize: '0.9rem', fontWeight: 600 }}>
-              <Calendar size={16} /> Book Appointment
-            </button>
-          </div>
-        </div>
-      </nav>
-
+    <>
       {/* ─── HERO SECTION ─── */}
       <section style={{ padding: '6rem 0', background: 'linear-gradient(to bottom, #f8fafc, #fff)' }}>
         <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
@@ -101,7 +68,7 @@ const Home = () => {
 
           <div style={{ position: 'relative' }}>
             <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
-              <img src="/clinic-interior.jpg" alt="Clinic Interior" style={{ width: '100%', height: 'auto', display: 'block' }} />
+              <img src="/clinic-interior.jpg" alt="Apollo Clinic Srinagar Interior" style={{ width: '100%', height: 'auto', display: 'block' }} />
             </div>
           </div>
         </div>
@@ -126,15 +93,15 @@ const Home = () => {
               { icon: <HeartPulse size={28} />, title: 'Chronic Care', desc: 'Managed care for long-term conditions.' },
               { icon: <Syringe size={28} />, title: 'Vaccination', desc: 'Safe and effective vaccination services.' },
             ].map((s, i) => (
-              <div key={i} className="card" style={{ padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div key={i} className="card" onClick={() => goTo('/services')} style={{ padding: '2rem 1.5rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.5rem' }}>
                   {s.icon}
                 </div>
                 <h3 style={{ fontSize: '1.1rem', marginBottom: '0.75rem' }}>{s.title}</h3>
                 <p style={{ fontSize: '0.85rem', color: 'var(--body)', marginBottom: '1.5rem', flex: 1 }}>{s.desc}</p>
-                <button className="btn-ghost" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <span style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                   Learn More <ArrowRight size={16} />
-                </button>
+                </span>
               </div>
             ))}
           </div>
@@ -153,7 +120,7 @@ const Home = () => {
                 Highly experienced specialists dedicated to your health.
               </h2>
             </div>
-            <button className="btn-ghost" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button onClick={() => goTo('/doctors')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
               View All Doctors <ArrowRight size={18} />
             </button>
           </div>
@@ -165,7 +132,7 @@ const Home = () => {
               { name: 'Dr. Priya Nair', spec: 'Consultant - Gynecology', qual: 'MBBS, MS (OBG)', exp: '14+ years experience', img: '/doctor-priya.png' },
               { name: 'Dr. Rohan Verma', spec: 'Consultant - Orthopedics', qual: 'MBBS, MS (Ortho)', exp: '10+ years experience', img: '/doctor-rohan.png' },
             ].map((d, i) => (
-              <div key={i} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+              <div key={i} className="card" onClick={() => goTo('/doctors')} style={{ padding: 0, overflow: 'hidden', cursor: 'pointer' }}>
                 <img src={d.img} alt={d.name} style={{ width: '100%', height: '240px', objectFit: 'cover' }} />
                 <div style={{ padding: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.2rem', color: 'var(--blue)', marginBottom: '0.25rem' }}>{d.name}</h3>
@@ -177,7 +144,7 @@ const Home = () => {
             ))}
 
             {/* Next arrow */}
-            <div style={{ position: 'absolute', right: '-24px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
+            <div onClick={() => goTo('/doctors')} style={{ position: 'absolute', right: '-24px', top: '50%', transform: 'translateY(-50%)', width: '48px', height: '48px', background: '#fff', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', cursor: 'pointer', zIndex: 10 }}>
               <ChevronRight size={24} color="var(--blue)" />
             </div>
           </div>
@@ -222,56 +189,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ─── WHY CHOOSE APOLLO CLINIC ─── */}
-      <section style={{ padding: '4rem 0', background: '#f8fafc', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-        <div className="container" style={{ maxWidth: '1400px', textAlign: 'center' }}>
-          <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3rem' }}>
-            WHY CHOOSE APOLLO CLINIC?
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '2rem' }}>
-            {[
-              { icon: <UserCircle size={32} />, title: 'Experienced Doctors', desc: 'Highly qualified and compassionate specialists.' },
-              { icon: <Briefcase size={32} />, title: 'Advanced Technology', desc: 'Modern facilities and latest medical technology.' },
-              { icon: <Heart size={32} />, title: 'Patient-Centric Care', desc: 'Personalized care with empathy and respect.' },
-              { icon: <ShieldCheck size={32} />, title: 'Safe & Hygienic', desc: 'Strict safety protocols for your peace of mind.' },
-              { icon: <MapPin size={32} />, title: 'Convenient Access', desc: 'Multiple centers and easy appointment booking.' },
-            ].map((f, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ color: 'var(--blue)', marginBottom: '1rem' }}>{f.icon}</div>
-                <h4 style={{ fontSize: '1rem', color: 'var(--heading)', marginBottom: '0.5rem' }}>{f.title}</h4>
-                <p style={{ fontSize: '0.85rem', color: 'var(--body)' }}>{f.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── PATIENT SERVICES ─── */}
-      <section style={{ padding: '4rem 0', background: '#fff' }}>
-        <div className="container" style={{ maxWidth: '1400px', textAlign: 'center' }}>
-          <div style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '3rem' }}>
-            PATIENT SERVICES
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '4rem', flexWrap: 'wrap' }}>
-            {[
-              { icon: <Calendar size={28} />, title: 'Book Appointment' },
-              { icon: <HeartPulse size={28} />, title: 'Health Checkups' },
-              { icon: <Shield size={28} />, title: 'Insurance Assistance' },
-              { icon: <Briefcase size={28} />, title: 'Pharmacy' },
-              { icon: <FileText size={28} />, title: 'Online Reports' },
-              { icon: <MapPin size={28} />, title: 'Home Collection' },
-            ].map((s, i) => (
-              <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem', cursor: 'pointer' }}>
-                <div style={{ width: '64px', height: '64px', borderRadius: '50%', border: '1px solid var(--blue-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--blue)' }}>
-                  {s.icon}
-                </div>
-                <span style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--blue)' }}>{s.title}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ─── PATIENT FEEDBACK ─── */}
       <section style={{ padding: '5rem 0', background: '#f8fafc' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
@@ -282,7 +199,7 @@ const Home = () => {
             <h2 style={{ fontSize: '2.5rem', color: 'var(--heading)', margin: 0 }}>
               Trusted by thousands of patients and families.
             </h2>
-            <button className="btn-ghost" style={{ position: 'absolute', right: 0, bottom: '10px', color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button onClick={() => goTo('/about')} style={{ position: 'absolute', right: 0, bottom: '10px', color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
               View All Reviews <ArrowRight size={18} />
             </button>
           </div>
@@ -335,14 +252,14 @@ const Home = () => {
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <MapPin className="text-blue" size={24} style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '0.95rem', color: 'var(--body)' }}>
-                  123, Health City, MG Road,<br/>Bangalore - 560001, India
+                  Near National School, Arham Towers,<br/>Karan Nagar, Srinagar
                 </span>
               </div>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <Phone className="text-blue" size={24} style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.95rem', color: 'var(--body)' }}>
+                <a href={PHONE_HREF} style={{ fontSize: '0.95rem', color: 'var(--body)', textDecoration: 'none' }}>
                   {PHONE}
-                </span>
+                </a>
               </div>
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <Mail className="text-blue" size={24} style={{ flexShrink: 0 }} />
@@ -353,7 +270,7 @@ const Home = () => {
               <div style={{ display: 'flex', gap: '1rem' }}>
                 <Clock className="text-blue" size={24} style={{ flexShrink: 0 }} />
                 <span style={{ fontSize: '0.95rem', color: 'var(--body)' }}>
-                  {TIMINGS}
+                  Mon–Sat: 12 PM–7 PM · Sun: 10 AM–1:30 PM
                 </span>
               </div>
             </div>
@@ -367,6 +284,7 @@ const Home = () => {
               style={{ border: 0 }} 
               allowFullScreen="" 
               loading="lazy"
+              title="Apollo Clinic Srinagar Location"
             />
           </div>
         </div>
@@ -380,7 +298,7 @@ const Home = () => {
               <h2 style={{ fontSize: '2.5rem', color: 'var(--heading)', margin: 0, marginBottom: '0.5rem' }}>FAQs</h2>
               <p style={{ fontSize: '1rem', color: 'var(--body)', margin: 0 }}>Find answers to common questions.</p>
             </div>
-            <button className="btn-ghost" style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <button onClick={() => goTo('/faq')} style={{ color: 'var(--blue)', fontWeight: 600, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
               View All FAQs <ArrowRight size={18} />
             </button>
           </div>
@@ -394,8 +312,8 @@ const Home = () => {
               "What are your clinic timings?",
               "What should I carry during my visit?"
             ].map((q, i) => (
-              <div key={i} className="faq-item" style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px' }}>
-                <button className="faq-question" style={{ width: '100%', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontWeight: 600, fontSize: '1rem', color: 'var(--heading)' }}>
+              <div key={i} onClick={() => goTo('/faq')} className="faq-item" style={{ background: '#fff', border: '1px solid var(--border)', borderRadius: '12px', cursor: 'pointer' }}>
+                <button className="faq-question" style={{ width: '100%', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontWeight: 600, fontSize: '1rem', color: 'var(--heading)', fontFamily: 'inherit' }}>
                   {q}
                   <ChevronDown size={20} className="text-muted" />
                 </button>
@@ -404,86 +322,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* ─── FOOTER ─── */}
-      <footer style={{ background: '#fff', borderTop: '1px solid var(--border)', padding: '4rem 0 2rem' }}>
-        <div className="container" style={{ maxWidth: '1400px' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr 1fr 1fr 1.2fr', gap: '3rem', marginBottom: '4rem' }}>
-            
-            <div>
-              <img src="/logo.jpg" alt="Apollo Clinic" style={{ height: '40px', marginBottom: '1.5rem' }} />
-              <p style={{ fontSize: '0.85rem', color: 'var(--body)', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                Apollo Clinic is committed to delivering quality healthcare with compassion, innovation and integrity.
-              </p>
-              <div style={{ display: 'flex', gap: '1rem', color: 'var(--heading)' }}>
-                <Facebook size={20} style={{ cursor: 'pointer' }} />
-                <Instagram size={20} style={{ cursor: 'pointer' }} />
-                <Youtube size={20} style={{ cursor: 'pointer' }} />
-                <Linkedin size={20} style={{ cursor: 'pointer' }} />
-              </div>
-            </div>
-
-            <div>
-              <h4 style={{ fontSize: '1rem', color: 'var(--heading)', marginBottom: '1.5rem' }}>Quick Links</h4>
-              {['Home', 'Services', 'Doctors', 'Diagnostics', 'About Us', 'Reports'].map(l => (
-                <div key={l} style={{ fontSize: '0.9rem', color: 'var(--body)', marginBottom: '0.75rem', cursor: 'pointer' }}>{l}</div>
-              ))}
-            </div>
-
-            <div>
-              <h4 style={{ fontSize: '1rem', color: 'var(--heading)', marginBottom: '1.5rem' }}>Our Services</h4>
-              {['Consultation', 'Diagnostics', 'Health Checkups', 'Specialty Care', 'Vaccination', 'Chronic Care'].map(l => (
-                <div key={l} style={{ fontSize: '0.9rem', color: 'var(--body)', marginBottom: '0.75rem', cursor: 'pointer' }}>{l}</div>
-              ))}
-            </div>
-
-            <div>
-              <h4 style={{ fontSize: '1rem', color: 'var(--heading)', marginBottom: '1.5rem' }}>Contact Us</h4>
-              <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-                <MapPin size={18} className="text-muted" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.85rem', color: 'var(--body)' }}>123, Health City, MG Road,<br/>Bangalore - 560001, India</span>
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-                <Phone size={18} className="text-muted" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.85rem', color: 'var(--body)' }}>{PHONE}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1rem' }}>
-                <Mail size={18} className="text-muted" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.85rem', color: 'var(--body)' }}>{EMAIL}</span>
-              </div>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
-                <Clock size={18} className="text-muted" style={{ flexShrink: 0 }} />
-                <span style={{ fontSize: '0.85rem', color: 'var(--body)' }}>{TIMINGS}</span>
-              </div>
-            </div>
-
-            <div>
-              <h4 style={{ fontSize: '1rem', color: 'var(--heading)', marginBottom: '1.5rem' }}>Stay Updated</h4>
-              <p style={{ fontSize: '0.85rem', color: 'var(--body)', marginBottom: '1rem' }}>Subscribe to our newsletter for health tips and updates.</p>
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                style={{ width: '100%', padding: '0.75rem 1rem', borderRadius: '8px', border: '1px solid var(--border)', marginBottom: '1rem', fontSize: '0.9rem' }} 
-              />
-              <button className="btn btn-blue" style={{ width: '100%', borderRadius: '8px', padding: '0.75rem' }}>Subscribe</button>
-            </div>
-
-          </div>
-
-          <div style={{ borderTop: '1px solid var(--border)', paddingTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
-            <div style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>
-              © 2024 Apollo Clinic. All rights reserved.
-            </div>
-            <div style={{ display: 'flex', gap: '2rem', fontSize: '0.85rem', color: 'var(--muted)' }}>
-              <span style={{ cursor: 'pointer' }}>Privacy Policy</span>
-              <span style={{ cursor: 'pointer' }}>Terms & Conditions</span>
-              <span style={{ cursor: 'pointer' }}>Sitemap</span>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-    </div>
+    </>
   );
 };
 
