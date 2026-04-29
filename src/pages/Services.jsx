@@ -1,352 +1,281 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, Phone, ArrowRight, CheckCircle, Clock, MapPin } from 'lucide-react';
+import { Calendar, Phone, Stethoscope, FlaskConical, ShieldCheck, FileText, CheckCircle } from 'lucide-react';
 
 const PHONE      = '+91 9149425496';
 const PHONE_HREF = 'tel:+919149425496';
 
-function useInView(t = 0.05) {
-  const ref = React.useRef(null);
-  const [vis, setVis] = React.useState(false);
-  React.useEffect(() => {
-    const o = new IntersectionObserver(([e]) => { if (e.isIntersecting) setVis(true); }, { threshold: t });
-    if (ref.current) o.observe(ref.current);
-    return () => o.disconnect();
-  }, []);
-  return [ref, vis];
-}
-
 const SPECIALTIES = [
   {
-    id: 'gp', name: 'General Physician', dept: 'Primary Care',
-    doctor: 'Dr. Shabir Ahmad Mir', doctorId: 'dr-shabir-ahmad-mir',
-    desc: 'Comprehensive primary care including chronic disease management, preventive medicine, and internal medicine for patients of all ages.',
+    name: 'General Physician',
+    desc: 'Comprehensive care for common illnesses and lifestyle conditions.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        <circle cx="12" cy="11" r="3"/>
       </svg>
     ),
-    features: ['Fever & Infection Care', 'Chronic Disease Management', 'Health Screenings', 'Preventive Care Advice'],
   },
   {
-    id: 'cardio', name: 'Cardiology', dept: 'Cardiac Care',
-    doctor: 'Visiting Cardiologist', doctorId: null,
-    desc: 'Expert cardiac evaluation, ECG and echocardiogram interpretation, risk stratification, and ongoing cardiovascular management.',
+    name: 'Cardiology',
+    desc: 'Expert care for heart health, monitoring and advanced treatments.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
         <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
       </svg>
     ),
-    features: ['ECG (12-Lead)', 'Echocardiogram (ECHO)', 'Cardiac Risk Assessment', 'Hypertension Management'],
   },
   {
-    id: 'paed', name: 'Pediatrics', dept: 'Child Health',
-    doctor: 'Dr. Aijaz Hussain', doctorId: 'dr-aijaz-hussain',
-    desc: 'Comprehensive child healthcare from infancy through adolescence — growth monitoring, vaccinations, nutrition, and illness management.',
+    name: 'Pediatrics',
+    desc: 'Compassionate care for newborns, children and adolescents.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="8" r="5"/><path d="M6 21v-1a6 6 0 0112 0v1"/>
       </svg>
     ),
-    features: ['Vaccinations & Immunization', 'Growth Monitoring', 'Child Nutrition Guidance', 'Pediatric Illness Care'],
   },
   {
-    id: 'gyn', name: 'Gynecology', dept: "Women's Health",
-    doctor: 'Dr. Saima Bano', doctorId: 'dr-saima-bano',
-    desc: "Complete women's healthcare — antenatal and postnatal care, reproductive wellness, menstrual health, and hormonal disorders.",
+    name: 'Gynecology',
+    desc: "Women's health, from routine care to advanced gynec treatments.",
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M12 22V8M12 8C12 8 9 5 6 5c-2 0-3 1.5-3 3 0 4 3 6 3 9h12c0-3 3-5 3-9 0-1.5-1-3-3-3-3 0-6 3-6 3z"/>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 15v7M9 19h6M12 15a6 6 0 100-12 6 6 0 000 12z"/>
       </svg>
     ),
-    features: ['Antenatal & Postnatal Care', 'Menstrual Health', 'Reproductive Wellness', 'Hormonal Disorders'],
   },
   {
-    id: 'derm', name: 'Dermatology', dept: 'Skin & Hair',
-    doctor: 'Dr. Nazia Rashid', doctorId: 'dr-nazia-rashid',
-    desc: 'Expert diagnosis and treatment of skin, hair, and nail conditions — from medical dermatology to cosmetic concerns.',
+    name: 'Dermatology',
+    desc: 'Diagnosis and treatment for skin, hair and nail conditions.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/>
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>
       </svg>
     ),
-    features: ['Acne & Eczema', 'Hair Loss Management', 'Cosmetic Dermatology', 'Skin Allergy Care'],
   },
   {
-    id: 'ortho', name: 'Orthopedics', dept: 'Bone & Joint',
-    doctor: 'Dr. Mushtaq Ahmed', doctorId: 'dr-mushtaq-ahmed',
-    desc: 'Diagnosis and treatment of musculoskeletal conditions — bone and joint pain, spine disorders, sports injuries, and rehabilitation.',
+    name: 'Orthopedics',
+    desc: 'Bone, joint and muscle care for pain-free movement.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>
       </svg>
     ),
-    features: ['Joint & Bone Pain', 'Spine Conditions', 'Sports Injury', 'Rehabilitation'],
   },
   {
-    id: 'psych', name: 'Clinical Psychology', dept: 'Mental Health',
-    doctor: 'Dr. Asma Yousuf', doctorId: 'dr-asma-yousuf',
-    desc: 'Evidence-based psychological care in a confidential setting — anxiety, depression, cognitive therapy, and stress management.',
+    name: 'Clinical Psychology',
+    desc: 'Mental health support for emotional well-being and resilience.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
       </svg>
     ),
-    features: ['Anxiety & Depression', 'Individual Counselling', 'Cognitive Behavioural Therapy', 'Stress Management'],
   },
   {
-    id: 'ent', name: 'ENT', dept: 'Ear, Nose & Throat',
-    doctor: 'Visiting ENT Specialist', doctorId: null,
-    desc: 'Evaluation and management of ear, nose, throat, and sinus conditions — from infections to chronic ENT problems.',
+    name: 'ENT',
+    desc: 'Diagnosis and treatment for ear, nose, throat and related disorders.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/>
         <line x1="12" y1="19" x2="12" y2="22"/>
       </svg>
     ),
-    features: ['Ear & Hearing Issues', 'Sinusitis', 'Throat & Tonsil Care', 'Nasal Conditions'],
   },
   {
-    id: 'diab', name: 'Diabetes & Endocrinology', dept: 'Metabolic Health',
-    doctor: 'Dr. Shabir Ahmad Mir', doctorId: 'dr-shabir-ahmad-mir',
-    desc: 'Comprehensive diabetes care, thyroid disorders, and metabolic health management with regular monitoring and personalised treatment.',
+    name: 'Diabetes & Endocrinology',
+    desc: 'Comprehensive care for diabetes, thyroid and hormonal disorders.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
         <path d="M8 12h8M12 8v8"/>
       </svg>
     ),
-    features: ['Diabetes Monitoring', 'Thyroid Disorders', 'HbA1c Management', 'Metabolic Screening'],
   },
   {
-    id: 'resp', name: 'Respiratory Care', dept: 'Pulmonology',
-    doctor: 'Visiting Pulmonologist', doctorId: null,
-    desc: 'Assessment and management of respiratory conditions — asthma, COPD, breathlessness — with in-house Pulmonary Function Testing.',
+    name: 'Respiratory Care',
+    desc: 'Diagnosis and treatment for asthma, allergies and lung conditions.',
     icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 22V8M12 8C12 8 9 5 6 5c-2 0-3 1.5-3 3 0 4 3 6 3 9h12c0-3 3-5 3-9 0-1.5-1-3-3-3-3 0-6 3-6 3z"/>
       </svg>
     ),
-    features: ['Asthma Management', 'COPD & Bronchitis', 'Pulmonary Function Test (PFT)', 'Breathlessness Assessment'],
   },
 ];
 
-/* ── Service card ── */
-const ServiceCard = ({ svc, vis, delay, onBook, onDoctor }) => {
-  const [hov, setHov] = React.useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={() => setHov(false)}
-      style={{
-        background: 'linear-gradient(150deg, #ffffff 0%, #f7fafe 100%)',
-        border: `1px solid ${hov ? 'rgba(13,82,192,0.2)' : 'rgba(13,82,192,0.08)'}`,
-        borderRadius: 'var(--r-xl)',
-        display: 'flex', flexDirection: 'column',
-        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-        boxShadow: hov ? '0 16px 32px rgba(13,82,192,0.12)' : '0 4px 16px rgba(13,82,192,0.04)',
-        transform: hov ? 'translateY(-3px)' : 'none',
-        opacity: vis ? 1 : 0,
-        transitionDelay: `${delay}s`,
-        overflow: 'hidden',
-      }}
-    >
-      {/* Top accent line */}
-      <div style={{ height: 3, background: hov ? 'var(--blue)' : 'var(--border)', transition: 'background 0.3s' }} />
-
-      <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column', gap: '0' }}>
-        {/* Icon + dept */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <div style={{
-            width: 46, height: 46, borderRadius: 'var(--r-md)',
-            background: hov ? 'linear-gradient(135deg, var(--navy), var(--blue))' : 'var(--blue-light)',
-            color: hov ? '#fff' : 'var(--blue)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'all 0.3s',
-            boxShadow: hov ? '0 4px 12px rgba(13,82,192,0.2)' : 'none',
-          }}>
-            {svc.icon}
-          </div>
-          <span style={{ background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 'var(--r-sm)', fontSize: '0.65rem', fontWeight: 700, color: 'var(--muted)', padding: '0.18rem 0.55rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-            {svc.dept}
-          </span>
-        </div>
-
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--heading)', marginBottom: '0.4rem', lineHeight: 1.3 }}>{svc.name}</h3>
-        <p style={{ fontSize: '0.86rem', color: 'var(--body)', lineHeight: 1.55, marginBottom: '0.85rem' }}>{svc.desc}</p>
-
-        {/* Doctor */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', marginBottom: '1rem', padding: '0.5rem 0.65rem', background: 'rgba(13,82,192,0.03)', borderRadius: 'var(--r-md)', border: '1px solid rgba(13,82,192,0.05)' }}>
-          <div style={{ width: 26, height: 26, borderRadius: '50%', background: 'linear-gradient(135deg, var(--blue-light), #e0eeff)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 900, flexShrink: 0 }}>
-            {svc.doctor.includes('Visiting') ? '?' : svc.doctor.split(' ')[1]?.[0]}{svc.doctor.split(' ')[2]?.[0]}
-          </div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--heading)' }}>{svc.doctor}</span>
-        </div>
-
-        {/* Feature tags */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem', marginBottom: '1.25rem', flex: 1 }}>
-          {svc.features.map((f, i) => (
-            <span key={i} style={{ background: 'var(--blue-light)', color: 'var(--blue)', fontSize: '0.68rem', fontWeight: 600, padding: '0.18rem 0.55rem', borderRadius: 'var(--r-sm)' }}>
-              {f}
-            </span>
-          ))}
-        </div>
-
-        <button
-          onClick={onBook}
-          style={{
-            width: '100%', padding: '0.7rem',
-            background: hov ? 'var(--navy)' : '#fff',
-            color: hov ? '#fff' : 'var(--navy)',
-            border: '1.5px solid var(--navy)',
-            borderRadius: 'var(--r-md)',
-            fontWeight: 700, fontSize: '0.85rem',
-            cursor: 'pointer', fontFamily: 'inherit',
-            transition: 'all 0.2s',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
-          }}
-        >
-          <Calendar size={14} /> Book Consultation
-        </button>
-      </div>
-    </div>
-  );
-};
-
 const Services = () => {
   const navigate = useNavigate();
-  const [ref, vis] = useInView(0.04);
-  const goBook = () => { navigate('/book'); window.scrollTo(0, 0); };
-  const goDoctor = (id) => { if (id) { navigate(`/doctors/${id}`); window.scrollTo(0, 0); } };
 
   return (
-    <div style={{ background: '#fff' }}>
-
-      {/* ── Hero ── */}
-      <section style={{ background: '#fff', borderBottom: '1px solid var(--border)', padding: 'clamp(3.5rem,8vw,5rem) 0 clamp(2.5rem,5vw,3.5rem)' }}>
-        <div className="container">
-          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8rem', color: 'var(--muted)', marginBottom: '1.5rem' }}>
-            <button onClick={() => { navigate('/'); window.scrollTo(0,0); }} style={{ background: 'none', border: 'none', color: 'var(--blue)', fontWeight: 600, cursor: 'pointer', fontSize: '0.8rem', fontFamily: 'inherit' }}>Home</button>
-            <ArrowRight size={12} />
-            <span>Clinical Specialties</span>
-          </nav>
-          <div className="services-hero-grid">
-            <div>
-              <div className="section-label">Our Services</div>
-              <h1 style={{ marginBottom: '0.85rem' }}>
-                Clinical <span style={{ color: 'var(--blue)' }}>Specialties</span>
-              </h1>
-              <p style={{ fontSize: '1rem', color: 'var(--body)', lineHeight: 1.72, marginBottom: '2rem', maxWidth: 480 }}>
-                Expert multi-specialty care across 10+ disciplines — all delivered by verified, experienced specialists under one roof at Apollo Clinic, Karan Nagar Srinagar.
-              </p>
-              <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                <button className="btn btn-primary btn-lg" onClick={goBook} style={{ borderRadius: 'var(--r-full)' }}>
-                  <Calendar size={16} /> Book Appointment
-                </button>
-                <a href={PHONE_HREF} className="btn btn-ghost btn-lg" style={{ borderRadius: 'var(--r-full)' }}>
-                  <Phone size={16} /> {PHONE}
-                </a>
-              </div>
+    <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: '4rem' }}>
+      
+      {/* ── Hero Section ── */}
+      <section style={{ padding: '5rem 0' }}>
+        <div className="container" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
+          
+          <div style={{ maxWidth: '600px' }}>
+            <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
+              <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                OUR SERVICES
+              </span>
+              <div style={{ height: '3px', width: '40px', background: 'var(--orange)', marginTop: '4px' }}></div>
             </div>
-
-            {/* Image with Floating Stats Overlay */}
-            <div className="services-hero-image-wrapper">
-              {/* Collage Image */}
-              <div style={{ borderRadius: 'var(--r-xl)', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
-                <img src="/services-collage.jpg" alt="Apollo Clinic Services" style={{ width: '100%', display: 'block', objectFit: 'cover' }} />
-              </div>
-
-              {/* Smaller Stats panel floating overlay */}
-              <div className="services-hero-stats-overlay">
-                <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '0.8rem' }}>
-                  {[
-                    { n: '10+', l: 'Specialties' },
-                    { n: '6',   l: 'Doctors' },
-                    { n: '24/7', l: 'Reports Online' },
-                    { n: '100%', l: 'In-House Lab' },
-                  ].map(s => (
-                    <div key={s.l} style={{ textAlign: 'center', padding: '0.75rem 0.5rem', background: '#f8fafc', borderRadius: 'var(--r-md)', border: '1px solid var(--border)' }}>
-                      <div style={{ fontSize: '1.4rem', fontWeight: 900, color: 'var(--navy)', letterSpacing: '-0.03em', lineHeight: 1 }}>{s.n}</div>
-                      <div style={{ fontSize: '0.62rem', color: 'var(--muted)', fontWeight: 600, marginTop: '0.3rem' }}>{s.l}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <style>{`
-          .services-hero-grid { display: grid; grid-template-columns: 1fr 440px; gap: 3rem; align-items: center; }
-          .services-hero-image-wrapper { position: relative; margin-top: 1rem; }
-          .services-hero-stats-overlay {
-            position: absolute; bottom: -1.5rem; left: -2.5rem;
-            background: #fff; border: 1px solid var(--border); border-radius: var(--r-xl);
-            padding: 1.2rem; box-shadow: 0 10px 30px rgba(15,23,42,0.08);
-            max-width: 280px; width: auto;
-          }
-          @media(max-width:860px){
-            .services-hero-grid { grid-template-columns: 1fr; gap: 2rem; padding-bottom: 1.5rem; }
-            .services-hero-image-wrapper { margin-top: 2rem; }
-            .services-hero-stats-overlay { left: 50%; transform: translateX(-50%); bottom: -2rem; width: 90%; max-width: none; }
-          }
-        `}</style>
-      </section>
-
-      {/* ── Trust strip ── */}
-      <div style={{ background: 'var(--bg)', borderBottom: '1px solid var(--border)', padding: '1.25rem 0' }}>
-        <div className="container">
-          <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-            {[
-              <CheckCircle size={14} />, 'Verified & Credentialed Specialists',
-              <CheckCircle size={14} />, 'In-House Diagnostics',
-              <CheckCircle size={14} />, 'Patient-First Approach',
-              <CheckCircle size={14} />, 'Walk-In Friendly',
-            ].reduce((acc, item, i) => {
-              if (i % 2 === 0) return [...acc, { icon: item }];
-              acc[acc.length - 1].text = item;
-              return acc;
-            }, []).map((item, i) => (
-              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', color: 'var(--body)', fontSize: '0.82rem', fontWeight: 500 }}>
-                <span style={{ color: 'var(--green)' }}>{item.icon}</span>{item.text}
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Services grid ── */}
-      <section style={{ background: 'var(--bg)', padding: '4.5rem 0' }}>
-        <div className="container">
-          <div style={{ maxWidth: 600, marginBottom: '2.5rem' }}>
-            <div className="section-label">All Specialties</div>
-            <h2 style={{ marginBottom: '0.65rem' }}>Expert Care Across Every Specialty</h2>
-            <p style={{ margin: 0, color: 'var(--body)' }}>
-              From primary care to specialist consultations — find the right doctor for your health needs.
+            
+            <h1 style={{ fontSize: '3.5rem', lineHeight: 1.1, marginBottom: '1.5rem', color: 'var(--navy)' }}>
+              Comprehensive Care,<br/>Closer to You
+            </h1>
+            
+            <p style={{ fontSize: '1.05rem', color: 'var(--body)', marginBottom: '3rem', lineHeight: 1.6 }}>
+              At Apollo Clinic, we bring together experienced doctors, advanced technology, and compassionate care to provide complete healthcare solutions under one roof.
             </p>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Stethoscope size={20} />
+                </div>
+                <span style={{ fontSize: '0.95rem', color: 'var(--body)', fontWeight: 500 }}>Multi-specialty care for all age groups</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <FlaskConical size={20} />
+                </div>
+                <span style={{ fontSize: '0.95rem', color: 'var(--body)', fontWeight: 500 }}>Advanced diagnostics and in-house lab</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <ShieldCheck size={20} />
+                </div>
+                <span style={{ fontSize: '0.95rem', color: 'var(--body)', fontWeight: 500 }}>Patient-first approach with 24/7 support</span>
+              </div>
+            </div>
           </div>
 
-          <div ref={ref} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 280px), 1fr))', gap: '1rem' }}>
-            {SPECIALTIES.map((svc, i) => (
-              <ServiceCard key={svc.id} svc={svc} vis={vis} delay={i * 0.04} onBook={goBook} onDoctor={() => goDoctor(svc.doctorId)} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── Info strip ── */}
-      <section style={{ background: '#fff', borderTop: '1px solid var(--border)', padding: '3rem 0' }}>
-        <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem' }}>
-            {[
-              { icon: <Clock size={18} />, label: 'Consultation Hours', lines: ['Mon – Sat: 12:00 PM – 7:00 PM', 'Sunday: 10:00 AM – 1:30 PM'] },
-              { icon: <MapPin size={18} />, label: 'Our Location', lines: ['Near National School, Arham Towers', 'Karan Nagar, Srinagar, J&K'] },
-              { icon: <Phone size={18} />, label: 'Appointments', lines: [PHONE, 'Call or WhatsApp to book'] },
-            ].map((item, i) => (
-              <div key={i} className="info-card">
-                <div className="info-card-icon">{item.icon}</div>
+          <div style={{ position: 'relative' }}>
+            <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
+              {/* Replace with actual image later */}
+              <img src="/services-collage.jpg" alt="Apollo Clinic Services" style={{ width: '100%', height: 'auto', display: 'block', backgroundColor: '#e2e8f0', minHeight: '400px' }} />
+            </div>
+            
+            {/* Stats Card */}
+            <div style={{ 
+              position: 'absolute', bottom: '-2rem', left: '-2rem', 
+              background: '#fff', padding: '2rem', borderRadius: '20px', 
+              boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+              display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <Stethoscope size={32} className="text-blue" />
                 <div>
-                  <div style={{ fontWeight: 700, fontSize: '0.88rem', color: 'var(--heading)', marginBottom: '0.35rem' }}>{item.label}</div>
-                  {item.lines.map((l, li) => <div key={li} style={{ fontSize: '0.82rem', color: 'var(--body)' }}>{l}</div>)}
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy)' }}>10+</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 600 }}>Specialties</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                <div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy)' }}>Expert</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 600 }}>Doctors</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <FileText size={32} className="text-blue" />
+                <div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy)' }}>24/7</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 600 }}>Reports Online</div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <FlaskConical size={32} className="text-blue" />
+                <div>
+                  <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--navy)' }}>In-House</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--muted)', fontWeight: 600 }}>Lab</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Specialties Section ── */}
+      <section style={{ padding: '6rem 0' }}>
+        <div className="container" style={{ maxWidth: '1400px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ height: '2px', width: '20px', background: 'var(--orange)' }}></div>
+              <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                OUR SPECIALTIES
+              </span>
+            </div>
+          </div>
+          
+          <h2 style={{ fontSize: '2.5rem', color: 'var(--navy)', marginBottom: '1rem' }}>
+            Care Across Every Specialty
+          </h2>
+          <p style={{ fontSize: '1.05rem', color: 'var(--body)', marginBottom: '4rem', maxWidth: '600px', margin: '0 auto 4rem' }}>
+            We offer a wide range of medical services to address all your healthcare needs.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
+            {SPECIALTIES.map((svc, i) => (
+              <div key={i} style={{ 
+                background: '#fff', borderRadius: '16px', padding: '2rem 1.5rem', 
+                border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center'
+              }}>
+                <div style={{ 
+                  width: '64px', height: '64px', borderRadius: '50%', 
+                  background: 'var(--blue-light)', color: 'var(--blue)', 
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: '1.25rem'
+                }}>
+                  {svc.icon}
+                </div>
+                <h3 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.5rem' }}>
+                  {svc.name}
+                </h3>
+                <p style={{ fontSize: '0.8rem', color: 'var(--body)', lineHeight: 1.5 }}>
+                  {svc.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Choose Us ── */}
+      <section style={{ padding: '4rem 0' }}>
+        <div className="container" style={{ maxWidth: '1400px', textAlign: 'center' }}>
+          <div style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', marginBottom: '1rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <div style={{ height: '2px', width: '20px', background: 'var(--orange)' }}></div>
+              <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                WHY CHOOSE OUR SERVICES
+              </span>
+            </div>
+          </div>
+          
+          <h2 style={{ fontSize: '2.5rem', color: 'var(--navy)', marginBottom: '4rem' }}>
+            Your Health, Our Priority
+          </h2>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            {[
+              { title: 'Experienced Doctors', desc: 'Qualified specialists with years of expertise and a patient-first mindset.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
+              { title: 'Modern Diagnostics', desc: 'Advanced technology and in-house lab for accurate results.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg> },
+              { title: 'Personalized Care', desc: 'Tailored treatment plans focused on your unique health needs.', icon: <ShieldCheck size={32} /> },
+              { title: 'Coordinated Treatment', desc: 'Seamless care across specialties for better health outcomes.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> },
+            ].map((f, i) => (
+              <div key={i} style={{ 
+                background: '#fff', borderRadius: '16px', padding: '2rem 1.5rem', 
+                border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 4px 20px rgba(0,0,0,0.02)',
+                display: 'flex', alignItems: 'center', gap: '1rem', textAlign: 'left'
+              }}>
+                <div style={{ color: 'var(--blue)', flexShrink: 0 }}>
+                  {f.icon}
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>{f.title}</h4>
+                  <p style={{ fontSize: '0.8rem', color: 'var(--body)', margin: 0, lineHeight: 1.4 }}>{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -354,25 +283,34 @@ const Services = () => {
         </div>
       </section>
 
-      {/* ── CTA ── */}
-      <section style={{ padding: '3.5rem 0' }}>
-        <div className="container">
-          <div className="cta-banner">
-            <div style={{ fontSize: '0.72rem', fontWeight: 700, color: 'rgba(255,255,255,0.65)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.4rem' }}>
-              Apollo Clinic Srinagar
+      {/* ── CTA Strip ── */}
+      <section style={{ padding: '2rem 0' }}>
+        <div className="container" style={{ maxWidth: '1400px' }}>
+          <div style={{ 
+            background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',
+            border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.04)',
+            display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+              <div style={{ width: '64px', height: '64px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Calendar size={28} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--navy)', margin: 0, marginBottom: '0.25rem' }}>
+                  Take the first step towards better health.
+                </h3>
+                <p style={{ fontSize: '0.95rem', color: 'var(--body)', margin: 0 }}>
+                  Book an appointment or talk to our care team today.
+                </p>
+              </div>
             </div>
-            <h2 style={{ color: '#fff', marginBottom: '0.5rem', fontSize: 'clamp(1.1rem,3vw,1.6rem)' }}>
-              Need help choosing the right specialty?
-            </h2>
-            <p style={{ color: 'rgba(255,255,255,0.65)', marginBottom: '1.75rem', fontSize: '0.92rem' }}>
-              Our front desk will connect you with the right specialist. Call us or book online.
-            </p>
-            <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button onClick={goBook} className="btn btn-lg" style={{ background: '#fff', color: 'var(--navy)', border: 'none', borderRadius: 'var(--r-full)' }}>
-                <Calendar size={16} /> Book Appointment
+            
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button className="btn btn-orange btn-lg" onClick={() => navigate('/book')} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
+                <Calendar size={18} /> Book Appointment
               </button>
-              <a href={PHONE_HREF} className="btn btn-lg" style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: 'var(--r-full)' }}>
-                <Phone size={15} /> {PHONE}
+              <a href={PHONE_HREF} className="btn btn-outline-blue btn-lg" style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', textDecoration: 'none' }}>
+                <Phone size={18} /> Talk to Clinic
               </a>
             </div>
           </div>
