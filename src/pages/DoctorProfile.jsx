@@ -186,7 +186,20 @@ const DoctorProfile = () => {
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
                 {doc.specializedCare.map((care, i) => (
-                  <div key={i} style={{ border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1.5rem 1rem', textAlign: 'center' }}>
+                  <div key={i} style={{ 
+                    border: '1px solid rgba(0,0,0,0.05)', borderRadius: '12px', padding: '1.5rem 1rem', textAlign: 'center',
+                    transition: 'all 0.3s ease', cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(13,82,192,0.1)';
+                    e.currentTarget.style.borderColor = 'rgba(13,82,192,0.15)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.borderColor = 'rgba(0,0,0,0.05)';
+                  }}>
                     <div style={{ color: 'var(--blue)', marginBottom: '1rem', display: 'flex', justifyContent: 'center' }}>
                       {getIcon(care.icon)}
                     </div>
