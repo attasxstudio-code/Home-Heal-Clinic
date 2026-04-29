@@ -1,156 +1,182 @@
 import React from 'react';
-import { Phone, MapPin, CheckCircle } from 'lucide-react';
+import { Phone, Clock, MapPin, CheckCircle, MessageCircle, Shield, Users, Lock, ChevronLeft, ShieldCheck, HeartPulse, FileText, Calendar } from 'lucide-react';
 import CheckupBookingForm from '../components/CheckupBookingForm';
 
-const PHONE_HREF = 'tel:+919000000000';
-const MAPS_LINK  = 'https://maps.google.com/?q=34.0806043,74.7988594';
-
-const WHY_ITEMS = [
-  { icon: '⚡', title: 'Same-Day Results',   desc: 'Most routine tests reported the same day.' },
-  { icon: '🏥', title: 'In-House Lab',       desc: 'No separate lab visit. Tests done right here.' },
-  { icon: '👨‍⚕️', title: 'Doctor Consultation', desc: 'Physician explains your report with you.' },
-  { icon: '🔒', title: 'Fully Confidential', desc: 'Results are private and only shared with you.' },
-];
-
 const BookCheckup = () => (
-  <div style={{ background: '#fff' }}>
+  <div style={{ background: '#f8fafc', minHeight: '100vh' }}>
+    
+    {/* ── Main Section ── */}
+    <section style={{ padding: '4rem 0 0rem', position: 'relative' }}>
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '70%', background: '#fff', zIndex: 0 }}></div>
+      
+      <div className="container" style={{ maxWidth: '1400px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: '5rem', alignItems: 'flex-start' }}>
 
-    {/* Hero */}
-    <section style={{
-      background: 'linear-gradient(135deg,#065f46 0%,#059669 50%,#0ea5e9 100%)',
-      padding: '4rem 0',
-    }}>
-      <div className="container" style={{ textAlign: 'center' }}>
-        <span style={{
-          display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-          background: 'rgba(255,255,255,0.15)', color: '#fff',
-          border: '1px solid rgba(255,255,255,0.3)',
-          fontWeight: 700, fontSize: '0.78rem',
-          padding: '0.3rem 0.9rem', borderRadius: '9999px',
-          marginBottom: '1rem',
-        }}>🔬 Diagnostics & Health Checkups</span>
+          {/* Left Column */}
+          <div style={{ paddingTop: '2rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
+              <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+                HEALTH CHECKUPS
+              </span>
+            </div>
+            
+            <h1 style={{ fontSize: '3.5rem', lineHeight: 1.1, color: 'var(--navy)', marginBottom: '1rem' }}>
+              Book Your<br/>Checkup
+            </h1>
+            
+            <div style={{ height: '3px', width: '40px', background: 'var(--orange)', marginBottom: '1.5rem' }}></div>
+            
+            <p style={{ fontSize: '1.2rem', color: 'var(--body)', marginBottom: '3rem', lineHeight: 1.6, maxWidth: '420px' }}>
+              Preventive care today leads to a healthier tomorrow. Schedule your checkup at a time that's convenient for you.
+            </p>
 
-        <h1 style={{
-          color: '#fff', fontWeight: 900,
-          fontSize: 'clamp(1.8rem,5vw,3rem)',
-          letterSpacing: '-0.03em', marginBottom: '1rem',
-        }}>Book a Health Checkup</h1>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', marginBottom: '4rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <MessageCircle size={24} />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>Instant WhatsApp confirmation</h4>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--body)', margin: 0, lineHeight: 1.5 }}>We'll confirm your appointment<br/>via WhatsApp.</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Shield size={24} />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>Secure & Confidential</h4>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--body)', margin: 0, lineHeight: 1.5 }}>Your information is protected<br/>with the highest standards.</p>
+                </div>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
+                <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <Users size={24} />
+                </div>
+                <div>
+                  <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>Expert Diagnostic Support</h4>
+                  <p style={{ fontSize: '0.95rem', color: 'var(--body)', margin: 0, lineHeight: 1.5 }}>Backed by Apollo's trusted<br/>network of specialists.</p>
+                </div>
+              </div>
+            </div>
 
-        <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: '1.05rem', lineHeight: 1.7, maxWidth: '540px', margin: '0 auto 1.5rem' }}>
-          Choose from ECG, ECHO, blood tests, diabetes screening, comprehensive packages and more — all in-house at Apollo Clinic Srinagar.
-        </p>
+            <div style={{ height: '320px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)', marginLeft: '-2rem' }}>
+              <img src="/clinic-reception.png" alt="Apollo Clinic Reception" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            </div>
+          </div>
 
-        <div style={{ display: 'flex', gap: '0.85rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a href={PHONE_HREF} style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-            background: 'rgba(255,255,255,0.15)', color: '#fff',
-            border: '1.5px solid rgba(255,255,255,0.35)',
-            padding: '0.7rem 1.3rem', borderRadius: '9999px',
-            fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
-          }}><Phone size={15} /> +91 9000000000</a>
-          <a href={MAPS_LINK} target="_blank" rel="noreferrer" style={{
-            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-            background: 'rgba(255,255,255,0.12)', color: '#fff',
-            border: '1.5px solid rgba(255,255,255,0.25)',
-            padding: '0.7rem 1.3rem', borderRadius: '9999px',
-            fontWeight: 700, fontSize: '0.9rem', textDecoration: 'none',
-          }}><MapPin size={15} /> Karan Nagar, Srinagar</a>
+          {/* Right Column: Form */}
+          <div style={{ paddingTop: '1rem' }}>
+            <div style={{ 
+              background: '#fff', borderRadius: '24px', padding: '3rem 4rem', 
+              boxShadow: '0 20px 60px rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.05)',
+              maxWidth: '600px', margin: '0 auto'
+            }}>
+              <CheckupBookingForm />
+            </div>
+          </div>
+          
         </div>
       </div>
     </section>
 
-    {/* Why choose */}
-    <div style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-      <div className="container" style={{ padding: '2rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: '1rem' }}>
-          {WHY_ITEMS.map((w, i) => (
-            <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', padding: '0.85rem' }}>
-              <div style={{ width: 38, height: 38, borderRadius: '10px', background: '#ecfdf5', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem', flexShrink: 0 }}>{w.icon}</div>
-              <div>
-                <div style={{ fontWeight: 800, fontSize: '0.85rem', color: '#065f46', marginBottom: '0.15rem' }}>{w.title}</div>
-                <div style={{ fontSize: '0.78rem', color: '#64748b', lineHeight: 1.5 }}>{w.desc}</div>
-              </div>
+    {/* ── Bottom Strip ── */}
+    <section style={{ padding: '6rem 0 3rem' }}>
+      <div className="container" style={{ maxWidth: '1400px' }}>
+        <div style={{ 
+          background: '#fff', borderRadius: '16px', padding: '2rem 3rem',
+          border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 40px rgba(0,0,0,0.03)',
+          display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', borderRight: '1px solid rgba(0,0,0,0.05)' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: '#ecfdf5', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <MessageCircle size={24} />
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    {/* Main: form + info */}
-    <section style={{ padding: '5rem 0', background: '#fff' }}>
-      <div className="container">
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: '4rem', alignItems: 'start' }}>
-
-          {/* Left */}
-          <div>
-            <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#059669', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>Health Checkup</div>
-            <h2 style={{ color: '#065f46', marginBottom: '0.85rem', fontSize: 'clamp(1.6rem,4vw,2.2rem)' }}>
-              How It Works
-            </h2>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '2rem' }}>
-              {[
-                { step: '1', title: 'Fill the form', desc: 'Select your checkup type, preferred date, and contact details.' },
-                { step: '2', title: 'Send via WhatsApp', desc: 'The form opens WhatsApp with a pre-filled message to our team.' },
-                { step: '3', title: 'Get confirmed', desc: 'We respond on WhatsApp to confirm your slot within a few hours.' },
-                { step: '4', title: 'Walk in & get tested', desc: 'Visit Apollo Clinic Srinagar, Karan Nagar on your confirmed date.' },
-              ].map((s, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
-                  <div style={{
-                    width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
-                    background: '#059669', color: '#fff',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontWeight: 900, fontSize: '0.82rem',
-                  }}>{s.step}</div>
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: '#065f46', marginBottom: '0.15rem' }}>{s.title}</div>
-                    <div style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.55 }}>{s.desc}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Available tests */}
-            <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: '14px', padding: '1.35rem' }}>
-              <h4 style={{ color: '#065f46', fontWeight: 800, margin: '0 0 1rem', fontSize: '0.9rem' }}>Available Tests & Packages</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                {[
-                  'ECG (12-Lead)', 'ECHO (Echocardiogram)', 'Pulmonary Function Test (PFT)',
-                  'Blood Tests (CBC, LFT, KFT)', 'Thyroid Profile (TSH, T3, T4)',
-                  'Diabetes Screening (HbA1c, Fasting Sugar)',
-                  'Basic Health Screen Package', 'Comprehensive Health Package',
-                  'Cardiac Risk Assessment Package',
-                ].map((t, i) => (
-                  <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.83rem', color: '#374151' }}>
-                    <CheckCircle size={13} color="#059669" style={{ flexShrink: 0 }} />
-                    {t}
-                  </div>
-                ))}
-              </div>
+            <div>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>WhatsApp Assistance</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--body)', margin: 0 }}>Get instant confirmation<br/>on WhatsApp.</p>
             </div>
           </div>
-
-          {/* Right: form */}
-          <div>
-            <CheckupBookingForm />
-            <div style={{ marginTop: '1.25rem', background: '#f8fafc', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '1.1rem 1.25rem' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.83rem', color: '#334155' }}>
-                  <MapPin size={13} color="#059669" />
-                  Near National School, Arham Towers, Karan Nagar, Srinagar
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.83rem', color: '#334155' }}>
-                  <span style={{ fontSize: '0.85rem' }}>🕐</span>
-                  Mon–Sat: 12 PM – 7 PM · Sunday: 10 AM – 1:30 PM
-                </div>
-                <a href={PHONE_HREF} style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', fontSize: '0.83rem', color: '#059669', fontWeight: 700, textDecoration: 'none' }}>
-                  <Phone size={13} /> +91 9000000000
-                </a>
-              </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', borderRight: '1px solid rgba(0,0,0,0.05)' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Clock size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>Clinic Hours</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--body)', margin: 0 }}>Mon – Sun<br/>7:00 AM – 9:00 PM</p>
+            </div>
+          </div>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+            <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Phone size={24} />
+            </div>
+            <div>
+              <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.25rem' }}>Need Help?</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--body)', margin: 0 }}>Call us at +91 0123 456 7878<br/>or email care@apolloclinic.com</p>
             </div>
           </div>
         </div>
       </div>
     </section>
+
+    {/* ── How It Works ── */}
+    <section style={{ padding: '3rem 0 6rem' }}>
+      <div className="container" style={{ maxWidth: '1400px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-block', marginBottom: '1rem' }}>
+          <span style={{ color: 'var(--blue)', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '1px', textTransform: 'uppercase' }}>
+            HOW IT WORKS
+          </span>
+          <div style={{ height: '3px', width: '30px', background: 'var(--orange)', margin: '4px auto 0' }}></div>
+        </div>
+        <h2 style={{ fontSize: '2.2rem', color: 'var(--navy)', marginBottom: '4rem' }}>
+          Simple steps to better health
+        </h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', position: 'relative' }}>
+          {/* Connecting line */}
+          <div style={{ position: 'absolute', top: '40px', left: '12%', right: '12%', height: '2px', background: 'rgba(0,0,0,0.05)', zIndex: 0 }}></div>
+          
+          <div style={{ position: 'relative', zIndex: 1, background: '#f8fafc', padding: '0 1rem' }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#fff', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', position: 'relative' }}>
+              <Calendar size={32} color="var(--blue)" />
+              <div style={{ position: 'absolute', bottom: '-10px', width: '24px', height: '24px', borderRadius: '50%', background: 'var(--navy)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 800, border: '2px solid #fff' }}>1</div>
+            </div>
+            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.5rem' }}>Book Your Checkup</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--body)' }}>Fill in the form with your details and preferred date.</p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, background: '#f8fafc', padding: '0 1rem' }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#fff', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', position: 'relative' }}>
+              <MessageCircle size={32} color="#10b981" />
+              <div style={{ position: 'absolute', bottom: '-10px', width: '24px', height: '24px', borderRadius: '50%', background: 'var(--navy)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 800, border: '2px solid #fff' }}>2</div>
+            </div>
+            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.5rem' }}>Get WhatsApp Confirmation</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--body)' }}>We'll confirm your appointment instantly on WhatsApp.</p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, background: '#f8fafc', padding: '0 1rem' }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#fff', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', position: 'relative' }}>
+              <HeartPulse size={32} color="var(--blue)" />
+              <div style={{ position: 'absolute', bottom: '-10px', width: '24px', height: '24px', borderRadius: '50%', background: 'var(--navy)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 800, border: '2px solid #fff' }}>3</div>
+            </div>
+            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.5rem' }}>Visit & Get Checked</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--body)' }}>Our experts will take care of your health.</p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, background: '#f8fafc', padding: '0 1rem' }}>
+            <div style={{ width: '80px', height: '80px', borderRadius: '50%', background: '#fff', border: '1px solid rgba(0,0,0,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', position: 'relative' }}>
+              <FileText size={32} color="var(--blue)" />
+              <div style={{ position: 'absolute', bottom: '-10px', width: '24px', height: '24px', borderRadius: '50%', background: 'var(--navy)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 800, border: '2px solid #fff' }}>4</div>
+            </div>
+            <h4 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--navy)', marginBottom: '0.5rem' }}>Receive Reports</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--body)' }}>Get your reports and expert advice with next steps.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </div>
 );
 
