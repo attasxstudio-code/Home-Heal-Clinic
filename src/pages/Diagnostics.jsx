@@ -254,7 +254,7 @@ const Diagnostics = () => {
                   ))}
                 </div>
 
-                <button onClick={() => navigate('/book')} style={{ 
+                <button onClick={() => navigate('/book-checkup')} style={{ 
                   width: '100%', padding: '0.75rem', background: 'var(--navy)', color: '#fff', 
                   border: 'none', borderRadius: '8px', fontWeight: 600, fontSize: '0.85rem', 
                   display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', cursor: 'pointer'
@@ -334,7 +334,7 @@ const Diagnostics = () => {
                   </ul>
                 </div>
 
-                <button onClick={() => navigate('/book')} style={{ 
+                <button onClick={() => navigate('/book-checkup')} style={{ 
                   width: '100%', padding: '0.75rem', 
                   background: pkg.featured ? '#3b82f6' : 'transparent', 
                   color: pkg.featured ? '#fff' : 'var(--navy)', 
@@ -417,8 +417,8 @@ const Diagnostics = () => {
             </div>
             
             <div style={{ display: 'flex', gap: '1rem' }}>
-              <button className="btn btn-orange btn-lg" onClick={() => navigate('/book')} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
-                <Calendar size={18} /> Book Appointment
+              <button className="btn btn-orange btn-lg" onClick={() => navigate('/book-checkup')} style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem' }}>
+                <Calendar size={18} /> Book Checkup
               </button>
               <a href={PHONE_HREF} className="btn btn-outline-blue btn-lg" style={{ padding: '0.75rem 1.5rem', fontSize: '0.95rem', textDecoration: 'none' }}>
                 <Phone size={18} /> Talk to Clinic
