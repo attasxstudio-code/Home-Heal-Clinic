@@ -53,8 +53,7 @@ const About = () => {
 
             {/* Right Image */}
             <div style={{ position: 'relative', height: '500px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-               {/* using clinic-interior as placeholder for building */}
-              <img src="/clinic-interior.jpg" alt="Apollo Clinic Building" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/clinic-exterior.png" alt="Apollo Clinic Building" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
 
@@ -136,7 +135,7 @@ const About = () => {
             </div>
             
             <div style={{ height: '400px', borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.1)' }}>
-              <img src="/clinic-interior.jpg" alt="Clinic Interior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src="/clinic-reception.png" alt="Clinic Interior" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
           </div>
         </div>
@@ -306,10 +305,10 @@ const About = () => {
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
-              { img: '/clinic-interior.jpg', title: 'Welcoming Reception', desc: 'Designed for comfort, convenience, and a smooth experience.' },
-              { img: '/clinic-interior.jpg', title: 'Modern Consultation Rooms', desc: 'Well-equipped rooms for private and comfortable consultations.' },
+              { img: '/clinic-reception.png', title: 'Welcoming Reception', desc: 'Designed for comfort, convenience, and a smooth experience.' },
+              { img: '/consultation-room.png', title: 'Modern Consultation Rooms', desc: 'Well-equipped rooms for private and comfortable consultations.' },
               { img: '/lab-technician.jpg', title: 'Advanced Diagnostics Lab', desc: 'State-of-the-art technology for accurate and reliable results.' },
-              { img: '/clinic-interior.jpg', title: 'Patient Comfort Areas', desc: 'Spacious waiting areas designed for relaxation and ease.' }
+              { img: '/patient-waiting.png', title: 'Patient Comfort Areas', desc: 'Spacious waiting areas designed for relaxation and ease.' }
             ].map((fac, i) => (
               <div key={i} style={{ 
                 borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(0,0,0,0.05)',
