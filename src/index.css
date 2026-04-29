@@ -1060,195 +1060,287 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MOBILE RESPONSIVE — Full site optimisation
+   MOBILE RESPONSIVE — Homepage-first premium mobile UI
 ═══════════════════════════════════════════════════════════════ */
 
-/* ── Tablet breakpoint (≤900px) ── */
+/* ── NAVBAR — compact premium mobile ── */
 @media (max-width: 900px) {
-  /* Grid collapses */
-  .m-grid-1 { grid-template-columns: 1fr !important; }
-  .m-grid-2 { grid-template-columns: repeat(2, 1fr) !important; }
-
-  /* Visibility */
-  .m-hide    { display: none !important; }
-
-  /* Flex stacking */
-  .m-stack   { flex-direction: column !important; align-items: stretch !important; }
-  .m-center  { text-align: center !important; justify-content: center !important; align-items: center !important; }
-  .m-wrap    { flex-wrap: wrap !important; justify-content: center !important; }
-
-  /* Position resets */
-  .m-static  { position: static !important; transform: none !important; width: 100% !important; left: auto !important; right: auto !important; bottom: auto !important; }
-  .m-full    { width: 100% !important; }
-
-  /* Spacing */
-  .m-gap-1   { gap: 1rem !important; }
-  .m-p-sm    { padding: 1.5rem 1rem !important; }
-  .m-ml-0    { margin-left: 0 !important; }
-  .m-mt-1    { margin-top: 1rem !important; }
-  .m-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
-
-  /* Heights auto */
-  .m-h-auto  { height: auto !important; max-height: none !important; }
+  .navbar-inner { height: 56px; }
+  .navbar-actions { display: none !important; }
+  .navbar-links { display: none !important; }
+  .navbar-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--navy);
+    padding: 0;
+    transition: var(--ease);
+  }
+  .navbar-toggle:hover {
+    border-color: var(--blue);
+    color: var(--blue);
+    background: var(--blue-light);
+  }
+  .navbar-logo img {
+    height: 36px !important;
+  }
+  /* Remove the pale gradient box behind logo on mobile */
+  .navbar-logo > div:first-child {
+    display: none !important;
+  }
+  .navbar-logo {
+    padding: 0;
+  }
+  .navbar {
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+    box-shadow: 0 1px 8px rgba(0,0,0,0.04);
+  }
 }
 
-/* ── Mobile breakpoint (≤768px) ── */
+/* ── GLOBAL MOBILE GRID UTILITIES ── */
 @media (max-width: 768px) {
 
-  /* ── Prevent horizontal overflow globally ── */
-  html, body { overflow-x: hidden !important; }
-  section { overflow-x: hidden !important; }
+  /* Prevent horizontal overflow */
+  html, body { overflow-x: hidden; }
 
-  /* ── Typography ── */
-  h1 { font-size: clamp(1.6rem, 7vw, 2.2rem) !important; line-height: 1.2 !important; }
-  h2 { font-size: clamp(1.3rem, 5.5vw, 1.75rem) !important; }
+  /* Typography */
+  h1 { font-size: clamp(1.7rem, 7vw, 2.2rem) !important; line-height: 1.15 !important; }
+  h2 { font-size: clamp(1.35rem, 5.5vw, 1.75rem) !important; line-height: 1.2 !important; }
 
-  /* ── Container ── */
-  .container { padding: 0 1.25rem !important; max-width: 100% !important; overflow: hidden; }
+  /* Container */
+  .container { padding: 0 20px !important; max-width: 100% !important; }
 
-  /* ── Section spacing ── */
-  section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  /* Sections: consistent 56px vertical padding */
+  section { padding-top: 3.5rem !important; padding-bottom: 3.5rem !important; }
 
-  /* ── ALL grids → single column on mobile ── */
-  .m-grid-1 { grid-template-columns: 1fr !important; gap: 2rem !important; }
-  .m-grid-2 { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  /* Grid collapses */
+  .m-grid-1 { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+  .m-grid-2 { grid-template-columns: 1fr !important; gap: 1.25rem !important; }
 
-  /* ── Center all text on mobile ── */
-  .m-grid-1 > div,
-  .m-stack > div { text-align: center; }
-
-  /* ── Center headings globally on mobile ── */
-  .m-grid-1 h1, .m-grid-1 h2, .m-grid-1 h3,
-  .m-stack h1, .m-stack h2, .m-stack h3 {
+  /* Stack + center */
+  .m-stack {
+    flex-direction: column !important;
+    align-items: center !important;
     text-align: center !important;
   }
-  .m-grid-1 p, .m-stack p {
+  .m-center {
     text-align: center !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
   }
-
-  /* ── Center section labels on mobile ── */
-  .m-grid-1 div[style*="textTransform"],
-  .m-grid-1 span[style*="textTransform"] {
-    text-align: center !important;
-    display: block !important;
-  }
-
-  /* ── Buttons: center and wrap on mobile ── */
-  .m-wrap {
-    flex-wrap: wrap !important;
-    justify-content: center !important;
-    width: 100% !important;
-  }
-  .m-wrap .btn {
-    flex: 1 1 100% !important;
-    max-width: 300px !important;
-    justify-content: center !important;
-  }
-
-  /* ── Flex lists (features, contact info): center ── */
-  .m-grid-1 ul, .m-grid-1 ol { padding: 0 !important; }
-  .m-grid-1 li { justify-content: center !important; }
-
-  /* ── Carousel: swipeable single-card view ── */
-  .no-scrollbar > .card {
-    flex: 0 0 80% !important;
-    min-width: 0 !important;
-    scroll-snap-align: center !important;
-  }
-
-  /* ── Scroll arrows: hide on touch devices ── */
-  .scroll-arrow { display: none !important; }
-
-  /* ── Floating stat cards: make static ── */
+  .m-hide { display: none !important; }
   .m-static {
     position: static !important;
     transform: none !important;
     width: 100% !important;
-    left: auto !important;
-    right: auto !important;
-    bottom: auto !important;
-    margin-top: 1.5rem !important;
+    left: auto !important; right: auto !important; bottom: auto !important;
+    margin-top: 1rem !important;
   }
 
-  /* ── Image containers: don't clip, auto height ── */
+  /* Buttons: full-width pill on mobile */
+  .m-wrap {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.75rem !important;
+    width: 100% !important;
+  }
+  .m-wrap > .btn,
+  .m-wrap > button,
+  .m-wrap > a {
+    width: 100% !important;
+    max-width: 340px !important;
+    justify-content: center !important;
+    padding: 0.9rem 1.5rem !important;
+    font-size: 0.95rem !important;
+    border-radius: var(--r-full) !important;
+  }
+
+  /* Image containers */
   .m-h-auto {
     height: auto !important;
     max-height: none !important;
   }
   .m-h-auto img {
     height: auto !important;
-    max-height: 300px !important;
     width: 100% !important;
-    object-fit: cover !important;
     border-radius: 16px !important;
   }
-
-  /* ── Negative margins: remove ── */
   .m-ml-0 { margin-left: 0 !important; margin-right: 0 !important; }
+  .m-mt-1 { margin-top: 1rem !important; }
+  .m-gap-1 { gap: 1rem !important; }
+  .m-p-sm { padding: 1.25rem !important; }
 
-  /* ── CTA banners: stack and center ── */
-  .m-stack.m-p-sm.m-center {
-    flex-direction: column !important;
-    align-items: center !important;
-    text-align: center !important;
-    padding: 1.5rem 1rem !important;
-    gap: 1.5rem !important;
+  /* ── HERO SECTION ── */
+  .hero-section { padding: 2.5rem 0 2rem !important; }
+  .hero-section .container { gap: 2rem !important; }
+  .hero-section h1 {
+    font-size: clamp(1.8rem, 8vw, 2.4rem) !important;
+    margin-bottom: 0.75rem !important;
   }
-  .m-stack.m-p-sm.m-center > div {
-    text-align: center !important;
+  .hero-section p { margin-bottom: 1.5rem !important; font-size: 1rem !important; }
+  .hero-section .m-wrap { margin-bottom: 2rem !important; }
+
+  /* Trust indicators as compact chips */
+  .trust-indicators {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 0.5rem !important;
     justify-content: center !important;
-    flex-direction: column !important;
+  }
+  .trust-chip {
+    display: flex !important;
     align-items: center !important;
+    gap: 0.5rem !important;
+    background: var(--blue-light) !important;
+    border: 1px solid var(--blue-border) !important;
+    border-radius: var(--r-full) !important;
+    padding: 0.4rem 0.85rem !important;
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    color: var(--navy) !important;
+    white-space: nowrap !important;
+  }
+  .trust-chip svg { flex-shrink: 0; }
+
+  /* Hero image */
+  .hero-image {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08) !important;
+  }
+  .hero-image img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* ── CAROUSEL SECTIONS (services, doctors, reviews) ── */
+  .carousel-container {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 0 !important;
+    gap: 12px !important;
+    margin: 0 -20px !important;
+    padding: 0 20px !important;
+  }
+  .carousel-container::-webkit-scrollbar { display: none; }
+  .carousel-container > .card {
+    flex: 0 0 calc(100vw - 56px) !important;
+    min-width: 0 !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* Hide scroll arrows on mobile */
+  .scroll-arrow { display: none !important; }
+
+  /* ── SERVICE CARDS ── */
+  .service-card {
+    padding: 1.25rem !important;
+    text-align: center !important;
+  }
+  .service-card h3 { font-size: 1rem !important; margin-bottom: 0.5rem !important; }
+  .service-card p { font-size: 0.85rem !important; margin-bottom: 1rem !important; }
+
+  /* ── DOCTOR CARDS ── */
+  .doctor-card { padding: 0 !important; }
+  .doctor-card img { height: 200px !important; }
+  .doctor-card .card-body { padding: 1rem 1.25rem 1.25rem !important; }
+
+  /* ── REVIEW CARDS ── */
+  .review-card {
+    padding: 1.5rem !important;
+  }
+  .review-card p { font-size: 0.95rem !important; margin-bottom: 1.25rem !important; }
+
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    text-align: center !important;
+    margin-bottom: 1.5rem !important;
+  }
+  .section-header h2 { margin-bottom: 0.75rem !important; }
+  .section-header .view-all-link {
+    position: static !important;
+    margin-top: 0.5rem !important;
+    justify-content: center !important;
+  }
+
+  /* ── LAB & DIAGNOSTICS ── */
+  .lab-checklist {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+    margin-bottom: 1.5rem !important;
+    align-items: flex-start !important;
+  }
+  .lab-checklist > div {
+    text-align: left !important;
+  }
+
+  /* ── FIND US / CONTACT ── */
+  .contact-info {
+    gap: 1rem !important;
+  }
+  .contact-info > div {
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+  .map-container {
+    height: 280px !important;
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.06) !important;
   }
 
   /* ── FAQ ── */
-  .faq-item button { font-size: 0.9rem !important; padding: 1rem !important; }
+  .faq-item button {
+    font-size: 0.9rem !important;
+    padding: 1.1rem 1rem !important;
+  }
 
-  /* ── Footer ── */
+  /* ── FOOTER ── */
   .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
   .footer-bottom { flex-direction: column; text-align: center; }
 
-  /* ── Doctor profile ── */
+  /* Doctor profile page */
   .doctor-profile-layout { grid-template-columns: 1fr !important; }
   .doctor-profile-header { flex-direction: column !important; text-align: center; }
 
-  /* ── Trust strip ── */
+  /* Trust strip */
   .trust-strip { flex-direction: column; gap: 0.5rem; align-items: center; }
   .trust-item { border-right: none !important; padding: 0.25rem 0.5rem; }
 
-  /* ── Forms: tighter padding ── */
-  .m-p-sm { padding: 1.5rem 1rem !important; }
-
-  /* ── Section header rows: stack title + link vertically ── */
-  .m-stack.m-gap-1 {
+  /* CTA banners */
+  .cta-banner {
     flex-direction: column !important;
     align-items: center !important;
     text-align: center !important;
-    gap: 1rem !important;
+    padding: 1.5rem 1.25rem !important;
+    gap: 1.25rem !important;
   }
-  .m-stack.m-gap-1 button {
-    white-space: nowrap !important;
-  }
-
-  /* ── "View All" buttons: center on mobile ── */
-  .m-static.m-mt-1 {
-    position: static !important;
-    margin-top: 1rem !important;
-    display: flex !important;
-    justify-content: center !important;
-    width: 100% !important;
+  .cta-banner > div {
+    text-align: center !important;
+    align-items: center !important;
   }
 }
 
-/* ── Extra small (≤480px) ── */
-@media (max-width: 480px) {
-  h1 { font-size: clamp(1.4rem, 6vw, 1.8rem) !important; }
-  .btn-lg { font-size: 0.85rem !important; padding: 0.65rem 1.25rem !important; }
-
-  /* Carousel: near-full width */
-  .no-scrollbar > .card { flex: 0 0 88% !important; }
-
-  /* Stack trust badges */
-  .m-stack.m-gap-1 > div { flex-direction: row; }
+/* ── Extra small (≤420px) ── */
+@media (max-width: 420px) {
+  h1 { font-size: clamp(1.5rem, 7vw, 1.9rem) !important; }
+  .btn-lg { font-size: 0.9rem !important; padding: 0.7rem 1.25rem !important; }
+  .carousel-container > .card { flex: 0 0 calc(100vw - 48px) !important; }
+  .trust-chip { font-size: 0.75rem !important; padding: 0.35rem 0.7rem !important; }
 }
+
+
+
 
