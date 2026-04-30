@@ -109,7 +109,7 @@ const Services = () => {
     <div style={{ background: '#f8fafc', minHeight: '100vh', paddingBottom: '4rem' }}>
       
       {/* ── Hero Section ── */}
-      <section style={{ padding: '5rem 0' }}>
+      <section className="svc-hero" style={{ padding: '5rem 0' }}>
         <div className="container m-grid-1" style={{ maxWidth: '1400px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4rem', alignItems: 'center' }}>
           
           <div className="m-center" style={{ maxWidth: '600px' }}>
@@ -128,7 +128,7 @@ const Services = () => {
               At Apollo Clinic, we bring together experienced doctors, advanced technology, and compassionate care to provide complete healthcare solutions under one roof.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div className="svc-features" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Stethoscope size={20} />
@@ -151,13 +151,13 @@ const Services = () => {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <div style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
+            <div className="svc-hero-img" style={{ borderRadius: '24px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.08)' }}>
               {/* Replace with actual image later */}
               <img src="/services-collage.jpg" alt="Apollo Clinic Services" style={{ width: '100%', height: 'auto', display: 'block', backgroundColor: '#e2e8f0', minHeight: '400px' }} />
             </div>
             
             {/* Stats Card */}
-            <div className="m-static m-grid-2" style={{ 
+            <div className="m-static svc-stats" style={{ 
               position: 'absolute', bottom: '-2rem', left: '-2rem', 
               background: '#fff', padding: '2rem', borderRadius: '20px', 
               boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
@@ -215,7 +215,7 @@ const Services = () => {
             We offer a wide range of medical services to address all your healthcare needs.
           </p>
 
-          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
+          <div className="svc-specialty-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '1.5rem' }}>
             {SPECIALTIES.map((svc, i) => (
               <div key={i} style={{ 
                 background: '#fff', borderRadius: '16px', padding: '2rem 1.5rem', 
@@ -269,7 +269,7 @@ const Services = () => {
             Your Health, Our Priority
           </h2>
 
-          <div className="m-grid-2" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+          <div className="svc-why-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
             {[
               { title: 'Experienced Doctors', desc: 'Qualified specialists with years of expertise and a patient-first mindset.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> },
               { title: 'Modern Diagnostics', desc: 'Advanced technology and in-house lab for accurate results.', icon: <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg> },
@@ -306,7 +306,7 @@ const Services = () => {
       </section>
 
       {/* ── CTA Strip ── */}
-      <section style={{ padding: '2rem 0' }}>
+      <section className="svc-cta" style={{ padding: '2rem 0' }}>
         <div className="container" style={{ maxWidth: '1400px' }}>
           <div className="m-stack m-p-sm m-center" style={{ 
             background: '#fff', borderRadius: '16px', padding: '2.5rem 3rem',

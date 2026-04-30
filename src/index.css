@@ -1087,7 +1087,7 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
     background: var(--blue-light);
   }
   .navbar-logo img {
-    height: 36px !important;
+    height: 42px !important;
   }
   /* Remove the pale gradient box behind logo on mobile */
   .navbar-logo > div:first-child {
@@ -1310,6 +1310,12 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
   /* ── FOOTER ── */
   .footer-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
   .footer-bottom { flex-direction: column; text-align: center; }
+  /* Footer logo — prevent oversized/cropped logo on mobile */
+  .footer img[alt*="Logo"] {
+    max-width: 180px !important;
+    height: auto !important;
+    object-fit: contain !important;
+  }
 
   /* Doctor profile page */
   .doctor-profile-layout { grid-template-columns: 1fr !important; }
@@ -1363,24 +1369,157 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
     grid-template-columns: 1fr !important;
   }
 
-  /* ── SERVICES PAGE — specialty grid ── */
-  /* 5-column grid → 2 cols on mobile */
-  .m-grid-2[style*="repeat(5"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+  /* ── SERVICES PAGE ──────────────────────────────── */
+
+  /* Services hero — reduce excessive spacing */
+  .svc-hero {
+    padding-top: 2rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+  .svc-hero h1 {
+    font-size: clamp(1.6rem, 7vw, 2.1rem) !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .svc-hero p {
+    font-size: 0.95rem !important;
+    margin-bottom: 1.5rem !important;
+    line-height: 1.5 !important;
+  }
+  /* Hero feature rows — compact */
+  .svc-hero .svc-features {
     gap: 0.75rem !important;
   }
-  /* 4-column grid → 2 cols on mobile */
-  .m-grid-2[style*="repeat(4"] {
-    grid-template-columns: repeat(2, 1fr) !important;
+  .svc-hero .svc-features > div {
     gap: 0.75rem !important;
   }
-  /* Fallback: any m-grid-2 → 1fr or 2-col */
+  .svc-hero .svc-features span {
+    font-size: 0.88rem !important;
+  }
+  .svc-hero .svc-features div[style*="40px"] {
+    width: 36px !important;
+    height: 36px !important;
+    flex-shrink: 0 !important;
+  }
+  .svc-hero .svc-features div[style*="40px"] svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+
+  /* Services hero image — mobile crop */
+  .svc-hero-img {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+  }
+  .svc-hero-img img {
+    width: 100% !important;
+    height: 220px !important;
+    object-fit: cover !important;
+    object-position: center 30% !important;
+    display: block !important;
+    border-radius: 16px !important;
+  }
+
+  /* Services stats card — compact 2x2 */
+  .svc-stats {
+    padding: 1rem 1rem !important;
+    gap: 0.75rem !important;
+    border-radius: 14px !important;
+    margin-top: 0.75rem !important;
+  }
+  .svc-stats > div {
+    gap: 0.6rem !important;
+  }
+  .svc-stats > div svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .svc-stats > div > div > div:first-child {
+    font-size: 1rem !important;
+  }
+  .svc-stats > div > div > div:last-child {
+    font-size: 0.7rem !important;
+  }
+
+  /* Specialty grid → 1-column horizontal cards */
+  .svc-specialty-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.6rem !important;
+  }
+  .svc-specialty-grid > div {
+    flex-direction: row !important;
+    text-align: left !important;
+    padding: 1rem !important;
+    gap: 0.85rem !important;
+    align-items: center !important;
+  }
+  .svc-specialty-grid > div > div:first-child {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    margin-bottom: 0 !important;
+    flex-shrink: 0 !important;
+  }
+  .svc-specialty-grid > div > div:first-child svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+  .svc-specialty-grid > div h3 {
+    font-size: 0.92rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+  .svc-specialty-grid > div p {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+    margin: 0 !important;
+  }
+
+  /* Why Choose cards → 1-column horizontal cards */
+  .svc-why-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.6rem !important;
+  }
+  .svc-why-grid > div {
+    flex-direction: row !important;
+    text-align: left !important;
+    padding: 1rem !important;
+    gap: 0.85rem !important;
+    align-items: center !important;
+  }
+  .svc-why-grid > div > div:first-child {
+    flex-shrink: 0 !important;
+  }
+  .svc-why-grid > div > div:first-child svg {
+    width: 26px !important;
+    height: 26px !important;
+  }
+  .svc-why-grid h4 {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+  .svc-why-grid p {
+    font-size: 0.82rem !important;
+    line-height: 1.4 !important;
+  }
+
+  /* Services CTA — reduce excess gaps */
+  .svc-cta {
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+  }
+  .svc-cta h3 {
+    font-size: 1.1rem !important;
+  }
+  .svc-cta p {
+    font-size: 0.88rem !important;
+  }
+
+  /* ── GENERAL m-grid-2 fallback (other pages) ── */
   .m-grid-2 {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 0.75rem !important;
   }
 
-  /* Service/feature cards — compact padding on mobile */
+  /* General card padding — m-grid-2 children */
   .m-grid-2 > div[style*="borderRadius"] {
     padding: 1.25rem 1rem !important;
   }
@@ -1493,6 +1632,23 @@ p  { color: var(--body); font-size: 0.95rem; line-height: 1.72; margin-bottom: 0
   img {
     max-width: 100% !important;
     height: auto !important;
+  }
+
+  /* Exception: Services hero image — fixed crop via container */
+  .svc-hero-img {
+    height: 220px !important;
+    max-height: 220px !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+  }
+  section .svc-hero-img img,
+  .svc-hero-img img {
+    width: 100% !important;
+    height: 220px !important;
+    min-height: 0 !important;
+    max-height: 220px !important;
+    object-fit: cover !important;
+    object-position: center 30% !important;
   }
 
   /* Exception: doctor card images keep fixed height */
