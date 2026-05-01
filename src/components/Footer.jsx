@@ -103,7 +103,7 @@ const Footer = () => {
         <div className="footer-bottom">
           <span>© {new Date().getFullYear()} Apollo Clinic Srinagar. Clinical excellence in Karan Nagar.</span>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-            <button className="footer-link" onClick={() => goTo('/faq')} style={{ marginBottom: 0 }}>Privacy Policy</button>
+            <button className="footer-link" onClick={() => goTo('/privacy-policy')} style={{ marginBottom: 0 }}>Privacy Policy</button>
             <button className="footer-link" onClick={() => goTo('/contact')} style={{ marginBottom: 0 }}>Contact Us</button>
             <Link to="/admin/login" style={{
               display: 'flex', alignItems: 'center', gap: '0.35rem',

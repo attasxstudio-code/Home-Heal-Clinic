@@ -14,6 +14,7 @@ import Contact from './pages/Contact';
 import BookAppointment from './pages/BookAppointment';
 import BookCheckup from './pages/BookCheckup';
 import FAQ from './pages/FAQ';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 import Login from './pages/admin/Login';
 import Dashboard from './pages/admin/Dashboard';
 import ReportVerify from './pages/ReportVerify';
@@ -66,6 +67,7 @@ function App() {
                     <Route path="/book"          element={<BookAppointment />} />
                     <Route path="/book-checkup"   element={<BookCheckup />} />
                     <Route path="/faq"             element={<FAQ />} />
+                    <Route path="/privacy-policy"  element={<PrivacyPolicy />} />
                     <Route path="*"            element={<Home />} />
                   </Routes>
                 </main>
