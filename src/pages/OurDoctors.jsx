@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, Calendar, Phone, ArrowRight, UserCheck, ShieldCheck, HeartPulse, Clock } from 'lucide-react';
+import { Search, Calendar, Phone, ArrowRight, UserCheck, ShieldCheck, HeartPulse, Clock, Heart } from 'lucide-react';
 
 import { PRIMARY_PHONE_HREF } from '../config/contact';
 
@@ -197,6 +197,83 @@ export const ALL_DOCTORS = [
     consultation_days: 'Monday to Saturday: 10:30 AM to 2:00 PM\nSunday: 10:30 AM to 2:00 PM',
     trust_banner: 'Paediatric and child specialist consultation available at Appolo Clinic Srinagar.',
     clinic_location: 'Appolo Clinic, Karan Nagar Chowk\nNear Mughal Darbar\nOpposite Medicare Diagnostic Centre\nSrinagar, Jammu & Kashmir',
+    clinic_contact: '0194-2488069 / 0194-4068095',
+    clinic_email: 'cypherhealthservicespvtltd@gmail.com',
+  },
+  {
+    id: 'dr-roheenah-akhtar',
+    slug: 'dr-roheenah-akhtar',
+    type: 'doctor',
+    image: '/images/doctors/Doctor-Roheenah-Akhtar.webp',
+    imagePosition: 'center top',
+    name: 'Dr Roheenah Akhtar',
+    title: 'Obstetrician & Gynaecologist',
+    designation: 'Obstetrician & Gynaecologist',
+    specialty: 'Obstetrics & Gynaecology',
+    dept: 'Obstetrics & Gynaecology',
+    qual: 'MBBS, DGO, DNB',
+    qual_short: 'MBBS, DGO, DNB',
+    exp: '',
+    bio: `Dr Roheenah Akhtar is an Obstetrician & Gynaecologist consulting at Appolo Clinic Srinagar. She provides specialist consultation for antenatal care, high-risk pregnancy, gynaecological concerns, and women's health.\n\nShe holds MBBS, DGO, and DNB qualifications with extensive training and experience from GMC Srinagar, SKIMS Bemina, and GMC Anantnag. Patients can consult her at Appolo Clinic Srinagar from Monday to Saturday, 11:00 AM to 3:00 PM.`,
+    education: [
+      'MBBS',
+      'DGO (Diploma in Gynaecology & Obstetrics)',
+      'DNB (Diplomate of National Board) Obstetrics & Gynaecology'
+    ],
+    avail: 'MON - SAT, 11:00 AM - 3:00 PM',
+    availability: 'Monday - Saturday, 11:00 AM - 3:00 PM',
+    hours: [
+      { day: 'Mon - Sat', time: '11:00 AM - 3:00 PM' },
+    ],
+    experienceHeading: 'Professional Experience',
+    experience: [
+      'Rotatory Internship, Dec 2014 - Dec 2015 - Government Medical College Srinagar',
+      'House Physician Medicine, Jan 2017 - Aug 2017 - SKIMS Bemina Srinagar',
+      'House Job, Neonatal Intensive Care Unit, Feb 2018 - May 2018 - Department of Obstetrics and Gynaecology, GMC Srinagar',
+      'Postgraduate Diploma Training, May 2018 - June 2020 - Department of Obstetrics and Gynaecology, GMC Srinagar',
+      'Senior Resident, Sep 2020 - Sep 2023 - Department of Obstetrics and Gynaecology, GMC Srinagar',
+      'DNB Obstetrics & Gynaecology, Oct 2023 - Oct 2025 - GMC Anantnag'
+    ],
+    coreCompetencies: [
+      'Management and treatment of high-risk antenatal patients',
+      'Management and treatment of gynaecological patients',
+      'Medical disorders in pregnancy',
+      'Elderly obstetric and gynaecological patients',
+      'Bad obstetric history evaluation',
+      'Antenatal care and follow-up',
+      'Specialist obstetrics and gynaecology consultation'
+    ],
+    areasOfCare: [
+      'Obstetrics and gynaecology consultation',
+      'Antenatal care',
+      'High-risk pregnancy care',
+      'Gynaecological consultation',
+      'Pregnancy-related medical concerns',
+      'Bad obstetric history evaluation',
+      "Women's health consultation",
+      'Follow-up obstetrics and gynaecology care'
+    ],
+    expertiseHeading: 'Core Competencies',
+    expertise: [
+      'Management and treatment of high-risk antenatal patients',
+      'Management and treatment of gynaecological patients',
+      'Medical disorders in pregnancy',
+      'Elderly obstetric and gynaecological patients',
+      'Bad obstetric history evaluation',
+      'Antenatal care and follow-up',
+      'Specialist obstetrics and gynaecology consultation'
+    ],
+    specializedCareHeading: "Women's Health Services",
+    specializedCare: [
+      { name: 'Antenatal Care', desc: 'Specialist consultation for antenatal concerns, pregnancy follow-up, and pregnancy-related medical guidance.', icon: 'Heart' },
+      { name: 'High-Risk Pregnancy Care', desc: 'Evaluation and care guidance for high-risk antenatal patients and medical disorders in pregnancy.', icon: 'Shield' },
+      { name: 'Gynaecological Consultation', desc: 'Consultation for gynaecological concerns, follow-up care, and women\'s health conditions.', icon: 'Activity' },
+      { name: 'Bad Obstetric History', desc: 'Specialist evaluation and consultation for bad obstetric history and pregnancy planning concerns.', icon: 'Shield' }
+    ],
+    consultation_days: 'Monday to Saturday\n11:00 AM to 3:00 PM',
+    institution: 'Appolo Clinic Srinagar',
+    trust_banner: 'Prior registration is mandatory for consultation with Dr Roheenah Akhtar at Appolo Clinic Srinagar.',
+    clinic_location: 'Appolo Clinic, Karan Nagar Chowk\nNear Mughal Darbar\nOpposite Medicare Diagnostic Centre',
     clinic_contact: '0194-2488069 / 0194-4068095',
     clinic_email: 'cypherhealthservicespvtltd@gmail.com',
   },
@@ -950,7 +1027,7 @@ export const ALL_DOCTORS = [
   }
 ];
 
-const ALL_POSSIBLE_FILTERS = ['All', 'General Physician', 'Physician', 'Internal Medicine', 'Cardiology', 'Pediatrics', 'Paediatrics', 'Gynecology', 'Dermatology', 'Orthopedics', 'Orthopaedics', 'ENT', 'Ophthalmology', 'Physiotherapy', 'Clinical Psychology', 'Orthodontics', 'Pathology', 'Neurosurgery', 'General Surgery', 'Diagnostics', 'Dietitian / Nutrition', 'Urology'];
+const ALL_POSSIBLE_FILTERS = ['All', 'General Physician', 'Physician', 'Internal Medicine', 'Cardiology', 'Pediatrics', 'Paediatrics', 'Gynecology', 'Obstetrics & Gynaecology', 'Dermatology', 'Orthopedics', 'Orthopaedics', 'ENT', 'Ophthalmology', 'Physiotherapy', 'Clinical Psychology', 'Orthodontics', 'Pathology', 'Neurosurgery', 'General Surgery', 'Diagnostics', 'Dietitian / Nutrition', 'Urology'];
 const SPECIALTIES_FILTER = ALL_POSSIBLE_FILTERS.filter(f => 
   f === 'All' || ALL_DOCTORS.some(d => d.dept === f || d.specialty === f)
 );
@@ -1002,6 +1079,7 @@ export const DoctorCard = ({ doc, onProfile, onBook }) => {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem', gap: '0.5rem' }}>
             <div style={{ fontSize: '0.62rem', fontWeight: 800, color: 'var(--blue)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               {doc.type === 'lab-incharge' ? 'Lab Incharge' : doc.type === 'visiting-doctor' ? 'Visiting Doctor' : doc.specialty}
+              {doc.specialty === 'Obstetrics & Gynaecology' && <Heart size={11} style={{ marginLeft: 4, verticalAlign: '-2px' }} />}
             </div>
             {doc.type === 'visiting-doctor' && (
               <div style={{ background: 'var(--orange-light)', color: 'var(--orange)', padding: '0.15rem 0.4rem', borderRadius: '4px', fontSize: '0.6rem', fontWeight: 800, textTransform: 'uppercase', flexShrink: 0 }}>

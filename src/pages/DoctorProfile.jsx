@@ -96,6 +96,24 @@ const DoctorProfile = () => {
                         <div style={{ fontSize: '0.75rem', color: 'var(--body)', whiteSpace: 'pre-line' }}>{doc.qual_short || doc.qual.split(',')[1]?.trim() || doc.qual}</div>
                       </div>
                     </div>
+                    {doc.consultingAt ? (
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px' }}>
+                        <div style={{ color: 'var(--blue)' }}><MapPin size={20} /></div>
+                        <div>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--heading)', marginBottom: '0.15rem' }}>Consulting At</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--body)', whiteSpace: 'pre-line' }}>{doc.consultingAt}</div>
+                        </div>
+                      </div>
+                    ) : null}
+                    {doc.availability ? (
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px' }}>
+                        <div style={{ color: 'var(--blue)' }}><Clock size={20} /></div>
+                        <div>
+                          <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--heading)', marginBottom: '0.15rem' }}>Availability</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--body)', whiteSpace: 'pre-line' }}>{doc.availability}</div>
+                        </div>
+                      </div>
+                    ) : null}
                     {doc.specialization ? (
                       <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem', background: '#f8fafc', padding: '1rem', borderRadius: '8px' }}>
                         <div style={{ color: 'var(--blue)' }}><ShieldCheck size={20} /></div>
@@ -218,6 +236,11 @@ const DoctorProfile = () => {
                       </span>
                     </div>
                   </div>
+                  {doc.appointmentNote ? (
+                    <div style={{ marginTop: '0.25rem', background: '#fffbeb', border: '1px solid #fde68a', color: '#92400e', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.82rem', fontWeight: 700 }}>
+                      {doc.appointmentNote}
+                    </div>
+                  ) : null}
                 </div>
               </div>
               
@@ -238,20 +261,22 @@ const DoctorProfile = () => {
                 </div>
                 <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>Professional Overview</h2>
               </div>
-              {doc.bio.split('\n\n').filter(Boolean).map((para, i) => (
-                <p key={i} style={{ marginBottom: i < doc.bio.split('\n\n').length - 1 ? '1rem' : 0, lineHeight: 1.7, color: 'var(--body)', fontSize: '0.95rem' }}>
+              {doc.bio && doc.bio.split('\n\n').filter(Boolean).map((para, i) => (
+                <p key={i} style={{ marginBottom: i < doc.bio.split('\n\n').filter(Boolean).length - 1 ? '1rem' : 0, lineHeight: 1.7, color: 'var(--body)', fontSize: '0.95rem' }}>
                   {para}
                 </p>
               ))}
+              {!doc.bio && <p style={{ color: 'var(--body)', fontSize: '0.95rem', lineHeight: 1.7 }}>Professional profile information coming soon.</p>}
             </div>
 
             {/* Education & Training */}
+            {doc.education && doc.education.length > 0 && (
             <div className="dp-section-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <GraduationCap size={20} />
                 </div>
-                <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>Education & Training</h2>
+                <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>{doc.educationHeading || 'Education & Training'}</h2>
               </div>
               <ul style={{ margin: 0, padding: '0 0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                 {doc.education.map((edu, i) => (
@@ -261,6 +286,7 @@ const DoctorProfile = () => {
                 ))}
               </ul>
             </div>
+            )}
 
             {/* Experience */}
             {doc.experience && doc.experience.length > 0 && (
@@ -269,7 +295,7 @@ const DoctorProfile = () => {
                   <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <Briefcase size={20} />
                   </div>
-                  <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>Experience</h2>
+                  <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>{doc.experienceHeading || 'Experience'}</h2>
                 </div>
                 <ul style={{ margin: 0, padding: '0 0 0 1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   {doc.experience.map((exp, i) => (
@@ -278,6 +304,29 @@ const DoctorProfile = () => {
                     </li>
                   ))}
                 </ul>
+              </div>
+            )}
+
+            {/* Areas of Care */}
+            {doc.areasOfCare && doc.areasOfCare.length > 0 && (
+              <div className="dp-section-card">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                  <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <HeartPulse size={20} />
+                  </div>
+                  <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>Areas of Care</h2>
+                </div>
+                <div className="dp-expertise-flex">
+                  {doc.areasOfCare.map((item, i) => (
+                    <span key={i} style={{
+                      background: '#f0fdf8', color: '#047857',
+                      border: '1px solid #a7f3d0', borderRadius: '999px',
+                      padding: '0.5rem 0.9rem', fontSize: '0.85rem', fontWeight: 700
+                    }}>
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 
@@ -358,6 +407,7 @@ const DoctorProfile = () => {
             )}
 
             {/* Specialized Treatments */}
+            {doc.specializedCare && doc.specializedCare.length > 0 && (
             <div className="dp-section-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -390,14 +440,16 @@ const DoctorProfile = () => {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Areas of Expertise */}
+            {doc.expertise && doc.expertise.length > 0 && (
             <div className="dp-section-card">
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
                 <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'var(--blue-light)', color: 'var(--blue)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <ShieldCheck size={20} />
                 </div>
-                <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>Areas of Expertise</h2>
+                <h2 style={{ fontSize: '1.25rem', color: 'var(--navy)', margin: 0 }}>{doc.expertiseHeading || 'Areas of Expertise'}</h2>
               </div>
               <div className="dp-expertise-flex">
                 {doc.expertise.map((tag, i) => (
@@ -411,6 +463,7 @@ const DoctorProfile = () => {
                 ))}
               </div>
             </div>
+            )}
 
             {/* Clinic Details */}
             <div className="dp-section-card">
@@ -492,11 +545,12 @@ const DoctorProfile = () => {
               <VisitingDoctorBookingForm doc={doc} />
             ) : (
             <div>
-              <BookingForm />
+              <BookingForm doctor={doc} />
 
               <div className="dp-form-card" style={{ marginTop: '1.5rem' }}>
 
               {/* Consultation Hours */}
+              {doc.hours && doc.hours.length > 0 && (
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
                   <Clock size={16} color="var(--blue)" />
@@ -514,6 +568,7 @@ const DoctorProfile = () => {
                   </div>
                 ))}
               </div>
+              )}
 
               {/* Quick phone link */}
               <div style={{ marginTop: '1.5rem', background: '#f8fafc', borderRadius: '8px', padding: '1.25rem', textAlign: 'center' }}>
