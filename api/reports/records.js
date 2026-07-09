@@ -83,7 +83,7 @@ export default async function handler(req, res) {
     if (!report.id || !report.patient_name || !report.phone || !report.dob || !report.report_title || !report.report_date || !report.token) {
       return res.status(400).json({ error: 'Missing required report metadata.' });
     }
-    const { error } = await supabase.from('test_reports').insert([report]);
+    const { error } = await supabase.from('test_reports').upsert([report]);
     if (error) return res.status(500).json({ error: 'Unable to save report metadata.' });
     return res.status(200).json({ ok: true });
   }

@@ -1,8 +1,18 @@
 import { put } from '@vercel/blob';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import { createClient } from '@supabase/supabase-js';
 
 const JWT_SECRET = process.env.JWT_SECRET;
+
+function getSupabaseAdmin() {
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+}
 
 /* ── Allowed origins ── */
 const ALLOWED_ORIGINS = [
@@ -223,6 +233,36 @@ export default async function handler(req, res) {
   } catch (err) {
     // Non-fatal — report is still uploaded, just lookup won't work
     console.warn('[Lookup Index] Failed to store lookup entry:', err.message);
+  }
+
+  /* ── Save report metadata directly to Supabase test_reports table for Admin Dashboard ── */
+  try {
+    const supabase = getSupabaseAdmin();
+    if (supabase) {
+      const reportRecord = {
+        id: reportId,
+        patient_name: cleanName,
+        phone: cleanPhone,
+        dob: cleanDob,
+        report_title: cleanTitle,
+        report_date: cleanDate,
+        test_type: cleanType,
+        notes: cleanNotes,
+        status: 'Pending',
+        blob_url: blob.url,
+        token: urlSafeToken,
+      };
+      const { error: dbError } = await supabase.from('test_reports').upsert([reportRecord]);
+      if (dbError) {
+        console.error('[Supabase Upsert Error]', dbError.message);
+      } else {
+        console.log('[Supabase] Successfully saved report to test_reports for Admin Dashboard:', reportId);
+      }
+    } else {
+      console.warn('[Supabase] Database keys not configured, skipped automatic dashboard registration.');
+    }
+  } catch (err) {
+    console.error('[Supabase Insert Exception]', err.message);
   }
 
   /* ── Return success ── */
